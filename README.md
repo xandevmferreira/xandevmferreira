@@ -1,12 +1,6 @@
-### Hi there 👋
+### Tudo bem? Me chamo Alexandre Messias!👋👋👋
 
-<!--
-**xandevmferreira/xandevmferreira** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-
-Here are some ideas to get you started:
 - 🚀 Estudando na velocidade da luz o curso front-End da Allura.
-- 👯 I’m look.
-- 🤔 I’m looking for help with ...
 - 💬 Contate-me no email: alexandrevmferreira@gmail.com
-- 📫 How to reach me: ...
+- 📫 Sou instrutor de canoa havaiana e atleta amador. Atualmente, nas horas vagas, estudo JavaScript!
 --> 

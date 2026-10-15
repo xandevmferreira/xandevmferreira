@@ -11,19 +11,27 @@ extends RefCounted
 
 const DIALOGUES := {
 	"cama": [
-		"O lençol está dobrado de um jeito que você não costuma deixar.",
-		"Alguém passou por aqui antes de você acordar.",
+		"Sua cama, no quarto da Amanda.",
+		"O lençol está do jeito que você deixou.",
 	],
-	"bolo": [
-		"Um bolo pequeno espera na mesa, com a vela ainda apagada.",
-		"O parabéns ficou guardado para daqui a pouco.",
+	"piano": [
+		"O piano sem causa, encostado na sala.",
+	],
+	"santos": [
+		"Os santos católicos, na estante.",
+	],
+	"sofa": [
+		"O sofá da sala, de frente para a TV.",
+	],
+	"cozinha": [
+		"A cozinha. As lajotas da parede são marrom claro.",
+		"O fogão e a pia ficam ao lado da bancada.",
+	],
+	"maquina": [
+		"A máquina de lavar, na lavanderia.",
 	],
 	"planta": [
-		"Alguém regou a planta. As folhas estão firmes, viradas para a luz.",
-	],
-	"quadro": [
-		"Um desenho feito à mão: duas pessoas, um gato e esta casa.",
-		"Embaixo, com letra miúda: nossa casa.",
+		"As plantas da área, perto dos banheiros.",
 	],
 	"flores": [
 		"Flores recém-cortadas, ao lado da porta.",

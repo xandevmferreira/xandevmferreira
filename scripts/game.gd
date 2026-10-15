@@ -103,7 +103,24 @@ func _process(delta: float) -> void:
 	_prompt.visible = show_prompt
 	if show_prompt:
 		var bob := -1.0 if int(Time.get_ticks_msec() / 280.0) % 2 == 0 else 0.0
-		_prompt.position = _prompt_anchor + Vector2(-6, -18 + bob)
+		_prompt.position = _screen_point(_prompt_anchor) + Vector2(-6, -18 + bob)
+
+func _screen_point(world: Vector2) -> Vector2:
+	var cam := get_viewport().get_camera_2d()
+	if cam == null:
+		return world
+	var view := get_viewport().get_visible_rect().size
+	var half := view * 0.5
+	var center := cam.global_position + cam.offset
+	if cam.limit_right > cam.limit_left:
+		var min_x := float(cam.limit_left) + half.x
+		var max_x := float(cam.limit_right) - half.x
+		center.x = (min_x + max_x) * 0.5 if max_x < min_x else clampf(center.x, min_x, max_x)
+	if cam.limit_bottom > cam.limit_top:
+		var min_y := float(cam.limit_top) + half.y
+		var max_y := float(cam.limit_bottom) - half.y
+		center.y = (min_y + max_y) * 0.5 if max_y < min_y else clampf(center.y, min_y, max_y)
+	return (world - center) * cam.zoom + half
 
 func _show_current_line() -> void:
 	_full = _lines[_index]

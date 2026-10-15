@@ -21,7 +21,7 @@ func _run() -> void:
 		_fail("cena inicial %s" % casa)
 		return
 	var player := casa.get_node("Props/Player") as CharacterBody2D
-	if player.global_position.distance_to(Vector2(120, 114)) > 1.5:
+	if player.global_position.distance_to(Vector2(100, 156)) > 1.5:
 		_fail("spawn da casa em %s" % player.global_position)
 
 	var origin := player.global_position
@@ -41,7 +41,7 @@ func _run() -> void:
 	if player.global_position.y > origin.y - 4.0:
 		_fail("não andou para cima: %s" % player.global_position)
 
-	player.global_position = Vector2(40, 102)
+	player.global_position = Vector2(44, 150)
 	player.facing = Vector2.UP
 	for _i in 3:
 		await physics_frame
@@ -59,7 +59,7 @@ func _run() -> void:
 		if _game.dialogue_open:
 			_fail("a fala da cama não terminou")
 
-	casa.get_node("Talkers/Bolo").interact()
+	casa.get_node("Talkers/Cozinha").interact()
 	await process_frame
 	_press_interact()
 	for _frame in 2:
@@ -81,7 +81,12 @@ func _run() -> void:
 	_check_lines()
 
 	await create_timer(0.55).timeout
-	player.global_position = Vector2(120, 136)
+	player.global_position = Vector2(400, 132)
+	player.facing = Vector2.UP
+	for _i in 3:
+		await physics_frame
+	await _shot(casa, "/tmp/art-preview/godot_cozinha.png")
+	player.global_position = Vector2(408, 274)
 	await physics_frame
 	Input.action_press("move_down")
 	var reached := false
@@ -119,7 +124,7 @@ func _run() -> void:
 			for _i in 20:
 				await process_frame
 			var home := current_scene.get_node("Props/Player") as Node2D
-			if home.global_position.distance_to(Vector2(120, 130)) > 2.0:
+			if home.global_position.distance_to(Vector2(408, 252)) > 2.0:
 				_fail("spawn de volta em %s" % home.global_position)
 
 	await create_timer(0.4).timeout

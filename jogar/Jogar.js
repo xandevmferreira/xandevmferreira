@@ -137,6 +137,11 @@ const Preloader = /** @constructor */ function () { // eslint-disable-line no-un
 	}
 
 	function loadFetch(file, tracker, fileSize, raw) {
+		if (typeof file === 'string' && !/^[a-z]+:/i.test(file)) {
+			try {
+				file = new URL(file, document.baseURI).href;
+			} catch (e) {}
+		}
 		tracker[file] = {
 			total: fileSize || 0,
 			loaded: 0,
@@ -539,12 +544,16 @@ const InternalConfig = function (initConfig) { // eslint-disable-line no-unused-
 				function done(result) {
 					onSuccess(result['instance'], result['module']);
 				}
-				if (typeof (WebAssembly.instantiateStreaming) !== 'undefined') {
-					WebAssembly.instantiateStreaming(Promise.resolve(r), imports).then(done);
-				} else {
-					r.arrayBuffer().then(function (buffer) {
+				const wasmResponse = r;
+				function instantiateBuffer() {
+					wasmResponse.arrayBuffer().then(function (buffer) {
 						WebAssembly.instantiate(buffer, imports).then(done);
 					});
+				}
+				if (typeof (WebAssembly.instantiateStreaming) !== 'undefined') {
+					WebAssembly.instantiateStreaming(Promise.resolve(wasmResponse), imports).then(done).catch(instantiateBuffer);
+				} else {
+					instantiateBuffer();
 				}
 				r = null;
 				return {};

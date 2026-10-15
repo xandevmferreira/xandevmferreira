@@ -15,7 +15,7 @@ const DIALOGUES := {
 		"O lençol está do jeito que você deixou.",
 	],
 	"piano": [
-		"O piano sem causa, encostado na sala.",
+		"O piano sem cauda, encostado na sala.",
 	],
 	"santos": [
 		"Os santos católicos, na estante.",
@@ -25,13 +25,13 @@ const DIALOGUES := {
 	],
 	"cozinha": [
 		"A cozinha. As lajotas da parede são marrom claro.",
-		"O fogão e a pia ficam ao lado da bancada.",
+		"A bancada americana separa a mesa do fogão.",
 	],
 	"maquina": [
 		"A máquina de lavar, na lavanderia.",
 	],
 	"planta": [
-		"As plantas da área, perto dos banheiros.",
+		"As plantas, num canto da sala.",
 	],
 	"flores": [
 		"Flores recém-cortadas, ao lado da porta.",

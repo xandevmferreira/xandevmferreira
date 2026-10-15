@@ -15,22 +15,22 @@ size = Vector2(12, 6)
 size = Vector2(20, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cama"]
-size = Vector2(52, 24)
+size = Vector2(40, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_piano"]
-size = Vector2(22, 34)
+size = Vector2(40, 44)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_santos"]
-size = Vector2(60, 20)
+size = Vector2(56, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sofa"]
-size = Vector2(70, 22)
+size = Vector2(72, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cozinha"]
-size = Vector2(36, 20)
+size = Vector2(56, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_maquina"]
-size = Vector2(40, 26)
+size = Vector2(40, 28)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_porta"]
 size = Vector2(32, 16)
@@ -54,10 +54,10 @@ collision_mask = 0
 y_sort_enabled = true
 
 [node name="Player" parent="Props" instance=ExtResource("3_player")]
-position = Vector2(100, 156)
+position = Vector2(64, 92)
 
 [node name="Plant" type="Node2D" parent="Props"]
-position = Vector2(96, 214)
+position = Vector2(146, 250)
 
 [node name="Sprite" type="Sprite2D" parent="Props/Plant"]
 texture_filter = 0
@@ -85,7 +85,7 @@ shape = SubResource("RectangleShape2D_planta")
 [node name="Talkers" type="Node2D" parent="."]
 
 [node name="Cama" type="Area2D" parent="Talkers"]
-position = Vector2(44, 140)
+position = Vector2(32, 74)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
@@ -96,7 +96,7 @@ dialogue_id = "cama"
 shape = SubResource("RectangleShape2D_cama")
 
 [node name="Piano" type="Area2D" parent="Talkers"]
-position = Vector2(23, 263)
+position = Vector2(32, 252)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
@@ -107,7 +107,7 @@ dialogue_id = "piano"
 shape = SubResource("RectangleShape2D_piano")
 
 [node name="Santos" type="Area2D" parent="Talkers"]
-position = Vector2(72, 257)
+position = Vector2(66, 240)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
@@ -118,7 +118,7 @@ dialogue_id = "santos"
 shape = SubResource("RectangleShape2D_santos")
 
 [node name="Sofa" type="Area2D" parent="Talkers"]
-position = Vector2(268, 212)
+position = Vector2(62, 222)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
@@ -129,7 +129,7 @@ dialogue_id = "sofa"
 shape = SubResource("RectangleShape2D_sofa")
 
 [node name="Cozinha" type="Area2D" parent="Talkers"]
-position = Vector2(400, 132)
+position = Vector2(400, 184)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
@@ -140,7 +140,7 @@ dialogue_id = "cozinha"
 shape = SubResource("RectangleShape2D_cozinha")
 
 [node name="Maquina" type="Area2D" parent="Talkers"]
-position = Vector2(378, 29)
+position = Vector2(436, 28)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
@@ -165,7 +165,7 @@ shape = SubResource("RectangleShape2D_porta")
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="default" type="Marker2D" parent="Spawns"]
-position = Vector2(100, 156)
+position = Vector2(64, 92)
 
 [node name="from_rua" type="Marker2D" parent="Spawns"]
 position = Vector2(408, 252)

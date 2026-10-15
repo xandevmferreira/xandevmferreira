@@ -21,7 +21,7 @@ func _run() -> void:
 		_fail("cena inicial %s" % casa)
 		return
 	var player := casa.get_node("Props/Player") as CharacterBody2D
-	if player.global_position.distance_to(Vector2(100, 156)) > 1.5:
+	if player.global_position.distance_to(Vector2(64, 92)) > 1.5:
 		_fail("spawn da casa em %s" % player.global_position)
 
 	var origin := player.global_position
@@ -41,7 +41,7 @@ func _run() -> void:
 	if player.global_position.y > origin.y - 4.0:
 		_fail("não andou para cima: %s" % player.global_position)
 
-	player.global_position = Vector2(44, 150)
+	player.global_position = Vector2(32, 86)
 	player.facing = Vector2.UP
 	for _i in 3:
 		await physics_frame
@@ -81,7 +81,7 @@ func _run() -> void:
 	_check_lines()
 
 	await create_timer(0.55).timeout
-	player.global_position = Vector2(400, 132)
+	player.global_position = Vector2(400, 196)
 	player.facing = Vector2.UP
 	for _i in 3:
 		await physics_frame

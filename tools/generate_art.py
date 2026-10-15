@@ -683,57 +683,50 @@ HOUSE_H = 368
 
 # Mesma lista vira colisão em scripts/casa_walls.gd.
 # O último valor marca a lajota marrom claro da cozinha.
+# Chão claro. O último valor marca só a lajota marrom claro da parede da cozinha.
+FLOOR_W = (248, 246, 242, 255)
+FLOOR_WG = (226, 224, 218, 255)
+BATH_W = (238, 242, 240, 255)
+BATH_WG = (210, 220, 218, 255)
+
 HOUSE_WALLS: list[tuple[int, int, int, int, bool]] = [
     (0, 0, 480, 8, False),
     (0, 8, 8, 280, False),
-    (472, 8, 8, 72, False),
-    (472, 88, 8, 88, True),
-    (472, 176, 8, 112, False),
+    (472, 8, 8, 168, False),
+    (472, 176, 8, 56, True),
+    (472, 232, 8, 56, False),
     (0, 288, 392, 8, False),
     (424, 288, 56, 8, False),
     (0, 296, 8, 72, False),
     (472, 296, 8, 72, False),
     (0, 360, 480, 8, False),
-    (168, 8, 8, 72, False),
-    (248, 8, 8, 16, False),
-    (248, 56, 8, 24, False),
-    (336, 8, 8, 24, False),
-    (336, 56, 8, 24, False),
-    (8, 80, 120, 8, False),
-    (156, 80, 20, 8, False),
-    (176, 80, 12, 8, False),
-    (216, 80, 32, 8, False),
-    (248, 80, 8, 8, False),
-    (256, 80, 80, 8, False),
-    (336, 80, 8, 8, False),
-    (344, 80, 128, 8, True),
-    (168, 88, 8, 48, False),
-    (168, 164, 8, 12, False),
-    (216, 88, 8, 48, False),
-    (216, 164, 8, 12, False),
-    (336, 88, 8, 88, True),
-    (8, 176, 160, 8, False),
-    (224, 176, 112, 8, False),
-    (336, 176, 8, 8, False),
-    (344, 176, 24, 8, True),
-    (404, 176, 68, 8, True),
-    (64, 184, 8, 48, False),
-    (112, 184, 8, 48, False),
-    (8, 232, 16, 8, False),
-    (48, 232, 16, 8, False),
-    (72, 232, 8, 8, False),
-    (104, 232, 8, 8, False),
-    (120, 232, 12, 8, False),
-    (156, 232, 12, 8, False),
-    (168, 184, 8, 8, False),
-    (168, 216, 8, 32, False),
-    (168, 276, 8, 12, False),
-    (216, 184, 8, 16, False),
-    (216, 264, 8, 24, False),
-    (336, 184, 8, 76, False),
-    (336, 284, 8, 4, False),
-    (344, 232, 40, 8, False),
-    (416, 232, 56, 8, False),
+    (152, 8, 8, 104, False),
+    (300, 8, 8, 104, False),
+    (400, 8, 8, 104, False),
+    (8, 104, 32, 8, False),
+    (72, 104, 80, 8, False),
+    (160, 104, 36, 8, False),
+    (228, 104, 72, 8, False),
+    (308, 104, 28, 8, False),
+    (368, 104, 32, 8, False),
+    (408, 104, 16, 8, False),
+    (456, 104, 16, 8, False),
+    (108, 16, 44, 8, False),
+    (108, 16, 8, 20, False),
+    (108, 64, 8, 28, False),
+    (108, 84, 44, 8, False),
+    (228, 12, 72, 8, False),
+    (228, 12, 8, 52, False),
+    (228, 64, 20, 8, False),
+    (280, 64, 20, 8, False),
+    (8, 168, 168, 8, False),
+    (248, 168, 224, 8, True),
+    (168, 176, 8, 24, False),
+    (168, 232, 8, 56, False),
+    (248, 176, 8, 24, True),
+    (248, 232, 8, 56, False),
+    (352, 228, 8, 16, False),
+    (352, 276, 8, 12, False),
 ]
 
 
@@ -797,11 +790,60 @@ def draw_machine(image: Image.Image, x: int, y: int) -> None:
 
 
 def draw_piano(image: Image.Image, x: int, y: int) -> None:
-    fill_rect(image, x, y, 14, 30, (48, 40, 44, 255))
-    fill_rect(image, x + 2, y + 3, 10, 18, (28, 24, 28, 255))
-    fill_rect(image, x + 1, y + 22, 12, 5, (240, 234, 224, 255))
-    for i in range(0, 10, 2):
-        pix(image, x + 2 + i, y + 22, INK)
+    # Piano vertical, sem cauda. O armário encosta na parede e o teclado olha o cômodo.
+    fill_rect(image, x, y, 14, 44, (36, 30, 34, 255))
+    fill_rect(image, x, y, 14, 3, (72, 60, 64, 255))
+    fill_rect(image, x + 2, y + 6, 10, 14, (22, 18, 22, 255))
+    fill_rect(image, x + 10, y + 22, 8, 16, (244, 240, 232, 255))
+    for key in range(0, 14, 3):
+        fill_rect(image, x + 11, y + 23 + key, 4, 2, (28, 24, 28, 255))
+    fill_rect(image, x + 2, y + 40, 3, 4, (24, 20, 24, 255))
+    fill_rect(image, x + 9, y + 40, 3, 4, (24, 20, 24, 255))
+    pix(image, x + 5, y + 43, (186, 156, 72, 255))
+    pix(image, x + 8, y + 43, (186, 156, 72, 255))
+
+
+def draw_toilet(image: Image.Image, x: int, y: int) -> None:
+    fill_rect(image, x + 1, y, 8, 4, (210, 210, 206, 255))
+    fill_rect(image, x, y + 3, 10, 10, (248, 248, 246, 255))
+    fill_rect(image, x + 2, y + 5, 6, 6, (150, 186, 194, 255))
+    fill_rect(image, x, y + 3, 10, 1, (180, 180, 176, 255))
+
+
+def draw_bath_sink(image: Image.Image, x: int, y: int) -> None:
+    fill_rect(image, x, y, 14, 10, (236, 236, 232, 255))
+    fill_rect(image, x + 3, y + 2, 8, 6, (140, 178, 186, 255))
+    pix(image, x + 6, y + 1, (170, 174, 170, 255))
+
+
+def door_leaf(image: Image.Image, x: int, y: int, w: int, h: int) -> None:
+    fill_rect(image, x, y, w, h, DOOR)
+    fill_rect(image, x, y, w, 1, DOOR_L)
+    fill_rect(image, x, y + h - 1, w, 1, DOOR_D)
+    if h >= w:
+        pix(image, x + w // 2, y + h - 4, (232, 196, 96, 255))
+    else:
+        pix(image, x + w - 4, y + h // 2, (232, 196, 96, 255))
+
+
+def draw_shower(image: Image.Image, x: int, y: int, w: int, h: int) -> None:
+    glass = (186, 206, 210, 255)
+    fill_rect(image, x, y, w, 2, glass)
+    fill_rect(image, x, y, 2, h, glass)
+    fill_rect(image, x + w - 2, y, 2, h, glass)
+    fill_rect(image, x, y + h - 2, w, 2, glass)
+
+
+def frame_gap_x(image: Image.Image, x: int, y: int, w: int, h: int = 8) -> None:
+    fill_rect(image, x - 3, y, 3, h, DOOR_D)
+    fill_rect(image, x + w, y, 3, h, DOOR_D)
+    fill_rect(image, x, y + h - 2, w, 2, (236, 228, 216, 255))
+
+
+def frame_gap_y(image: Image.Image, x: int, y: int, h: int, w: int = 8) -> None:
+    fill_rect(image, x, y - 3, w, 3, DOOR_D)
+    fill_rect(image, x, y + h, w, 3, DOOR_D)
+    fill_rect(image, x, y, 2, h, (236, 228, 216, 255))
 
 
 def draw_saints(image: Image.Image, x: int, y: int, w: int) -> None:
@@ -896,22 +938,21 @@ def feet_blocked(px: int, py: int, rects: list[tuple[int, int, int, int]]) -> bo
 
 
 def assert_paths(rects: list[tuple[int, int, int, int]]) -> None:
-    start = (100, 156)
+    start = (64, 92)
     goals = {
-        "spawn_direita": (116, 156),
-        "spawn_cima": (100, 146),
-        "cama": (44, 150),
-        "casal": (90, 60),
-        "banho": (210, 48),
-        "aberta": (290, 48),
-        "lavanderia": (400, 58),
-        "visita": (270, 140),
-        "cozinha": (400, 132),
-        "plantas": (90, 210),
-        "banho_quarto": (144, 210),
-        "piano": (110, 266),
-        "sala": (280, 270),
-        "jantar": (450, 210),
+        "spawn_direita": (80, 92),
+        "spawn_cima": (64, 82),
+        "cama": (32, 86),
+        "banho_amanda": (132, 48),
+        "centro": (200, 88),
+        "banho_centro": (264, 40),
+        "visita": (370, 90),
+        "lavanderia": (440, 60),
+        "cozinha": (400, 196),
+        "jantar": (320, 262),
+        "corredor": (200, 140),
+        "piano": (100, 240),
+        "sala": (110, 210),
         "hall": (408, 252),
         "porta": (408, 278),
     }
@@ -954,15 +995,7 @@ def write_casa_walls(rects: list[tuple[int, int, int, int]]) -> None:
 
 def draw_casa() -> Image.Image:
     image = Image.new("RGBA", (HOUSE_W, HOUSE_H), WALL_C)
-    wood_floor(image, 8, 8, 472, 288)
-    grid_floor(image, 176, 8, 248, 80, BATH_F, BATH_G, 6)
-    grid_floor(image, 256, 8, 336, 80, OPEN_F, OPEN_D, 7)
-    grid_floor(image, 344, 8, 472, 80, LAUNDRY_F, BATH_G, 8)
-    grid_floor(image, 344, 88, 472, 176, CREAM, CREAM_G, 8)
-    grid_floor(image, 8, 184, 64, 232, BATH_F, BATH_G, 6)
-    grid_floor(image, 72, 184, 112, 232, PLANT_F, (168, 180, 150, 255), 6)
-    grid_floor(image, 120, 184, 168, 232, BATH_F, BATH_G, 6)
-    grid_floor(image, 344, 240, 472, 288, HALL_F, HALL_G, 10)
+    grid_floor(image, 8, 8, 472, 288, FLOOR_W, FLOOR_WG, 16)
     pixels = image.load()
     for y in range(296, 360):
         for x in range(8, 472):
@@ -972,8 +1005,6 @@ def draw_casa() -> Image.Image:
                 pixels[x, y] = PAVE_L
             else:
                 pixels[x, y] = PAVE
-    fill_rect(image, 392, 288, 32, 8, (132, 96, 68, 255))
-    fill_rect(image, 396, 290, 24, 4, PATH)
 
     solids: list[tuple[int, int, int, int]] = [(x, y, w, h) for x, y, w, h, _tile in HOUSE_WALLS]
     for x, y, w, h, tile in HOUSE_WALLS:
@@ -981,73 +1012,114 @@ def draw_casa() -> Image.Image:
             paint_tile_wall(image, x, y, w, h)
         else:
             paint_light_wall(image, x, y, w, h)
-    paint_tile_wall(image, 344, 88, 128, 6)
-    paint_tile_wall(image, 344, 170, 128, 6)
-    paint_tile_wall(image, 344, 88, 6, 88)
-    paint_tile_wall(image, 466, 88, 6, 88)
 
-    fill_rect(image, 186, 108, 12, 156, RUG_D)
-    fill_rect(image, 188, 110, 8, 152, RUG)
-    fill_rect(image, 78, 148, 36, 14, RUG_D)
-    fill_rect(image, 80, 150, 32, 10, RUG)
-    fill_rect(image, 396, 274, 24, 6, SKIRT_S)
-    fill_rect(image, 398, 276, 20, 3, SKIRT)
+    draw_bed_v(image, 18, 28)
+    solids.append((18, 28, 28, 44))
+    draw_tv_shelf(image, 46, 14, 52)
+    solids.append((46, 14, 52, 12))
+    draw_wardrobe(image, 86, 70, 16, 26)
+    solids.append((86, 70, 16, 26))
+    draw_bath_sink(image, 118, 28)
+    solids.append((118, 28, 14, 10))
+    draw_shower(image, 136, 28, 14, 18)
+    solids.append((136, 28, 14, 18))
+    draw_toilet(image, 120, 66)
+    solids.append((120, 66, 10, 14))
 
-    draw_bed(image, 16, 12)
-    solids.append((16, 12, 54, 38))
-    draw_bed(image, 16, 96)
-    solids.append((16, 96, 54, 38))
-    draw_tv_shelf(image, 70, 90, 52)
-    solids.append((70, 90, 52, 12))
-    draw_wardrobe(image, 142, 92, 20, 40)
-    solids.append((142, 92, 20, 40))
-    draw_bed_v(image, 230, 96)
-    solids.append((230, 96, 28, 44))
-    draw_wardrobe(image, 308, 92, 18, 40)
-    solids.append((308, 92, 18, 40))
-    draw_pc(image, 234, 150, 46, 14)
-    solids.append((234, 150, 46, 14))
-    draw_machine(image, 360, 18)
-    solids.append((360, 18, 36, 22))
-    draw_counter(image, 360, 90, 80, 12, (232, 220, 204, 255))
-    solids.append((360, 90, 80, 12))
-    draw_stove(image, 360, 108)
-    solids.append((360, 108, 22, 16))
-    draw_sink(image, 386, 108)
-    solids.append((386, 108, 26, 14))
-    draw_wardrobe(image, 452, 108, 12, 34)
-    solids.append((452, 108, 12, 34))
-    draw_counter(image, 368, 150, 60, 12, (214, 176, 140, 255))
-    solids.append((368, 150, 60, 12))
-    draw_books(image, 228, 188, 84)
-    solids.append((228, 188, 84, 12))
-    draw_sofa(image, 236, 204, 64, 16)
-    solids.append((236, 204, 64, 16))
-    draw_plain_table(image, 232, 232, 68, 16)
-    solids.append((232, 228, 68, 24))
-    draw_plain_table(image, 384, 198, 56, 14)
-    solids.append((384, 194, 56, 22))
-    draw_piano(image, 16, 248)
-    solids.append((16, 248, 14, 30))
-    draw_saints(image, 44, 250, 56)
-    solids.append((44, 250, 56, 14))
+    draw_bed(image, 166, 18)
+    solids.append((166, 18, 54, 40))
+    draw_bath_sink(image, 238, 22)
+    solids.append((238, 22, 14, 10))
+    draw_toilet(image, 276, 22)
+    solids.append((276, 22, 10, 14))
+    draw_shower(image, 238, 46, 12, 16)
+    solids.append((238, 46, 12, 16))
+
+    draw_bed_v(image, 316, 18)
+    solids.append((316, 18, 28, 44))
+    draw_wardrobe(image, 364, 16, 16, 34)
+    solids.append((364, 16, 16, 34))
+    draw_pc(image, 318, 68, 46, 12)
+    solids.append((318, 68, 46, 12))
+
+    draw_machine(image, 418, 16)
+    solids.append((418, 16, 36, 22))
+
+    draw_counter(image, 300, 178, 140, 12, (232, 220, 204, 255))
+    solids.append((300, 178, 140, 12))
+    draw_stove(image, 308, 190)
+    solids.append((308, 190, 22, 16))
+    draw_sink(image, 334, 190)
+    solids.append((334, 190, 26, 14))
+    draw_wardrobe(image, 448, 178, 14, 36)
+    solids.append((448, 178, 14, 36))
+    draw_counter(image, 300, 210, 132, 12, (214, 176, 140, 255))
+    solids.append((300, 210, 132, 12))
+    draw_plain_table(image, 262, 256, 52, 14)
+    solids.append((262, 253, 52, 20))
+    for stool in (314, 346, 378):
+        fill_rect(image, stool, 222, 8, 4, (140, 96, 70, 255))
+        solids.append((stool, 222, 8, 4))
+
+    draw_books(image, 20, 178, 80)
+    solids.append((20, 178, 80, 12))
+    draw_tv_shelf(image, 24, 194, 64)
+    solids.append((24, 194, 64, 12))
+    draw_sofa(image, 28, 214, 68, 16)
+    solids.append((28, 214, 68, 16))
+    draw_piano(image, 12, 230)
+    solids.append((12, 230, 18, 44))
+    draw_saints(image, 40, 232, 52)
+    solids.append((40, 232, 52, 14))
+    draw_plain_table(image, 56, 258, 80, 14)
+    solids.append((56, 255, 80, 20))
     for index, color in enumerate((LEAF_D, LEAF, LEAF_L)):
-        px = 78 + index * 10
-        fill_rect(image, px + 1, 200, 6, 4, (150, 96, 70, 255))
-        blob(image, px + 4, 197, 4, 4, color)
+        px = 132 + index * 8
+        fill_rect(image, px, 240, 6, 4, (150, 96, 70, 255))
+        blob(image, px + 3, 237, 4, 4, color)
+    solids.append((132, 234, 24, 10))
 
-    wall_window(image, 36, 1, 36, 6)
-    wall_window(image, 278, 1, 18, 6)
-    wall_window(image, 270, 81, 28, 6)
-    wall_window(image, 473, 108, 6, 22)
-    wall_window(image, 360, 233, 18, 6)
-    wall_window(image, 430, 233, 18, 6)
-    wall_window(image, 473, 252, 6, 16)
-    for wx in (244, 276, 308):
+    wall_window(image, 36, 1, 28, 6)
+    wall_window(image, 176, 1, 28, 6)
+    wall_window(image, 332, 1, 22, 6)
+    wall_window(image, 424, 1, 18, 6)
+    wall_window(image, 473, 186, 6, 22)
+    wall_window(image, 473, 248, 6, 16)
+    for wx in (48, 88, 128):
         wall_window(image, wx, 289, 16, 6)
-    fill_rect(image, 390, 288, 2, 8, BEAM_D)
-    fill_rect(image, 424, 288, 2, 8, BEAM_D)
-    fill_rect(image, 400, 289, 3, 6, DOOR)
+
+    frame_gap_x(image, 40, 104, 32)
+    frame_gap_x(image, 196, 104, 32)
+    frame_gap_x(image, 336, 104, 32)
+    frame_gap_x(image, 424, 104, 32)
+    frame_gap_y(image, 108, 36, 28)
+    frame_gap_x(image, 248, 64, 32)
+    frame_gap_y(image, 168, 200, 32)
+    frame_gap_y(image, 248, 200, 32)
+    frame_gap_y(image, 352, 244, 32)
+    door_leaf(image, 42, 90, 8, 14)
+    solids.append((42, 90, 8, 14))
+    door_leaf(image, 198, 90, 8, 14)
+    solids.append((198, 90, 8, 14))
+    door_leaf(image, 338, 90, 8, 14)
+    solids.append((338, 90, 8, 14))
+    door_leaf(image, 426, 90, 8, 14)
+    solids.append((426, 90, 8, 14))
+    door_leaf(image, 116, 56, 12, 8)
+    solids.append((116, 56, 12, 8))
+    door_leaf(image, 270, 50, 8, 14)
+    solids.append((270, 50, 8, 14))
+    door_leaf(image, 154, 200, 14, 8)
+    solids.append((154, 200, 14, 8))
+    door_leaf(image, 256, 200, 14, 8)
+    solids.append((256, 200, 14, 8))
+    door_leaf(image, 360, 268, 14, 8)
+    solids.append((360, 268, 14, 8))
+    door_leaf(image, 392, 272, 10, 16)
+    solids.append((392, 272, 10, 16))
+    fill_rect(image, 390, 288, 2, 8, DOOR_D)
+    fill_rect(image, 424, 288, 2, 8, DOOR_D)
+    fill_rect(image, 396, 292, 24, 2, (236, 228, 216, 255))
 
     assert_paths(solids)
     write_casa_walls(solids)
@@ -1224,8 +1296,8 @@ def main() -> None:
     down = player.crop((0, 0, 16, 24))
     side = player.crop((0, 24, 16, 48))
     casa_preview = casa.copy()
-    paste_feet(casa_preview, down, 100, 156)
-    paste_feet(casa_preview, plant, 96, 214)
+    paste_feet(casa_preview, down, 64, 92)
+    paste_feet(casa_preview, plant, 146, 250)
     scale(casa_preview, 2).save(preview / "casa.png")
 
     rua_preview = rua.copy()

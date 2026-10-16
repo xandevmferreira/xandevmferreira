@@ -7,6 +7,10 @@
 [ext_resource type="Script" path="res://scripts/feet_sprite.gd" id="5_pes"]
 [ext_resource type="Script" path="res://scripts/interactable.gd" id="6_falar"]
 [ext_resource type="Script" path="res://scripts/door.gd" id="7_porta"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pai.png" id="8_pai"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mae.png" id="9_mae"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cachorra.png" id="10_cao"]
+[ext_resource type="Script" path="res://scripts/wardrobe.gd" id="11_armario"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vaso"]
 size = Vector2(12, 6)
@@ -55,6 +59,24 @@ y_sort_enabled = true
 
 [node name="Player" parent="Props" instance=ExtResource("3_player")]
 position = Vector2(70, 158)
+
+[node name="Pai" type="Sprite2D" parent="Props"]
+texture_filter = 0
+position = Vector2(212, 258)
+texture = ExtResource("8_pai")
+script = ExtResource("5_pes")
+
+[node name="Mae" type="Sprite2D" parent="Props"]
+texture_filter = 0
+position = Vector2(374, 138)
+texture = ExtResource("9_mae")
+script = ExtResource("5_pes")
+
+[node name="Cachorra" type="Sprite2D" parent="Props"]
+texture_filter = 0
+position = Vector2(404, 186)
+texture = ExtResource("10_cao")
+script = ExtResource("5_pes")
 
 [node name="Plant" type="Node2D" parent="Props"]
 position = Vector2(100, 270)
@@ -123,7 +145,7 @@ collision_layer = 4
 collision_mask = 0
 monitoring = false
 script = ExtResource("6_falar")
-dialogue_id = "sofa"
+dialogue_id = "pai"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Sofa"]
 shape = SubResource("RectangleShape2D_sofa")
@@ -149,6 +171,38 @@ dialogue_id = "maquina"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Maquina"]
 shape = SubResource("RectangleShape2D_maquina")
+
+[node name="Mae" type="Area2D" parent="Talkers"]
+position = Vector2(374, 152)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("6_falar")
+dialogue_id = "mae"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Mae"]
+shape = SubResource("RectangleShape2D_cozinha")
+
+[node name="Cachorra" type="Area2D" parent="Talkers"]
+position = Vector2(404, 186)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("6_falar")
+dialogue_id = "cachorra"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Cachorra"]
+shape = SubResource("RectangleShape2D_planta")
+
+[node name="Armario" type="Area2D" parent="Talkers"]
+position = Vector2(108, 150)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("11_armario")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Armario"]
+shape = SubResource("RectangleShape2D_cama")
 
 [node name="Door" type="Area2D" parent="."]
 position = Vector2(408, 298)

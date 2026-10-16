@@ -23,8 +23,12 @@ A cena da casa segue a planta em `references/locations/casa/planta.png`.
 - Sala de TV: estante com livros, TV, sofá e mesa de jantar.
 - Hall de entrada. A porta leva à rua do condomínio.
 
-A personagem começa no quarto da Amanda. A volta da rua a deixa no hall.
+A personagem começa no quarto da Amanda. O banheiro dela é suíte, com porta saindo do quarto. A volta da rua a deixa no hall.
+
+O pai fica sentado no sofá. A mãe cozinha. A cachorra preta dorme no chão, perto da cozinha.
 
 ## Fora da casa
 
-A rua é um condomínio fechado, não uma fazenda. O Creta preto fica na rua, perto da porta. A academia é do lado. Depois de 1 minuto na casa, o celular recebe uma mensagem do Alex e começa um cronômetro de 3 minutos. Na academia, a série libera um quarto do coração.
+A rua é um condomínio fechado, não uma fazenda. O Creta preto fica na rua, perto da porta. A academia é do lado. Depois de 1 minuto na casa, o celular recebe uma mensagem do Alex e começa um cronômetro de 3 minutos. Na academia, o Alex anima o treino e a série libera um quarto do coração.
+
+Ao sair da academia, a missão é voltar para casa e se arrumar para a UFPA. O guarda-roupa faz o PUF e troca a roupa. O Henrique espera na rua, entra no Creta e os dois seguem até a universidade. Lá estão o professor Ernani, o professor Breno, a placa da Pedagogia e outro quarto do coração.

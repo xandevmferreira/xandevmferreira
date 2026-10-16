@@ -283,6 +283,115 @@ func _drive_to_gym() -> void:
 		heart_guard += 1
 	if _game.heart_pieces != 1:
 		_fail("não pegou o 1/4 do coração")
+		return
+	trainee.global_position = Vector2(124, 130)
+	trainee.facing = Vector2.DOWN
+	await physics_frame
+	Input.action_press("move_down")
+	var left_gym := false
+	var started_leave := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - started_leave < 2500:
+		await process_frame
+		if current_scene != null and current_scene.name == "Rua":
+			left_gym = true
+			break
+	Input.action_release("move_down")
+	if not left_gym:
+		_fail("não saiu da academia")
+		return
+	await create_timer(0.55).timeout
+	if not _game.mission_ufpa or not _game.dialogue_open:
+		_fail("a missão da UFPA não abriu")
+		return
+	await _close_talk()
+	_game.request_scene("res://scenes/casa/casa.tscn", "default")
+	if not await _await_scene("Casa"):
+		_fail("não voltou para se arrumar")
+		return
+	await create_timer(0.45).timeout
+	current_scene.get_node("Talkers/Armario").interact()
+	await process_frame
+	if not _game.dressed:
+		_fail("o guarda-roupa não trocou a roupa")
+		return
+	await _shot(current_scene, "/tmp/art-preview/godot_puf.png")
+	await _close_talk()
+	_game.request_scene("res://scenes/rua/rua.tscn", "from_casa")
+	if not await _await_scene("Rua"):
+		_fail("não saiu para encontrar o Henrique")
+		return
+	await create_timer(0.45).timeout
+	var friend := current_scene.get_node("Props/Henrique")
+	if not friend.visible:
+		_fail("o Henrique não apareceu")
+		return
+	friend.interact()
+	await process_frame
+	if not _game.henrique_joined or not await _seen("tu nem sabe"):
+		_fail("o Henrique não falou")
+		return
+	await _close_talk()
+	_game.request_scene("res://scenes/universidade/universidade.tscn", "default")
+	if not await _await_scene("Universidade"):
+		_fail("não chegou na UFPA")
+		return
+	await create_timer(0.55).timeout
+	await _close_talk()
+	await _shot(current_scene, "/tmp/art-preview/godot_ufpa.png")
+	var student := current_scene.get_node("Props/Player") as CharacterBody2D
+	student.global_position = Vector2(176, 102)
+	student.facing = Vector2.UP
+	for _i in 4:
+		await physics_frame
+	_press_interact()
+	for _frame in 4:
+		await process_frame
+	if not await _seen("mais elegante"):
+		_fail("o professor Ernani não falou")
+		return
+	await _close_talk()
+	student.global_position = Vector2(320, 166)
+	student.facing = Vector2.UP
+	for _i in 4:
+		await physics_frame
+	_press_interact()
+	for _frame in 4:
+		await process_frame
+	if not await _seen("começa a escrever"):
+		_fail("o professor Breno não falou")
+		return
+	await _close_talk()
+	current_scene.get_node("Heart").interact()
+	await process_frame
+	if _game.heart_pieces != 2:
+		_fail("não achou o segundo coração: %s" % _game.heart_pieces)
+
+func _seen(snippet: String) -> bool:
+	var guard := 0
+	while guard < 6:
+		if _label_has(snippet):
+			return true
+		if not _game.dialogue_open:
+			return false
+		_press_interact()
+		await process_frame
+		guard += 1
+	return _label_has(snippet)
+
+func _close_talk() -> void:
+	var guard := 0
+	while _game.dialogue_open and guard < 8:
+		_press_interact()
+		await process_frame
+		guard += 1
+
+func _await_scene(scene_name: String) -> bool:
+	var started := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - started < 2500:
+		await process_frame
+		if current_scene != null and current_scene.name == scene_name:
+			return true
+	return false
 
 func _label_has(snippet: String) -> bool:
 	return _dialogue_line().contains(snippet)

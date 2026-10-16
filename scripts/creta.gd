@@ -26,6 +26,14 @@ func _physics_process(_delta: float) -> void:
 	if axis.x != 0.0:
 		$Sprite.flip_h = axis.x < 0.0
 	move_and_slide()
+	if global_position.x < 368.0:
+		return
+	if Game.henrique_joined:
+		Game.go_university()
+	else:
+		global_position.x = 360.0
+		velocity = Vector2.ZERO
+		Game.remind_gate()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not driving or Game.blocks_player():

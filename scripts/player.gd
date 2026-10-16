@@ -10,6 +10,7 @@ const FRAME := Vector2i(16, 24)
 
 var facing := Vector2.DOWN
 var _last_axis := "y"
+var _outfit := "casa"
 
 func _ready() -> void:
 	add_to_group("player")
@@ -103,8 +104,20 @@ func _update_prompt() -> void:
 	else:
 		Game.set_prompt(Vector2.ZERO, false)
 
+func apply_outfit(outfit_name: String) -> void:
+	if _outfit == outfit_name and sprite.sprite_frames != null:
+		return
+	_outfit = outfit_name
+	var anim := sprite.animation
+	var frame := sprite.frame
+	_build_frames()
+	if anim != StringName():
+		sprite.play(anim)
+		sprite.frame = frame
+
 func _build_frames() -> void:
-	var texture: Texture2D = load("res://assets/sprites/player.png")
+	var path := "res://assets/sprites/player_elegante.png" if _outfit == "elegante" else "res://assets/sprites/player.png"
+	var texture: Texture2D = load(path)
 	var frames := SpriteFrames.new()
 	if frames.has_animation(&"default"):
 		frames.remove_animation(&"default")

@@ -13,6 +13,8 @@
 [ext_resource type="Script" path="res://scripts/door.gd" id="11_porta"]
 [ext_resource type="Script" path="res://scripts/creta.gd" id="12_creta"]
 [ext_resource type="Script" path="res://scripts/creta_talk.gd" id="13_falar_carro"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="14_npc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/henrique.png" id="15_henrique"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flores_solido"]
 size = Vector2(12, 6)
@@ -185,6 +187,24 @@ target_spawn = "default"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GymDoor"]
 shape = SubResource("RectangleShape2D_porta")
 
+[node name="Henrique" type="Area2D" parent="Props"]
+position = Vector2(148, 78)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("14_npc")
+dialogue_id = "henrique"
+show_if_dressed = true
+hide_after_join = true
+
+[node name="Sprite" type="Sprite2D" parent="Props/Henrique"]
+texture_filter = 0
+texture = ExtResource("15_henrique")
+script = ExtResource("8_pes")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Henrique"]
+shape = SubResource("RectangleShape2D_gato")
+
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="default" type="Marker2D" parent="Spawns"]
@@ -195,3 +215,6 @@ position = Vector2(62, 86)
 
 [node name="from_academia" type="Marker2D" parent="Spawns"]
 position = Vector2(312, 86)
+
+[node name="from_ufpa" type="Marker2D" parent="Spawns"]
+position = Vector2(340, 86)

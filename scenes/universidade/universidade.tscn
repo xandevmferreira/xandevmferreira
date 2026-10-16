@@ -1,0 +1,125 @@
+[gd_scene load_steps=12 format=3 uid="uid://cufpa_aniv01"]
+
+[ext_resource type="Script" path="res://scripts/map.gd" id="1_map"]
+[ext_resource type="Texture2D" path="res://assets/maps/ufpa.png" id="2_mapa"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="4_npc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ernani.png" id="5_ernani"]
+[ext_resource type="Texture2D" path="res://assets/sprites/breno.png" id="6_breno"]
+[ext_resource type="Script" path="res://scripts/feet_sprite.gd" id="7_pes"]
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="8_falar"]
+[ext_resource type="Script" path="res://scripts/heart_piece.gd" id="9_coracao"]
+[ext_resource type="Texture2D" path="res://assets/sprites/heart2.png" id="10_coracao"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="11_porta"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pessoa"]
+size = Vector2(22, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_placa"]
+size = Vector2(88, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_coracao"]
+size = Vector2(20, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_porta"]
+size = Vector2(28, 16)
+
+[node name="Universidade" type="Node2D"]
+script = ExtResource("1_map")
+map_id = "ufpa"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(120, 80)
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 0
+texture = ExtResource("2_mapa")
+centered = false
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="Props" instance=ExtResource("3_player")]
+position = Vector2(190, 168)
+
+[node name="Ernani" type="Area2D" parent="Props"]
+position = Vector2(176, 90)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("4_npc")
+dialogue_id = "ernani"
+
+[node name="Sprite" type="Sprite2D" parent="Props/Ernani"]
+texture_filter = 0
+texture = ExtResource("5_ernani")
+script = ExtResource("7_pes")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Ernani"]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_pessoa")
+
+[node name="Breno" type="Area2D" parent="Props"]
+position = Vector2(320, 150)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("4_npc")
+dialogue_id = "breno"
+
+[node name="Sprite" type="Sprite2D" parent="Props/Breno"]
+texture_filter = 0
+texture = ExtResource("6_breno")
+script = ExtResource("7_pes")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Breno"]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_pessoa")
+
+[node name="Placa" type="Area2D" parent="."]
+position = Vector2(256, 140)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("8_falar")
+dialogue_id = "placa"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Placa"]
+shape = SubResource("RectangleShape2D_placa")
+
+[node name="Heart" type="Area2D" parent="."]
+position = Vector2(90, 160)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("9_coracao")
+piece_id = "ufpa"
+needs_exercise = false
+line_id = "coracao2"
+
+[node name="Sprite" type="Sprite2D" parent="Heart"]
+texture_filter = 0
+texture = ExtResource("10_coracao")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Heart"]
+shape = SubResource("RectangleShape2D_coracao")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(190, 186)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_porta")
+target_scene = "res://scenes/rua/rua.tscn"
+target_spawn = "from_ufpa"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+shape = SubResource("RectangleShape2D_porta")
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="default" type="Marker2D" parent="Spawns"]
+position = Vector2(190, 168)

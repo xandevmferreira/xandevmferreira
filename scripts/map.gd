@@ -21,6 +21,8 @@ func _ready() -> void:
 		_follow_player(CasaWalls.SIZE)
 	elif map_id == "rua":
 		_follow_player(CidadeWalls.SIZE)
+	elif map_id == "ufpa":
+		_follow_player(UfpaWalls.SIZE)
 	Game.on_map_ready($Props/Player, $Spawns)
 
 func _follow_player(map_size: Vector2i) -> void:
@@ -41,6 +43,8 @@ func _build_walls() -> void:
 		rects = CidadeWalls.RECTS
 	elif map_id == "academia":
 		rects = ACADEMIA_WALLS
+	elif map_id == "ufpa":
+		rects = UfpaWalls.RECTS
 	var body := $Walls as StaticBody2D
 	for rect: Rect2 in rects:
 		var shape := RectangleShape2D.new()

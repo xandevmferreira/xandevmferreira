@@ -7,6 +7,9 @@
 [ext_resource type="Script" path="res://scripts/heart_piece.gd" id="5_coracao"]
 [ext_resource type="Texture2D" path="res://assets/sprites/heart.png" id="6_coracao"]
 [ext_resource type="Script" path="res://scripts/door.gd" id="7_porta"]
+[ext_resource type="Script" path="res://scripts/npc.gd" id="8_npc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/alex.png" id="9_alex"]
+[ext_resource type="Script" path="res://scripts/feet_sprite.gd" id="10_pes"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_serie"]
 size = Vector2(40, 28)
@@ -16,6 +19,9 @@ size = Vector2(20, 18)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_porta"]
 size = Vector2(28, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_alex"]
+size = Vector2(22, 18)
 
 [node name="Academia" type="Node2D"]
 script = ExtResource("1_map")
@@ -63,6 +69,24 @@ texture = ExtResource("6_coracao")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Heart"]
 shape = SubResource("RectangleShape2D_coracao")
+
+[node name="Alex" type="Area2D" parent="."]
+position = Vector2(102, 78)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("8_npc")
+dialogue_id = "alex1"
+cycle = PackedStringArray("alex1", "alex2", "alex3", "alex4")
+
+[node name="Sprite" type="Sprite2D" parent="Alex"]
+texture_filter = 0
+texture = ExtResource("9_alex")
+script = ExtResource("10_pes")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Alex"]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_alex")
 
 [node name="Door" type="Area2D" parent="."]
 position = Vector2(124, 146)

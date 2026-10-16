@@ -124,6 +124,9 @@ LEGEND = {
     "N": INK,
     "n": (22, 22, 28, 255),
     "I": (255, 252, 246, 255),
+    "Q": (28, 26, 32, 255),
+    "q": (58, 54, 62, 255),
+    "Z": (214, 176, 78, 255),
 }
 
 
@@ -364,12 +367,47 @@ def build_back(step: int) -> Image.Image:
     return grid_image(grid)
 
 
-def character_sheet() -> Image.Image:
+def to_elegant(frame: Image.Image, view: str) -> Image.Image:
+    """Troca a roupa por um vestido preto e marca joias douradas."""
+    cloth = {WOOL[:3], WOOL_S[:3], WOOL_D[:3], SKIRT[:3], SKIRT_S[:3]}
+    image = frame.copy()
+    pixels = image.load()
+    width, height = image.size
+    for y in range(height):
+        for x in range(width):
+            pixel = pixels[x, y]
+            if pixel[3] == 0 or pixel[:3] not in cloth:
+                continue
+            pixels[x, y] = (58, 54, 62, 255) if pixel[:3] in {WOOL_S[:3], WOOL_D[:3], SKIRT_S[:3]} else (24, 22, 28, 255)
+    if view == "front":
+        for x in (6, 7, 8, 9):
+            pix(image, x, 12, (214, 176, 78, 255))
+        pix(image, 7, 13, (232, 198, 110, 255))
+        pix(image, 3, 9, (214, 176, 78, 255))
+        pix(image, 12, 9, (214, 176, 78, 255))
+    elif view == "side":
+        for x in (8, 9, 10):
+            pix(image, x, 12, (214, 176, 78, 255))
+        pix(image, 12, 9, (214, 176, 78, 255))
+    else:
+        for x in (6, 7, 8, 9):
+            pix(image, x, 10, (214, 176, 78, 255))
+    return image
+
+
+def character_sheet(elegant: bool = False) -> Image.Image:
     rows = []
-    for builder in (build_front, build_side, build_back):
-        stand = outline(builder(0))
-        stride_a = outline(builder(1))
-        stride_b = outline(builder(-1))
+    for builder, view in zip((build_front, build_side, build_back), ("front", "side", "back")):
+        stand = builder(0)
+        stride_a = builder(1)
+        stride_b = builder(-1)
+        if elegant:
+            stand = to_elegant(stand, view)
+            stride_a = to_elegant(stride_a, view)
+            stride_b = to_elegant(stride_b, view)
+        stand = outline(stand)
+        stride_a = outline(stride_a)
+        stride_b = outline(stride_b)
         rows.append(
             [
                 stand,
@@ -715,7 +753,8 @@ HOUSE_WALLS: list[tuple[int, int, int, int, bool]] = [
     (152, 140, 8, 8, False),
     (152, 172, 8, 12, False),
     (224, 96, 8, 80, False),
-    (8, 176, 144, 8, False),
+    (8, 176, 104, 8, False),
+    (140, 176, 12, 8, False),
     (232, 176, 24, 8, False),
     (288, 176, 48, 8, False),
     (336, 96, 8, 88, True),
@@ -724,8 +763,7 @@ HOUSE_WALLS: list[tuple[int, int, int, int, bool]] = [
     (56, 184, 8, 16, False),
     (56, 224, 8, 16, False),
     (104, 184, 8, 56, False),
-    (152, 184, 8, 16, False),
-    (152, 224, 8, 24, False),
+    (152, 184, 8, 56, False),
     (8, 240, 64, 8, False),
     (104, 240, 56, 8, False),
     (344, 248, 48, 8, False),
@@ -867,6 +905,9 @@ def draw_stove(image: Image.Image, x: int, y: int) -> None:
     fill_rect(image, x + 12, y + 2, 7, 5, (36, 38, 42, 255))
     pix(image, x + 5, y + 4, (120, 122, 126, 255))
     pix(image, x + 15, y + 4, (120, 122, 126, 255))
+    fill_rect(image, x + 11, y - 2, 8, 4, (90, 94, 98, 255))
+    pix(image, x + 13, y - 4, (210, 214, 216, 255))
+    pix(image, x + 15, y - 6, (210, 214, 216, 255))
 
 
 def draw_sink(image: Image.Image, x: int, y: int) -> None:
@@ -910,7 +951,9 @@ def draw_bed_v(image: Image.Image, x: int, y: int) -> None:
     fill_rect(image, x, y, 28, 6, BEAM)
     fill_rect(image, x, y, 28, 2, BEAM_L)
     fill_rect(image, x + 2, y + 6, 24, 28, (244, 228, 214, 255))
-    fill_rect(image, x + 4, y + 8, 14, 8, (255, 250, 244, 255))
+    fill_rect(image, x + 4, y + 8, 10, 7, (255, 250, 244, 255))
+    fill_rect(image, x + 15, y + 8, 8, 7, (232, 214, 214, 255))
+    fill_rect(image, x + 2, y + 16, 24, 2, (220, 196, 184, 255))
     fill_rect(image, x + 2, y + 18, 24, 14, RUG)
     fill_rect(image, x + 2, y + 18, 24, 2, RUG_L)
     fill_rect(image, x, y + 38, 28, 6, BEAM_D)
@@ -1029,8 +1072,9 @@ def draw_casa() -> Image.Image:
     solids.append((16, 122, 28, 44))
     draw_tv_shelf(image, 52, 104, 70)
     solids.append((52, 104, 70, 12))
-    draw_wardrobe(image, 118, 120, 16, 36)
-    solids.append((118, 120, 16, 36))
+    draw_wardrobe(image, 96, 118, 18, 40)
+    solids.append((96, 118, 18, 40))
+    fill_rect(image, 20, 168, 22, 6, (214, 186, 176, 255))
 
     draw_bed_v(image, 240, 108)
     solids.append((240, 108, 28, 44))
@@ -1058,6 +1102,11 @@ def draw_casa() -> Image.Image:
     draw_plain_table(image, 352, 220, 52, 14)
     solids.append((352, 217, 52, 20))
 
+    for y in range(184, 240):
+        for x in range(112, 152):
+            pixels[x, y] = (232, 236, 234, 255) if (x // 8 + y // 8) % 2 == 0 else (244, 246, 244, 255)
+    fill_rect(image, 140, 186, 8, 10, (186, 206, 210, 255))
+    fill_rect(image, 142, 188, 4, 6, (230, 240, 242, 255))
     draw_bath_sink(image, 116, 192)
     solids.append((116, 192, 14, 10))
     draw_toilet(image, 132, 192)
@@ -1070,6 +1119,8 @@ def draw_casa() -> Image.Image:
         blob(image, px + 3, 196, 4, 4, color)
     solids.append((70, 192, 28, 12))
 
+    fill_rect(image, 168, 242, 120, 36, (214, 176, 176, 255))
+    fill_rect(image, 172, 246, 112, 28, (196, 140, 146, 255))
     draw_books(image, 176, 208, 90)
     solids.append((176, 208, 90, 12))
     draw_tv_shelf(image, 184, 226, 64)
@@ -1099,7 +1150,7 @@ def draw_casa() -> Image.Image:
     frame_gap_y(image, 152, 148, 24)
     frame_gap_x(image, 256, 176, 32)
     frame_gap_y(image, 336, 192, 32)
-    frame_gap_y(image, 152, 200, 24)
+    frame_gap_x(image, 112, 176, 28)
     frame_gap_x(image, 72, 240, 32)
     frame_gap_x(image, 392, 248, 32)
     door_leaf(image, 136, 32, 12, 8)
@@ -1319,11 +1370,221 @@ def contact(frames: list[Image.Image], scale_factor: int) -> Image.Image:
     return sheet
 
 
+MORENO = (186, 124, 86, 255)
+MORENO_S = (156, 98, 66, 255)
+BROWN = (102, 64, 42, 255)
+WHITE_HAIR = (236, 232, 224, 255)
+ELDER = (228, 190, 162, 255)
+ELDER_S = (196, 156, 132, 255)
+GOLD = (214, 176, 78, 255)
+
+
+def draw_standing(
+    skin: tuple,
+    skin_s: tuple,
+    hair: tuple,
+    shirt: tuple,
+    pants: tuple,
+    glasses: bool = False,
+    chubby: bool = False,
+    beard: bool = False,
+) -> Image.Image:
+    image = new(16, 24)
+    fill_rect(image, 3, 2, 10, 4, hair)
+    fill_rect(image, 2, 4, 2, 7, hair)
+    fill_rect(image, 12, 4, 2, 7, hair)
+    fill_rect(image, 4, 6, 8, 6, skin)
+    pix(image, 5, 8, (255, 252, 246, 255))
+    pix(image, 6, 8, EYE)
+    pix(image, 9, 8, EYE)
+    pix(image, 10, 8, (255, 252, 246, 255))
+    if glasses:
+        fill_rect(image, 4, 7, 8, 1, (22, 22, 28, 255))
+        pix(image, 4, 8, (22, 22, 28, 255))
+        pix(image, 7, 8, (22, 22, 28, 255))
+        pix(image, 8, 8, (22, 22, 28, 255))
+        pix(image, 11, 8, (22, 22, 28, 255))
+    if beard:
+        fill_rect(image, 5, 10, 6, 2, hair)
+    else:
+        pix(image, 7, 11, MOUTH)
+        pix(image, 8, 11, MOUTH)
+    pix(image, 4, 10, skin_s)
+    pix(image, 11, 10, skin_s)
+    body_w = 12 if chubby else 10
+    body_x = 2 if chubby else 3
+    fill_rect(image, body_x, 12, body_w, 6, shirt)
+    fill_rect(image, body_x, 12, body_w, 1, skin_s if chubby else shirt)
+    fill_rect(image, 4, 17, 8, 3, pants)
+    fill_rect(image, 4, 20, 3, 2, SHOE)
+    fill_rect(image, 9, 20, 3, 2, SHOE)
+    return outline(image)
+
+
+def draw_father() -> Image.Image:
+    image = new(20, 16)
+    fill_rect(image, 6, 0, 8, 3, (168, 164, 158, 255))
+    fill_rect(image, 5, 2, 10, 5, ELDER)
+    pix(image, 7, 4, EYE)
+    pix(image, 12, 4, EYE)
+    pix(image, 9, 6, MOUTH)
+    fill_rect(image, 2, 7, 16, 7, (64, 92, 140, 255))
+    fill_rect(image, 4, 8, 12, 5, (86, 114, 158, 255))
+    fill_rect(image, 1, 12, 4, 3, (48, 62, 96, 255))
+    fill_rect(image, 15, 12, 4, 3, (48, 62, 96, 255))
+    fill_rect(image, 3, 14, 5, 2, (46, 52, 70, 255))
+    fill_rect(image, 12, 14, 5, 2, (46, 52, 70, 255))
+    return outline(image)
+
+
+def draw_dog() -> Image.Image:
+    image = new(24, 12)
+    fill_rect(image, 4, 4, 16, 6, (24, 22, 26, 255))
+    fill_rect(image, 2, 5, 4, 4, (24, 22, 26, 255))
+    fill_rect(image, 16, 3, 6, 5, (24, 22, 26, 255))
+    fill_rect(image, 18, 5, 4, 2, (150, 146, 142, 255))
+    pix(image, 20, 4, (250, 246, 240, 255))
+    pix(image, 21, 4, EYE)
+    pix(image, 22, 6, (120, 80, 80, 255))
+    fill_rect(image, 6, 9, 3, 2, (24, 22, 26, 255))
+    fill_rect(image, 14, 9, 3, 2, (24, 22, 26, 255))
+    fill_rect(image, 1, 6, 2, 3, (24, 22, 26, 255))
+    return outline(image)
+
+
+def draw_tree_campus(image: Image.Image, x: int, y: int) -> None:
+    fill_rect(image, x + 6, y + 14, 4, 12, (92, 64, 48, 255))
+    blob(image, x + 8, y + 10, 10, 8, LEAF_D)
+    blob(image, x + 5, y + 8, 6, 5, LEAF)
+    blob(image, x + 11, y + 7, 5, 4, LEAF_L)
+
+
+GLYPHS = {
+    "A": ["010", "101", "111", "101", "101"],
+    "C": ["011", "100", "100", "100", "011"],
+    "D": ["110", "101", "101", "101", "110"],
+    "E": ["111", "100", "110", "100", "111"],
+    "G": ["011", "100", "101", "101", "011"],
+    "H": ["101", "101", "111", "101", "101"],
+    "I": ["111", "010", "010", "010", "111"],
+    "L": ["100", "100", "100", "100", "111"],
+    "M": ["101", "111", "101", "101", "101"],
+    "O": ["010", "101", "101", "101", "010"],
+    "P": ["110", "101", "110", "100", "100"],
+    "Q": ["010", "101", "101", "011", "001"],
+    "R": ["110", "101", "110", "101", "101"],
+    "S": ["011", "100", "010", "001", "110"],
+    "U": ["101", "101", "101", "101", "010"],
+    " ": ["000", "000", "000", "000", "000"],
+}
+
+
+def paint_text(image: Image.Image, x: int, y: int, text: str, color: tuple) -> None:
+    cursor = x
+    for char in text:
+        glyph = GLYPHS.get(char, GLYPHS[" "])
+        for row, bits in enumerate(glyph):
+            for col, bit in enumerate(bits):
+                if bit == "1":
+                    pix(image, cursor + col, y + row, color)
+        cursor += 4
+
+
+UNI_W = 400
+UNI_H = 200
+UNI_WALLS: list[tuple[int, int, int, int]] = [
+    (0, 0, 400, 8),
+    (0, 8, 8, 184),
+    (392, 8, 8, 184),
+    (0, 192, 400, 8),
+    (8, 8, 384, 28),
+    (120, 52, 168, 8),
+    (120, 60, 8, 44),
+    (280, 60, 8, 44),
+    (120, 104, 52, 8),
+    (204, 104, 84, 8),
+    (28, 120, 18, 16),
+    (340, 70, 18, 16),
+    (48, 150, 16, 16),
+    (214, 118, 84, 16),
+    (160, 64, 28, 8),
+]
+
+
+def write_ufpa_walls() -> None:
+    lines = [
+        "class_name UfpaWalls",
+        "extends RefCounted",
+        "",
+        "## Muros da UFPA. Sai de tools/generate_art.py.",
+        "",
+        "const SIZE := Vector2i(400, 200)",
+        "",
+        "const RECTS: Array[Rect2] = [",
+    ]
+    for x, y, w, h in UNI_WALLS:
+        lines.append(f"\tRect2({x}, {y}, {w}, {h}),")
+    lines.append("]")
+    lines.append("")
+    (ROOT / "scripts" / "ufpa_walls.gd").write_text("\n".join(lines), encoding="utf-8")
+
+
+def draw_universidade() -> Image.Image:
+    image = Image.new("RGBA", (UNI_W, UNI_H), (214, 208, 196, 255))
+    pixels = image.load()
+    for y in range(36, 192):
+        for x in range(8, 392):
+            pixels[x, y] = (198, 192, 180, 255) if (x // 16 + y // 16) % 2 == 0 else (214, 208, 196, 255)
+    for y in range(8, 36):
+        for x in range(8, 392):
+            wave = (x // 6 + y) % 5 == 0
+            pixels[x, y] = (96, 156, 180, 255) if wave else (64, 124, 156, 255)
+    for x, y, w, h in (
+        (120, 52, 168, 8),
+        (120, 60, 8, 44),
+        (280, 60, 8, 44),
+        (120, 104, 52, 8),
+        (204, 104, 84, 8),
+    ):
+        fill_rect(image, x, y, w, h, (232, 214, 186, 255))
+        fill_rect(image, x, y, w, 2, (176, 92, 84, 255))
+    fill_rect(image, 128, 60, 152, 44, (240, 230, 210, 255))
+    fill_rect(image, 160, 64, 28, 8, (48, 58, 70, 255))
+    fill_rect(image, 162, 66, 24, 4, (180, 206, 196, 255))
+    wall_window(image, 206, 70, 20, 12)
+    wall_window(image, 234, 70, 20, 12)
+    paint_text(image, 136, 54, "PEDAGOGIA", (92, 48, 40, 255))
+    fill_rect(image, 214, 118, 84, 16, (122, 86, 58, 255))
+    fill_rect(image, 214, 118, 84, 2, (92, 62, 40, 255))
+    paint_text(image, 218, 120, "SO OS MELHORES", (255, 244, 220, 255))
+    paint_text(image, 226, 126, "CHEGAM AQUI", (255, 244, 220, 255))
+    fill_rect(image, 168, 108, 4, 14, DOOR_D)
+    fill_rect(image, 200, 108, 4, 14, DOOR)
+    draw_tree_campus(image, 20, 108)
+    draw_tree_campus(image, 332, 58)
+    draw_tree_campus(image, 40, 138)
+    draw_tree_campus(image, 300, 140)
+    write_ufpa_walls()
+    return image
+
+
+def draw_heart_more() -> Image.Image:
+    image = new(16, 16)
+    fill_rect(image, 3, 3, 4, 3, (214, 72, 96, 255))
+    fill_rect(image, 2, 5, 6, 3, (214, 72, 96, 255))
+    fill_rect(image, 9, 3, 4, 3, (214, 72, 96, 255))
+    fill_rect(image, 8, 5, 6, 3, (214, 72, 96, 255))
+    fill_rect(image, 4, 8, 8, 2, (236, 228, 226, 255))
+    fill_rect(image, 5, 10, 6, 3, (236, 228, 226, 255))
+    return outline(image)
+
+
 def main() -> None:
     for folder in ("sprites", "maps", "ui", "fonts"):
         (ASSETS / folder).mkdir(parents=True, exist_ok=True)
 
     player = character_sheet()
+    elegante = character_sheet(True)
     plant = PLANT
     flowers = FLOWERS
     cat = new(32, 16)
@@ -1335,8 +1596,24 @@ def main() -> None:
     academia = draw_academia()
     creta = draw_creta()
     heart = draw_heart()
+    heart_more = draw_heart_more()
+    alex = draw_standing(MORENO, MORENO_S, HAIR, (168, 64, 72, 255), (48, 52, 64, 255))
+    henrique = draw_standing(MORENO, MORENO_S, HAIR, (64, 104, 156, 255), (48, 52, 64, 255))
+    mae = draw_standing(SKIN, SKIN_S, BROWN, (214, 168, 150, 255), (120, 96, 84, 255), glasses=True)
+    pai = draw_father()
+    cachorra = draw_dog()
+    ernani = draw_standing(ELDER, ELDER_S, WHITE_HAIR, (52, 62, 92, 255), (60, 56, 52, 255), beard=True)
+    breno = draw_standing(ELDER, ELDER_S, WHITE_HAIR, (120, 84, 58, 255), (48, 52, 60, 255))
 
     player.save(ASSETS / "sprites" / "player.png")
+    elegante.save(ASSETS / "sprites" / "player_elegante.png")
+    alex.save(ASSETS / "sprites" / "alex.png")
+    henrique.save(ASSETS / "sprites" / "henrique.png")
+    mae.save(ASSETS / "sprites" / "mae.png")
+    pai.save(ASSETS / "sprites" / "pai.png")
+    cachorra.save(ASSETS / "sprites" / "cachorra.png")
+    ernani.save(ASSETS / "sprites" / "ernani.png")
+    breno.save(ASSETS / "sprites" / "breno.png")
     plant.save(ASSETS / "sprites" / "plant.png")
     flowers.save(ASSETS / "sprites" / "flowers.png")
     cat.save(ASSETS / "sprites" / "cat.png")
@@ -1345,8 +1622,10 @@ def main() -> None:
     casa.save(ASSETS / "maps" / "casa.png")
     rua.save(ASSETS / "maps" / "rua.png")
     academia.save(ASSETS / "maps" / "academia.png")
+    draw_universidade().save(ASSETS / "maps" / "ufpa.png")
     creta.save(ASSETS / "sprites" / "creta.png")
     heart.save(ASSETS / "sprites" / "heart.png")
+    heart_more.save(ASSETS / "sprites" / "heart2.png")
     draw_dialogue_frame().save(ASSETS / "ui" / "dialogue_frame.png")
     draw_key_chip().save(ASSETS / "ui" / "key_e.png")
     draw_arrow().save(ASSETS / "ui" / "arrow.png")

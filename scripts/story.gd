@@ -11,8 +11,8 @@ extends RefCounted
 
 const DIALOGUES := {
 	"cama": [
-		"Sua cama, no quarto da Amanda.",
-		"O lençol está do jeito que você deixou.",
+		"A cama está arrumada.",
+		"Alguém que dormiu aqui arrumou antes de sair.",
 	],
 	"piano": [
 		"O piano sem cauda, encostado na sala.",
@@ -64,6 +64,68 @@ const DIALOGUES := {
 	"coracao": [
 		"Um quarto do coração.",
 		"É o primeiro pedaço. O resto ainda está na cidade.",
+	],
+	"pai": [
+		"Pai: No Quixote, o amor às vezes voa.",
+		"Às vezes anda. Ninguém o alcança, nem lhe escapa.",
+	],
+	"mae": [
+		"Bom dia filhota! Deus te abençoe.",
+	],
+	"cachorra": [
+		"Me leva pra passear humana!",
+	],
+	"alex1": [
+		"Vamos lá! Ta leve!",
+	],
+	"alex2": [
+		"Isso! Mais uma, campeã!",
+	],
+	"alex3": [
+		"Leve demais! Quase voando!",
+	],
+	"alex4": [
+		"Você consegue! Eu acredito!",
+	],
+	"armario": [
+		"O guarda-roupa da Amanda.",
+	],
+	"armario_pronta": [
+		"A roupa preta já está no corpo.",
+	],
+	"puf": [
+		"PUF.",
+		"Roupa preta e joias douradas. Pronta pra UFPA.",
+	],
+	"missao_ufpa": [
+		"Hora de ir pra casa e se arrumar.",
+		"Hoje tem aula na UFPA.",
+	],
+	"henrique": [
+		"Amiga, tu nem sabe!",
+		"Entra no Creta. Eu vou junto.",
+	],
+	"creta_ufpa": [
+		"Henrique sobe junto. A UFPA é seguindo a rua.",
+	],
+	"ufpa_cedo": [
+		"A UFPA fica pra lá. O Henrique ainda não veio.",
+	],
+	"ufpa_chegada": [
+		"A UFPA. O rio passa atrás da Pedagogia.",
+	],
+	"placa": [
+		"Só os melhores chegam aqui.",
+	],
+	"ernani": [
+		"Amiga, vc é a aluna mais elegante da universidade!",
+	],
+	"breno": [
+		"Amanda, começa a escrever!!!!",
+	],
+	"coracao2": [
+		"Outro quarto do coração.",
+		"Já são dois. O resto ainda está na cidade.",
 	],
 	"presente": [
 		"Uma caixinha amarrada com fita está em cima do banco.",

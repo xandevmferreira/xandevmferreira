@@ -39,6 +39,13 @@ var gym_arrived := false
 var exercised := false
 var heart_pieces := 0
 var driving := false
+var mission_ufpa := false
+var dressed := false
+var henrique_joined := false
+var ufpa_arrived := false
+var _hearts := {}
+var _said_gate := false
+var _spawn_used := ""
 var _car: Node2D
 var _after_close := ""
 var _status: Label
@@ -79,12 +86,20 @@ func request_scene(path: String, spawn_name: String) -> void:
 	)
 
 func on_map_ready(player: Node2D, spawns: Node2D) -> void:
+	_spawn_used = pending_spawn
 	var marker := spawns.get_node_or_null(pending_spawn) as Node2D
 	if marker == null:
 		marker = spawns.get_node_or_null("default") as Node2D
 	if marker:
 		player.global_position = marker.global_position
 	pending_spawn = "default"
+	var body := player as CharacterBody2D
+	if body:
+		body.visible = true
+		body.collision_layer = 2
+		body.set_physics_process(true)
+		if dressed and body.has_method("apply_outfit"):
+			body.apply_outfit("elegante")
 	driving = false
 	transitioning = true
 	var tween := create_tween()
@@ -92,8 +107,16 @@ func on_map_ready(player: Node2D, spawns: Node2D) -> void:
 	tween.tween_callback(func() -> void:
 		transitioning = false
 		var scene := get_tree().current_scene
-		if scene != null and scene.name == "Academia":
+		if scene == null:
+			return
+		if scene.name == "Academia":
 			arrive_gym()
+		elif scene.name == "Rua" and _spawn_used == "from_academia" and not mission_ufpa:
+			mission_ufpa = true
+			start_dialogue(Story.lines_for("missao_ufpa"))
+		elif scene.name == "Universidade" and not ufpa_arrived:
+			ufpa_arrived = true
+			start_dialogue(Story.lines_for("ufpa_chegada"))
 	)
 
 func set_prompt(anchor: Vector2, show: bool) -> void:
@@ -202,7 +225,8 @@ func queue_drive(car: Node2D) -> void:
 		return
 	_car = car
 	_after_close = "enter_car"
-	start_dialogue(Story.lines_for("creta"))
+	var fala := "creta_ufpa" if henrique_joined else "creta"
+	start_dialogue(Story.lines_for(fala))
 
 func end_drive() -> void:
 	if not driving or _car == null:
@@ -232,8 +256,34 @@ func arrive_gym() -> void:
 	elif gym_late or phone_read:
 		start_dialogue(Story.lines_for("academia_atraso"))
 
-func collect_heart() -> void:
-	heart_pieces = 1
+func has_heart(piece_id: String) -> bool:
+	return _hearts.has(piece_id)
+
+func collect_heart(piece_id: String = "academia") -> void:
+	_hearts[piece_id] = true
+	heart_pieces = _hearts.size()
+
+func transform_outfit() -> void:
+	if dressed:
+		return
+	dressed = true
+	var player := get_tree().get_first_node_in_group("player")
+	if player and player.has_method("apply_outfit"):
+		player.apply_outfit("elegante")
+	_show_puf()
+	start_dialogue(Story.lines_for("puf"))
+
+func remind_gate() -> void:
+	if _said_gate or henrique_joined or blocks_player():
+		return
+	_said_gate = true
+	start_dialogue(Story.lines_for("ufpa_cedo"))
+
+func go_university() -> void:
+	if transitioning or not henrique_joined:
+		return
+	driving = false
+	request_scene("res://scenes/universidade/universidade.tscn", "default")
 
 func _start_drive() -> void:
 	if _car == null:
@@ -262,7 +312,13 @@ func _refresh_status() -> void:
 		_status.text = "Treino %d:%02d" % [total / 60, total % 60]
 		_status.visible = true
 	elif heart_pieces > 0:
-		_status.text = "Coração 1/4"
+		_status.text = "Coração %d/4" % heart_pieces
+		_status.visible = true
+	elif mission_ufpa and not dressed:
+		_status.text = "UFPA: casa"
+		_status.visible = true
+	elif dressed and not henrique_joined:
+		_status.text = "Henrique"
 		_status.visible = true
 	else:
 		_status.visible = false
@@ -346,6 +402,36 @@ func _build_ui() -> void:
 	_layer.add_child(_status)
 
 	_layer.move_child(_fade, -1)
+
+func _show_puf() -> void:
+	var flash := ColorRect.new()
+	flash.color = Color(1, 1, 1, 0.0)
+	flash.position = Vector2.ZERO
+	flash.size = Vector2(240, 160)
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_layer.add_child(flash)
+	var font := load("res://assets/fonts/CozetteVector.ttf") as Font
+	var label := Label.new()
+	label.text = "PUF"
+	label.position = Vector2(80, 58)
+	label.size = Vector2(80, 28)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_override(&"font", font)
+	label.add_theme_font_size_override(&"font_size", 28)
+	label.add_theme_color_override(&"font_color", Color("3a242c"))
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_layer.add_child(label)
+	_layer.move_child(_fade, -1)
+	var tween := create_tween()
+	tween.tween_property(flash, "color:a", 0.9, 0.08)
+	tween.tween_property(flash, "color:a", 0.0, 0.28)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.4)
+	tween.tween_callback(func() -> void:
+		if is_instance_valid(flash):
+			flash.queue_free()
+		if is_instance_valid(label):
+			label.queue_free()
+	)
 
 func _make_chip(font: Font, text: String, pos: Vector2, chip_size: Vector2) -> Control:
 	var chip := ColorRect.new()

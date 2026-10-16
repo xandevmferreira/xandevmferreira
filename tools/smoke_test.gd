@@ -21,7 +21,7 @@ func _run() -> void:
 		_fail("cena inicial %s" % casa)
 		return
 	var player := casa.get_node("Props/Player") as CharacterBody2D
-	if player.global_position.distance_to(Vector2(64, 92)) > 1.5:
+	if player.global_position.distance_to(Vector2(70, 158)) > 1.5:
 		_fail("spawn da casa em %s" % player.global_position)
 
 	var origin := player.global_position
@@ -41,8 +41,8 @@ func _run() -> void:
 	if player.global_position.y > origin.y - 4.0:
 		_fail("não andou para cima: %s" % player.global_position)
 
-	player.global_position = Vector2(32, 86)
-	player.facing = Vector2.UP
+	player.global_position = Vector2(48, 150)
+	player.facing = Vector2.LEFT
 	for _i in 3:
 		await physics_frame
 	_press_interact()
@@ -81,7 +81,7 @@ func _run() -> void:
 	_check_lines()
 
 	await create_timer(0.55).timeout
-	player.global_position = Vector2(400, 196)
+	player.global_position = Vector2(430, 148)
 	player.facing = Vector2.UP
 	for _i in 3:
 		await physics_frame
@@ -103,11 +103,11 @@ func _run() -> void:
 		await create_timer(0.45).timeout
 		var rua := current_scene
 		var arrived := rua.get_node("Props/Player") as Node2D
-		if arrived.global_position.distance_to(Vector2(120, 126)) > 2.0:
+		if arrived.global_position.distance_to(Vector2(62, 86)) > 2.0:
 			_fail("spawn da rua em %s" % arrived.global_position)
 		await _shot(rua, "/tmp/art-preview/godot_rua.png")
 		await create_timer(0.5).timeout
-		arrived.global_position = Vector2(120, 118)
+		arrived.global_position = Vector2(62, 78)
 		await physics_frame
 		Input.action_press("move_up")
 		var back := false
@@ -124,11 +124,42 @@ func _run() -> void:
 			for _i in 20:
 				await process_frame
 			var home := current_scene.get_node("Props/Player") as Node2D
-			if home.global_position.distance_to(Vector2(408, 252)) > 2.0:
+			if home.global_position.distance_to(Vector2(408, 268)) > 2.0:
 				_fail("spawn de volta em %s" % home.global_position)
 
 	await create_timer(0.4).timeout
 	await _shot(current_scene, "/tmp/art-preview/godot_volta.png")
+
+	if current_scene != null and current_scene.name == "Casa":
+		_game.house_seconds = 59.2
+		await create_timer(1.1).timeout
+		if not _game.phone_ringing:
+			_fail("o celular não tocou")
+		else:
+			_press_interact()
+			for _frame in 4:
+				await process_frame
+		if not _game.dialogue_open:
+			_fail("a mensagem do Alex não abriu")
+		else:
+			var saw_alex := false
+			var guard := 0
+			while _game.dialogue_open and guard < 8:
+				if _dialogue_line().contains("Meu bem vc nao vem treinar?"):
+					saw_alex = true
+					await _shot(current_scene, "/tmp/art-preview/godot_celular.png")
+				_press_interact()
+				await process_frame
+				guard += 1
+			if not saw_alex:
+				_fail("a mensagem do Alex não apareceu")
+			if _game.gym_left < 100.0:
+				_fail("o cronômetro não abriu: %s" % _game.gym_left)
+			else:
+				await _shot(current_scene, "/tmp/art-preview/godot_cronometro.png")
+
+	await _drive_to_gym()
+
 	if _errors.is_empty():
 		print("SMOKE_OK")
 		quit(0)
@@ -136,6 +167,131 @@ func _run() -> void:
 		for message in _errors:
 			print("SMOKE_FAIL: ", message)
 		quit(1)
+
+func _drive_to_gym() -> void:
+	if not _errors.is_empty():
+		return
+	_game.request_scene("res://scenes/rua/rua.tscn", "from_casa")
+	var street := false
+	var started_street := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - started_street < 2000:
+		await process_frame
+		if current_scene != null and current_scene.name == "Rua":
+			street = true
+			break
+	if not street:
+		_fail("não voltou à cidade para o Creta")
+		return
+	await create_timer(0.45).timeout
+	var rua := current_scene
+	var walker := rua.get_node("Props/Player") as CharacterBody2D
+	walker.global_position = Vector2(188, 128)
+	walker.facing = Vector2.UP
+	for _i in 4:
+		await physics_frame
+	_press_interact()
+	for _frame in 4:
+		await process_frame
+	if not _game.dialogue_open:
+		_fail("o Creta não abriu")
+		return
+	var guard := 0
+	while _game.dialogue_open and guard < 6:
+		_press_interact()
+		await process_frame
+		guard += 1
+	if not _game.is_driving():
+		_fail("não entrou no Creta")
+		return
+	var car := rua.get_node("Props/Creta") as CharacterBody2D
+	var car_x := car.global_position.x
+	Input.action_press("move_right")
+	for _i in 30:
+		await physics_frame
+	Input.action_release("move_right")
+	if car.global_position.x < car_x + 20.0:
+		_fail("o Creta não andou: %s" % car.global_position)
+		return
+	await _shot(rua, "/tmp/art-preview/godot_creta.png")
+	car.global_position = Vector2(312, 108)
+	await physics_frame
+	_press_interact()
+	for _frame in 4:
+		await process_frame
+	if _game.is_driving():
+		_fail("não saiu do Creta")
+		return
+	walker = rua.get_node("Props/Player") as CharacterBody2D
+	if not walker.visible:
+		_fail("a personagem não desceu do carro")
+		return
+	walker.global_position = Vector2(312, 78)
+	walker.facing = Vector2.UP
+	await physics_frame
+	Input.action_press("move_up")
+	var gym := false
+	var started_gym := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - started_gym < 2500:
+		await process_frame
+		if current_scene != null and current_scene.name == "Academia":
+			gym = true
+			break
+	Input.action_release("move_up")
+	if not gym:
+		_fail("não entrou na academia. cena=%s pos=%s" % [current_scene, walker.global_position])
+		return
+	await create_timer(0.55).timeout
+	var close_guard := 0
+	while _game.dialogue_open and close_guard < 8:
+		_press_interact()
+		await process_frame
+		close_guard += 1
+	await _shot(current_scene, "/tmp/art-preview/godot_academia.png")
+	var trainee := current_scene.get_node("Props/Player") as CharacterBody2D
+	for serie in 3:
+		trainee.global_position = Vector2(70, 100)
+		trainee.facing = Vector2.LEFT
+		for _i in 4:
+			await physics_frame
+		_press_interact()
+		for _frame in 4:
+			await process_frame
+		var serie_guard := 0
+		while _game.dialogue_open and serie_guard < 8:
+			_press_interact()
+			await process_frame
+			serie_guard += 1
+	if not _game.exercised:
+		_fail("o exercício não terminou")
+		return
+	var heart := current_scene.get_node_or_null("Heart")
+	if heart == null or not heart.visible:
+		_fail("o pedaço do coração não apareceu")
+		return
+	await _shot(current_scene, "/tmp/art-preview/godot_coracao.png")
+	trainee.global_position = Vector2(180, 114)
+	trainee.facing = Vector2.UP
+	for _i in 4:
+		await physics_frame
+	_press_interact()
+	for _frame in 4:
+		await process_frame
+	var heart_guard := 0
+	while _game.dialogue_open and heart_guard < 8:
+		_press_interact()
+		await process_frame
+		heart_guard += 1
+	if _game.heart_pieces != 1:
+		_fail("não pegou o 1/4 do coração")
+
+func _label_has(snippet: String) -> bool:
+	return _dialogue_line().contains(snippet)
+
+func _dialogue_line() -> String:
+	for node in _game.find_children("*", "Label", true, false):
+		if node.get_parent() is NinePatchRect:
+			return String(node.text)
+	return ""
 
 func _press_interact() -> void:
 	var event := InputEventAction.new()

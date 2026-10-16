@@ -20,7 +20,7 @@ func _ready() -> void:
 	sprite.play(&"idle_down")
 
 func _physics_process(_delta: float) -> void:
-	if Game.blocks_player():
+	if Game.is_driving() or Game.blocks_player():
 		velocity = Vector2.ZERO
 		_animate(false)
 		move_and_slide()
@@ -45,7 +45,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed(&"move_up") or event.is_action_pressed(&"move_down"):
 		_last_axis = "y"
 
-	if event.is_action_pressed(&"interact") and not Game.blocks_player():
+	if event.is_action_pressed(&"interact") and not Game.blocks_player() and not Game.is_driving():
+		if Game.phone_ringing:
+			Game.read_phone()
+			get_viewport().set_input_as_handled()
+			return
 		var target := _nearest_interactable()
 		if target:
 			target.interact()

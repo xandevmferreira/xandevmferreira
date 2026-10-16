@@ -30,11 +30,28 @@ var _prompt_anchor := Vector2.ZERO
 var _prompt_wanted := false
 var _hint_hidden := false
 
+var house_seconds := 0.0
+var phone_ringing := false
+var phone_read := false
+var gym_left := -1.0
+var gym_late := false
+var gym_arrived := false
+var exercised := false
+var heart_pieces := 0
+var driving := false
+var _car: Node2D
+var _after_close := ""
+var _status: Label
+var _phone_chip: Control
+
 func _ready() -> void:
 	_build_ui()
 
 func blocks_player() -> bool:
 	return dialogue_open or transitioning
+
+func is_driving() -> bool:
+	return driving
 
 func start_dialogue(lines: PackedStringArray) -> void:
 	if lines.is_empty() or dialogue_open or transitioning:
@@ -68,11 +85,15 @@ func on_map_ready(player: Node2D, spawns: Node2D) -> void:
 	if marker:
 		player.global_position = marker.global_position
 	pending_spawn = "default"
+	driving = false
 	transitioning = true
 	var tween := create_tween()
 	tween.tween_property(_fade, "color:a", 0.0, 0.28)
 	tween.tween_callback(func() -> void:
 		transitioning = false
+		var scene := get_tree().current_scene
+		if scene != null and scene.name == "Academia":
+			arrive_gym()
 	)
 
 func set_prompt(anchor: Vector2, show: bool) -> void:
@@ -99,7 +120,20 @@ func _process(delta: float) -> void:
 	elif dialogue_open:
 		_arrow.visible = int(Time.get_ticks_msec() / 360.0) % 2 == 0
 
-	var show_prompt := _prompt_wanted and not blocks_player()
+	var scene := get_tree().current_scene
+	if scene != null and scene.name == "Casa" and not phone_read and not phone_ringing and not dialogue_open:
+		house_seconds += delta
+		if house_seconds >= 60.0:
+			phone_ringing = true
+	if gym_left > 0.0 and not gym_arrived:
+		gym_left = maxf(gym_left - delta, 0.0)
+		if gym_left == 0.0:
+			gym_late = true
+			if not dialogue_open and not transitioning:
+				start_dialogue(Story.lines_for("alex_alongou"))
+	_refresh_status()
+
+	var show_prompt := _prompt_wanted and not blocks_player() and not driving
 	_prompt.visible = show_prompt
 	if show_prompt:
 		var bob := -1.0 if int(Time.get_ticks_msec() / 280.0) % 2 == 0 else 0.0
@@ -148,6 +182,90 @@ func _close_dialogue() -> void:
 	_typing = false
 	_box.visible = false
 	_arrow.visible = false
+	var follow := _after_close
+	_after_close = ""
+	if follow == "timer":
+		gym_left = 180.0
+	elif follow == "enter_car":
+		_start_drive()
+
+func read_phone() -> void:
+	if not phone_ringing or dialogue_open or transitioning:
+		return
+	phone_ringing = false
+	phone_read = true
+	_after_close = "timer"
+	start_dialogue(Story.lines_for("celular"))
+
+func queue_drive(car: Node2D) -> void:
+	if driving or dialogue_open or transitioning:
+		return
+	_car = car
+	_after_close = "enter_car"
+	start_dialogue(Story.lines_for("creta"))
+
+func end_drive() -> void:
+	if not driving or _car == null:
+		return
+	var player := get_tree().get_first_node_in_group("player") as CharacterBody2D
+	if player == null:
+		driving = false
+		return
+	player.global_position = _car.global_position + Vector2(0, -30)
+	player.visible = true
+	player.collision_layer = 2
+	player.set_physics_process(true)
+	var cam := _car.get_node_or_null("Camera2D") as Camera2D
+	if cam:
+		cam.reparent(player)
+		cam.position = Vector2.ZERO
+	driving = false
+
+func arrive_gym() -> void:
+	if gym_arrived:
+		return
+	gym_arrived = true
+	var made_it := gym_left > 0.0
+	gym_left = 0.0
+	if made_it:
+		start_dialogue(Story.lines_for("academia_tempo"))
+	elif gym_late or phone_read:
+		start_dialogue(Story.lines_for("academia_atraso"))
+
+func collect_heart() -> void:
+	heart_pieces = 1
+
+func _start_drive() -> void:
+	if _car == null:
+		return
+	var player := get_tree().get_first_node_in_group("player") as CharacterBody2D
+	if player == null:
+		return
+	player.visible = false
+	player.collision_layer = 0
+	player.velocity = Vector2.ZERO
+	player.set_physics_process(false)
+	var cam := player.get_node_or_null("Camera2D") as Camera2D
+	if cam:
+		cam.reparent(_car)
+		cam.position = Vector2.ZERO
+	driving = true
+	_car.set("driving", true)
+
+func _refresh_status() -> void:
+	if _phone_chip:
+		_phone_chip.visible = phone_ringing and not blocks_player()
+	if _status == null:
+		return
+	if gym_left > 0.0:
+		var total := int(ceil(gym_left))
+		_status.text = "Treino %d:%02d" % [total / 60, total % 60]
+		_status.visible = true
+	elif heart_pieces > 0:
+		_status.text = "Coração 1/4"
+		_status.visible = true
+	else:
+		_status.visible = false
 
 func _build_ui() -> void:
 	_layer = CanvasLayer.new()
@@ -209,7 +327,43 @@ func _build_ui() -> void:
 	_prompt.visible = false
 	_prompt.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_layer.add_child(_prompt)
+
+	_phone_chip = _make_chip(font, "E  celular", Vector2(4, 18), Vector2(78, 14))
+	_phone_chip.visible = false
+	_layer.add_child(_phone_chip)
+
+	_status = Label.new()
+	_status.position = Vector2(150, 18)
+	_status.size = Vector2(86, 14)
+	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_status.add_theme_font_override(&"font", font)
+	_status.add_theme_font_size_override(&"font_size", 13)
+	_status.add_theme_color_override(&"font_color", Color("fff6ea"))
+	_status.add_theme_color_override(&"font_outline_color", FADE_COLOR)
+	_status.add_theme_constant_override(&"outline_size", 3)
+	_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_status.visible = false
+	_layer.add_child(_status)
+
 	_layer.move_child(_fade, -1)
+
+func _make_chip(font: Font, text: String, pos: Vector2, chip_size: Vector2) -> Control:
+	var chip := ColorRect.new()
+	chip.position = pos
+	chip.size = chip_size
+	chip.color = Color(FADE_COLOR, 0.72)
+	chip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var label := Label.new()
+	label.text = text
+	label.position = Vector2(4, 0)
+	label.size = chip_size - Vector2(6, 0)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_override(&"font", font)
+	label.add_theme_font_size_override(&"font_size", 13)
+	label.add_theme_color_override(&"font_color", Color("fff6ea"))
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	chip.add_child(label)
+	return chip
 
 func _make_hint(font: Font) -> Control:
 	var chip := ColorRect.new()

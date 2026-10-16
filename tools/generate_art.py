@@ -21,15 +21,15 @@ ASSETS = ROOT / "assets"
 
 INK = (58, 36, 44, 255)
 
-SKIN = (255, 214, 186, 255)
-SKIN_S = (236, 178, 150, 255)
+SKIN = (255, 246, 240, 255)
+SKIN_S = (236, 214, 206, 255)
 BLUSH = (236, 146, 150, 255)
 MOUTH = (176, 104, 112, 255)
 EYE = (58, 36, 44, 255)
 
-HAIR = (102, 58, 52, 255)
-HAIR_L = (146, 86, 70, 255)
-HAIR_D = (72, 40, 40, 255)
+HAIR = (28, 26, 32, 255)
+HAIR_L = (58, 56, 66, 255)
+HAIR_D = (14, 12, 18, 255)
 RIBBON = (196, 82, 104, 255)
 RIBBON_L = (230, 150, 160, 255)
 
@@ -122,6 +122,7 @@ LEGEND = {
     "f": FROST,
     "C": CAKE,
     "N": INK,
+    "n": (22, 22, 28, 255),
     "I": (255, 252, 246, 255),
 }
 
@@ -254,16 +255,19 @@ def build_front(step: int) -> Image.Image:
     grid = blank()
     stamp(grid, 3, 2, 10, 4, "H")
     stamp(grid, 5, 2, 4, 2, "L")
-    stamp(grid, 5, 3, 3, 2, "R")
-    dot(grid, 6, 3, "r")
     stamp(grid, 4, 6, 8, 1, "H")
-    stamp(grid, 2, 5, 2, 5, "H")
-    stamp(grid, 12, 5, 2, 5, "H")
+    stamp(grid, 2, 4, 2, 9, "H")
+    stamp(grid, 12, 4, 2, 9, "H")
     stamp(grid, 4, 7, 8, 5, "S")
     stamp(grid, 5, 8, 2, 2, "E")
     stamp(grid, 9, 8, 2, 2, "E")
     dot(grid, 5, 8, "I")
     dot(grid, 9, 8, "I")
+    stamp(grid, 4, 7, 8, 1, "n")
+    dot(grid, 4, 8, "n")
+    dot(grid, 7, 8, "n")
+    dot(grid, 8, 8, "n")
+    dot(grid, 11, 8, "n")
     dot(grid, 4, 10, "B")
     dot(grid, 11, 10, "B")
     dot(grid, 7, 11, "M")
@@ -296,14 +300,15 @@ def build_front(step: int) -> Image.Image:
 def build_side(step: int) -> Image.Image:
     """Olhando para a direita. step 0 parado, 1 e -1 são os passos."""
     grid = blank()
-    stamp(grid, 3, 2, 8, 5, "H")
+    stamp(grid, 3, 2, 7, 8, "H")
     stamp(grid, 4, 2, 3, 2, "L")
-    stamp(grid, 3, 4, 2, 2, "R")
-    dot(grid, 4, 4, "r")
     stamp(grid, 6, 7, 6, 5, "S")
     stamp(grid, 10, 8, 2, 2, "E")
     dot(grid, 10, 8, "I")
-    dot(grid, 12, 9, "s")
+    stamp(grid, 9, 7, 4, 1, "n")
+    dot(grid, 9, 8, "n")
+    dot(grid, 12, 8, "n")
+    dot(grid, 13, 9, "s")
     dot(grid, 9, 10, "B")
     dot(grid, 11, 10, "M")
     stamp(grid, 5, 12, 7, 5, "W")
@@ -332,12 +337,10 @@ def build_side(step: int) -> Image.Image:
 
 def build_back(step: int) -> Image.Image:
     grid = blank()
-    stamp(grid, 3, 2, 10, 6, "H")
+    stamp(grid, 3, 2, 10, 9, "H")
     stamp(grid, 5, 2, 4, 2, "L")
-    stamp(grid, 5, 4, 5, 2, "R")
-    dot(grid, 7, 4, "r")
-    stamp(grid, 2, 5, 2, 4, "H")
-    stamp(grid, 12, 5, 2, 4, "H")
+    stamp(grid, 2, 4, 2, 8, "H")
+    stamp(grid, 12, 4, 2, 8, "H")
     stamp(grid, 3, 10, 10, 5, "W")
     stamp(grid, 3, 10, 10, 1, "v")
     stamp(grid, 3, 11, 2, 3, "w")
@@ -692,41 +695,41 @@ BATH_WG = (210, 220, 218, 255)
 HOUSE_WALLS: list[tuple[int, int, int, int, bool]] = [
     (0, 0, 480, 8, False),
     (0, 8, 8, 280, False),
-    (472, 8, 8, 168, False),
-    (472, 176, 8, 56, True),
-    (472, 232, 8, 56, False),
+    (472, 8, 8, 88, False),
+    (472, 96, 8, 92, True),
+    (472, 188, 8, 100, False),
     (0, 288, 392, 8, False),
     (424, 288, 56, 8, False),
     (0, 296, 8, 72, False),
     (472, 296, 8, 72, False),
     (0, 360, 480, 8, False),
-    (152, 8, 8, 104, False),
-    (300, 8, 8, 104, False),
-    (400, 8, 8, 104, False),
-    (8, 104, 32, 8, False),
-    (72, 104, 80, 8, False),
-    (160, 104, 36, 8, False),
-    (228, 104, 72, 8, False),
-    (308, 104, 28, 8, False),
-    (368, 104, 32, 8, False),
-    (408, 104, 16, 8, False),
-    (456, 104, 16, 8, False),
-    (108, 16, 44, 8, False),
-    (108, 16, 8, 20, False),
-    (108, 64, 8, 28, False),
-    (108, 84, 44, 8, False),
-    (228, 12, 72, 8, False),
-    (228, 12, 8, 52, False),
-    (228, 64, 20, 8, False),
-    (280, 64, 20, 8, False),
-    (8, 168, 168, 8, False),
-    (248, 168, 224, 8, True),
-    (168, 176, 8, 24, False),
-    (168, 232, 8, 56, False),
-    (248, 176, 8, 24, True),
-    (248, 232, 8, 56, False),
-    (352, 228, 8, 16, False),
-    (352, 276, 8, 12, False),
+    (128, 8, 8, 24, False),
+    (128, 64, 8, 32, False),
+    (336, 8, 8, 28, False),
+    (336, 68, 8, 28, False),
+    (8, 88, 148, 8, False),
+    (188, 88, 72, 8, False),
+    (292, 88, 44, 8, False),
+    (336, 88, 136, 8, True),
+    (152, 96, 8, 20, False),
+    (152, 140, 8, 8, False),
+    (152, 172, 8, 12, False),
+    (224, 96, 8, 80, False),
+    (8, 176, 144, 8, False),
+    (232, 176, 24, 8, False),
+    (288, 176, 48, 8, False),
+    (336, 96, 8, 88, True),
+    (336, 184, 8, 8, False),
+    (336, 224, 8, 64, False),
+    (56, 184, 8, 16, False),
+    (56, 224, 8, 16, False),
+    (104, 184, 8, 56, False),
+    (152, 184, 8, 16, False),
+    (152, 224, 8, 24, False),
+    (8, 240, 64, 8, False),
+    (104, 240, 56, 8, False),
+    (344, 248, 48, 8, False),
+    (424, 248, 48, 8, False),
 ]
 
 
@@ -938,22 +941,24 @@ def feet_blocked(px: int, py: int, rects: list[tuple[int, int, int, int]]) -> bo
 
 
 def assert_paths(rects: list[tuple[int, int, int, int]]) -> None:
-    start = (64, 92)
+    start = (70, 158)
     goals = {
-        "spawn_direita": (80, 92),
-        "spawn_cima": (64, 82),
-        "cama": (32, 86),
-        "banho_amanda": (132, 48),
-        "centro": (200, 88),
-        "banho_centro": (264, 40),
-        "visita": (370, 90),
-        "lavanderia": (440, 60),
-        "cozinha": (400, 196),
-        "jantar": (320, 262),
-        "corredor": (200, 140),
-        "piano": (100, 240),
-        "sala": (110, 210),
-        "hall": (408, 252),
+        "spawn_direita": (86, 158),
+        "spawn_cima": (70, 148),
+        "cama": (48, 150),
+        "casal": (60, 70),
+        "banho_casal": (168, 48),
+        "aberta": (270, 50),
+        "lavanderia": (400, 50),
+        "visita": (280, 140),
+        "cozinha": (430, 148),
+        "jantar": (420, 230),
+        "corredor": (190, 140),
+        "piano": (110, 258),
+        "sala": (300, 250),
+        "plantas": (80, 210),
+        "banho_quarto": (148, 208),
+        "hall": (408, 268),
         "porta": (408, 278),
     }
     for name, point in {"amanda": start, **goals}.items():
@@ -1013,110 +1018,106 @@ def draw_casa() -> Image.Image:
         else:
             paint_light_wall(image, x, y, w, h)
 
-    draw_bed_v(image, 18, 28)
-    solids.append((18, 28, 28, 44))
-    draw_tv_shelf(image, 46, 14, 52)
-    solids.append((46, 14, 52, 12))
-    draw_wardrobe(image, 86, 70, 16, 26)
-    solids.append((86, 70, 16, 26))
-    draw_bath_sink(image, 118, 28)
-    solids.append((118, 28, 14, 10))
-    draw_shower(image, 136, 28, 14, 18)
-    solids.append((136, 28, 14, 18))
-    draw_toilet(image, 120, 66)
-    solids.append((120, 66, 10, 14))
+    draw_bed(image, 16, 18)
+    solids.append((16, 18, 54, 40))
+    draw_bath_sink(image, 148, 18)
+    solids.append((148, 18, 14, 10))
+    draw_toilet(image, 172, 62)
+    solids.append((172, 62, 10, 14))
 
-    draw_bed(image, 166, 18)
-    solids.append((166, 18, 54, 40))
-    draw_bath_sink(image, 238, 22)
-    solids.append((238, 22, 14, 10))
-    draw_toilet(image, 276, 22)
-    solids.append((276, 22, 10, 14))
-    draw_shower(image, 238, 46, 12, 16)
-    solids.append((238, 46, 12, 16))
+    draw_bed_v(image, 16, 122)
+    solids.append((16, 122, 28, 44))
+    draw_tv_shelf(image, 52, 104, 70)
+    solids.append((52, 104, 70, 12))
+    draw_wardrobe(image, 118, 120, 16, 36)
+    solids.append((118, 120, 16, 36))
 
-    draw_bed_v(image, 316, 18)
-    solids.append((316, 18, 28, 44))
-    draw_wardrobe(image, 364, 16, 16, 34)
-    solids.append((364, 16, 16, 34))
-    draw_pc(image, 318, 68, 46, 12)
-    solids.append((318, 68, 46, 12))
+    draw_bed_v(image, 240, 108)
+    solids.append((240, 108, 28, 44))
+    draw_wardrobe(image, 304, 108, 16, 32)
+    solids.append((304, 108, 16, 32))
+    draw_pc(image, 246, 156, 44, 12)
+    solids.append((246, 156, 44, 12))
 
-    draw_machine(image, 418, 16)
-    solids.append((418, 16, 36, 22))
+    draw_machine(image, 390, 18)
+    solids.append((390, 18, 36, 22))
 
-    draw_counter(image, 300, 178, 140, 12, (232, 220, 204, 255))
-    solids.append((300, 178, 140, 12))
-    draw_stove(image, 308, 190)
-    solids.append((308, 190, 22, 16))
-    draw_sink(image, 334, 190)
-    solids.append((334, 190, 26, 14))
-    draw_wardrobe(image, 448, 178, 14, 36)
-    solids.append((448, 178, 14, 36))
-    draw_counter(image, 300, 210, 132, 12, (214, 176, 140, 255))
-    solids.append((300, 210, 132, 12))
-    draw_plain_table(image, 262, 256, 52, 14)
-    solids.append((262, 253, 52, 20))
-    for stool in (314, 346, 378):
-        fill_rect(image, stool, 222, 8, 4, (140, 96, 70, 255))
-        solids.append((stool, 222, 8, 4))
+    draw_counter(image, 360, 108, 96, 12, (232, 220, 204, 255))
+    solids.append((360, 108, 96, 12))
+    draw_stove(image, 360, 124)
+    solids.append((360, 124, 22, 16))
+    draw_sink(image, 388, 124)
+    solids.append((388, 124, 26, 14))
+    draw_wardrobe(image, 448, 112, 14, 32)
+    solids.append((448, 112, 14, 32))
+    draw_counter(image, 380, 156, 72, 12, (214, 176, 140, 255))
+    solids.append((380, 156, 72, 12))
+    for stool in (392, 424):
+        fill_rect(image, stool, 168, 8, 4, (140, 96, 70, 255))
+        solids.append((stool, 168, 8, 4))
+    draw_plain_table(image, 352, 220, 52, 14)
+    solids.append((352, 217, 52, 20))
 
-    draw_books(image, 20, 178, 80)
-    solids.append((20, 178, 80, 12))
-    draw_tv_shelf(image, 24, 194, 64)
-    solids.append((24, 194, 64, 12))
-    draw_sofa(image, 28, 214, 68, 16)
-    solids.append((28, 214, 68, 16))
-    draw_piano(image, 12, 230)
-    solids.append((12, 230, 18, 44))
-    draw_saints(image, 40, 232, 52)
-    solids.append((40, 232, 52, 14))
-    draw_plain_table(image, 56, 258, 80, 14)
-    solids.append((56, 255, 80, 20))
+    draw_bath_sink(image, 116, 192)
+    solids.append((116, 192, 14, 10))
+    draw_toilet(image, 132, 192)
+    solids.append((132, 192, 10, 14))
+    draw_shower(image, 118, 214, 22, 18)
+    solids.append((118, 214, 22, 18))
     for index, color in enumerate((LEAF_D, LEAF, LEAF_L)):
-        px = 132 + index * 8
-        fill_rect(image, px, 240, 6, 4, (150, 96, 70, 255))
-        blob(image, px + 3, 237, 4, 4, color)
-    solids.append((132, 234, 24, 10))
+        px = 70 + index * 10
+        fill_rect(image, px, 200, 6, 4, (150, 96, 70, 255))
+        blob(image, px + 3, 196, 4, 4, color)
+    solids.append((70, 192, 28, 12))
 
-    wall_window(image, 36, 1, 28, 6)
-    wall_window(image, 176, 1, 28, 6)
-    wall_window(image, 332, 1, 22, 6)
-    wall_window(image, 424, 1, 18, 6)
-    wall_window(image, 473, 186, 6, 22)
-    wall_window(image, 473, 248, 6, 16)
-    for wx in (48, 88, 128):
+    draw_books(image, 176, 208, 90)
+    solids.append((176, 208, 90, 12))
+    draw_tv_shelf(image, 184, 226, 64)
+    solids.append((184, 226, 64, 12))
+    draw_sofa(image, 180, 246, 64, 16)
+    solids.append((180, 246, 64, 16))
+    draw_plain_table(image, 176, 266, 96, 14)
+    solids.append((176, 263, 96, 20))
+    draw_piano(image, 12, 250)
+    solids.append((12, 250, 18, 36))
+    draw_saints(image, 40, 252, 48)
+    solids.append((40, 252, 48, 14))
+
+    wall_window(image, 40, 1, 28, 6)
+    wall_window(image, 250, 1, 18, 6)
+    wall_window(image, 390, 1, 22, 6)
+    wall_window(image, 473, 120, 6, 20)
+    wall_window(image, 473, 210, 6, 16)
+    for wx in (200, 248, 296):
         wall_window(image, wx, 289, 16, 6)
 
-    frame_gap_x(image, 40, 104, 32)
-    frame_gap_x(image, 196, 104, 32)
-    frame_gap_x(image, 336, 104, 32)
-    frame_gap_x(image, 424, 104, 32)
-    frame_gap_y(image, 108, 36, 28)
-    frame_gap_x(image, 248, 64, 32)
-    frame_gap_y(image, 168, 200, 32)
-    frame_gap_y(image, 248, 200, 32)
-    frame_gap_y(image, 352, 244, 32)
-    door_leaf(image, 42, 90, 8, 14)
-    solids.append((42, 90, 8, 14))
-    door_leaf(image, 198, 90, 8, 14)
-    solids.append((198, 90, 8, 14))
-    door_leaf(image, 338, 90, 8, 14)
-    solids.append((338, 90, 8, 14))
-    door_leaf(image, 426, 90, 8, 14)
-    solids.append((426, 90, 8, 14))
-    door_leaf(image, 116, 56, 12, 8)
-    solids.append((116, 56, 12, 8))
-    door_leaf(image, 270, 50, 8, 14)
-    solids.append((270, 50, 8, 14))
-    door_leaf(image, 154, 200, 14, 8)
-    solids.append((154, 200, 14, 8))
-    door_leaf(image, 256, 200, 14, 8)
-    solids.append((256, 200, 14, 8))
-    door_leaf(image, 360, 268, 14, 8)
-    solids.append((360, 268, 14, 8))
-    door_leaf(image, 392, 272, 10, 16)
-    solids.append((392, 272, 10, 16))
+    frame_gap_y(image, 128, 32, 32)
+    frame_gap_x(image, 156, 88, 32)
+    frame_gap_y(image, 336, 36, 32)
+    frame_gap_x(image, 260, 88, 32)
+    frame_gap_y(image, 152, 116, 24)
+    frame_gap_y(image, 152, 148, 24)
+    frame_gap_x(image, 256, 176, 32)
+    frame_gap_y(image, 336, 192, 32)
+    frame_gap_y(image, 152, 200, 24)
+    frame_gap_x(image, 72, 240, 32)
+    frame_gap_x(image, 392, 248, 32)
+    door_leaf(image, 136, 32, 12, 8)
+    solids.append((136, 32, 12, 8))
+    door_leaf(image, 156, 78, 8, 10)
+    solids.append((156, 78, 8, 10))
+    door_leaf(image, 344, 36, 12, 8)
+    solids.append((344, 36, 12, 8))
+    door_leaf(image, 160, 116, 12, 8)
+    solids.append((160, 116, 12, 8))
+    door_leaf(image, 160, 148, 12, 8)
+    solids.append((160, 148, 12, 8))
+    door_leaf(image, 256, 166, 8, 10)
+    solids.append((256, 166, 8, 10))
+    door_leaf(image, 344, 192, 12, 8)
+    solids.append((344, 192, 12, 8))
+    door_leaf(image, 392, 258, 10, 14)
+    solids.append((392, 258, 10, 14))
     fill_rect(image, 390, 288, 2, 8, DOOR_D)
     fill_rect(image, 424, 288, 2, 8, DOOR_D)
     fill_rect(image, 396, 292, 24, 2, (236, 228, 216, 255))
@@ -1160,87 +1161,148 @@ def draw_tree(image: Image.Image, x: int, y: int) -> None:
     blob(image, x + 12, y + 12, 7, 5, LEAF_L)
 
 
-def draw_rua() -> Image.Image:
-    image = Image.new("RGBA", (240, 160), GRASS)
+CITY_W = 400
+CITY_H = 180
+ASPHALT = (78, 80, 86, 255)
+ASPHALT_D = (62, 64, 70, 255)
+WALK = (198, 196, 190, 255)
+WALK_D = (168, 166, 160, 255)
+FACADE = (236, 232, 224, 255)
+GYM_C = (176, 186, 196, 255)
+
+CITY_WALLS: list[tuple[int, int, int, int]] = [
+    (0, 0, 400, 8),
+    (0, 8, 8, 164),
+    (392, 8, 8, 164),
+    (0, 172, 400, 8),
+    (16, 16, 96, 28),
+    (16, 44, 28, 8),
+    (80, 44, 32, 8),
+    (112, 16, 136, 16),
+    (248, 16, 128, 28),
+    (248, 44, 48, 8),
+    (328, 44, 48, 8),
+    (376, 16, 16, 20),
+]
+
+
+def write_cidade_walls() -> None:
+    lines = [
+        "class_name CidadeWalls",
+        "extends RefCounted",
+        "",
+        "## Muros do condomínio. Sai de tools/generate_art.py.",
+        "",
+        "const SIZE := Vector2i(400, 180)",
+        "",
+        "const RECTS: Array[Rect2] = [",
+    ]
+    for x, y, w, h in CITY_WALLS:
+        lines.append(f"\tRect2({x}, {y}, {w}, {h}),")
+    lines.append("]")
+    lines.append("")
+    (ROOT / "scripts" / "cidade_walls.gd").write_text("\n".join(lines), encoding="utf-8")
+
+
+def draw_creta() -> Image.Image:
+    image = new(44, 20)
+    fill_rect(image, 4, 2, 36, 16, (22, 22, 26, 255))
+    fill_rect(image, 2, 4, 4, 12, (22, 22, 26, 255))
+    fill_rect(image, 38, 4, 4, 12, (22, 22, 26, 255))
+    fill_rect(image, 14, 4, 16, 12, (32, 34, 40, 255))
+    fill_rect(image, 22, 5, 6, 10, (150, 176, 186, 255))
+    fill_rect(image, 15, 5, 5, 10, (120, 146, 158, 255))
+    fill_rect(image, 34, 6, 4, 3, (255, 244, 210, 255))
+    fill_rect(image, 6, 6, 4, 3, (220, 60, 54, 255))
+    fill_rect(image, 8, 0, 6, 4, (16, 16, 18, 255))
+    fill_rect(image, 30, 0, 6, 4, (16, 16, 18, 255))
+    fill_rect(image, 8, 16, 6, 4, (16, 16, 18, 255))
+    fill_rect(image, 30, 16, 6, 4, (16, 16, 18, 255))
+    return image
+
+
+def draw_heart() -> Image.Image:
+    image = new(16, 16)
+    fill_rect(image, 3, 3, 4, 3, (214, 72, 96, 255))
+    fill_rect(image, 2, 5, 6, 3, (214, 72, 96, 255))
+    fill_rect(image, 4, 8, 4, 2, (214, 72, 96, 255))
+    fill_rect(image, 8, 3, 5, 8, (236, 228, 226, 255))
+    fill_rect(image, 5, 10, 6, 3, (236, 228, 226, 255))
+    pix(image, 7, 4, (255, 214, 220, 255))
+    return outline(image)
+
+
+def draw_academia() -> Image.Image:
+    image = Image.new("RGBA", (240, 160), (214, 216, 220, 255))
     pixels = image.load()
-    for y in range(0, 58):
-        t = y / 57
-        if t < 0.55:
-            u = t / 0.55
-            color = tuple(int(SKY_TOP[i] + (SKY_MID[i] - SKY_TOP[i]) * u) for i in range(3)) + (255,)
+    for y in range(8, 152):
+        for x in range(8, 232):
+            pixels[x, y] = (186, 190, 196, 255) if (x // 16 + y // 16) % 2 == 0 else (198, 202, 206, 255)
+    paint_light_wall(image, 0, 0, 240, 8)
+    paint_light_wall(image, 0, 8, 8, 144)
+    paint_light_wall(image, 232, 8, 8, 144)
+    paint_light_wall(image, 0, 152, 108, 8)
+    paint_light_wall(image, 140, 152, 100, 8)
+    fill_rect(image, 16, 16, 90, 8, (150, 168, 178, 255))
+    fill_rect(image, 18, 18, 86, 4, (214, 228, 232, 255))
+    fill_rect(image, 28, 36, 28, 40, (64, 68, 74, 255))
+    fill_rect(image, 36, 44, 16, 16, (36, 38, 42, 255))
+    fill_rect(image, 40, 48, 8, 8, (120, 124, 130, 255))
+    fill_rect(image, 24, 78, 8, 10, (48, 50, 56, 255))
+    fill_rect(image, 52, 78, 8, 10, (48, 50, 56, 255))
+    fill_rect(image, 150, 40, 36, 10, (90, 96, 104, 255))
+    fill_rect(image, 156, 28, 6, 22, (70, 74, 80, 255))
+    fill_rect(image, 174, 28, 6, 22, (70, 74, 80, 255))
+    fill_rect(image, 108, 154, 2, 6, DOOR_D)
+    fill_rect(image, 138, 154, 2, 6, DOOR_D)
+    return image
+
+
+def _asphalt_grit(x: int, y: int) -> bool:
+    """Pontos soltos, sem listra. Listra na rua parecia plantação."""
+    n = (x * 374761393 + y * 668265263) & 0xFFFFFFFF
+    n = ((n ^ (n >> 13)) * 1274126177) & 0xFFFFFFFF
+    return (n & 255) < 22
+
+
+def draw_rua() -> Image.Image:
+    image = Image.new("RGBA", (CITY_W, CITY_H), WALK)
+    pixels = image.load()
+    for y in range(60, 96):
+        for x in range(8, 392):
+            pixels[x, y] = WALK_D if x % 12 == 0 or y % 12 == 0 else WALK
+    for y in range(148, 172):
+        for x in range(8, 392):
+            pixels[x, y] = WALK_D if x % 12 == 0 or y % 12 == 0 else WALK
+    for y in range(96, 148):
+        for x in range(8, 392):
+            pixels[x, y] = ASPHALT_D if _asphalt_grit(x, y) else ASPHALT
+    for x in range(24, 380, 18):
+        fill_rect(image, x, 118, 8, 2, (214, 206, 120, 255))
+    for x, y, w, h in CITY_WALLS:
+        if h <= 8 or w <= 8:
+            paint_light_wall(image, x, y, w, h)
+        elif x >= 248:
+            fill_rect(image, x, y, w, h, GYM_C)
+            fill_rect(image, x, y, w, 3, (150, 162, 174, 255))
+        elif x >= 112 and w > 40:
+            fill_rect(image, x, y, w, h, (92, 96, 104, 255))
+            fill_rect(image, x + 48, y + 2, 28, 12, (70, 74, 82, 255))
         else:
-            u = (t - 0.55) / 0.45
-            color = tuple(int(SKY_MID[i] + (SKY_HOR[i] - SKY_MID[i]) * u) for i in range(3)) + (255,)
-        for x in range(240):
-            pixels[x, y] = color
-    blob(image, 46, 18, 18, 6, CLOUD)
-    blob(image, 40, 20, 10, 4, CLOUD)
-    blob(image, 188, 14, 14, 5, CLOUD)
-    blob(image, 196, 16, 8, 3, CLOUD)
-
-    draw_tree(image, 4, 18)
-
-    for y in range(96, 160):
-        for x in range(240):
-            noise = (x * 19 + y * 7) % 23
-            if noise == 0:
-                color = GRASS_L
-            elif noise < 5:
-                color = GRASS_D
-            else:
-                color = GRASS
-            pixels[x, y] = color
-    for y in range(154, 160):
-        for x in range(240):
-            pixels[x, y] = GRASS_D
-    for tx, ty in ((28, 118), (40, 142), (206, 118), (214, 140), (170, 146), (20, 130)):
-        pix(image, tx, ty, LEAF_D)
-        pix(image, tx + 1, ty - 1, LEAF)
-        pix(image, tx + 2, ty, LEAF_L)
-
-    # caminho
-    for y in range(100, 160):
-        for x in range(96, 144):
-            color = PATH if (x + y) % 2 == 0 else PATH_D
-            if (x * 3 + y) % 11 == 0:
-                color = PATH_L
-            pixels[x, y] = color
-    # pedrinhas
-    for sx, sy in ((104, 118), (132, 126), (110, 140), (128, 148), (118, 132)):
-        pix(image, sx, sy, (176, 150, 128, 255))
-
-    # casa
-    draw_roof(image, 62, 30, 116, 28)
-    fill_rect(image, 74, 52, 92, 50, WALL)
-    fill_rect(image, 74, 52, 92, 3, WALL_S)
-    # janelas acesas de manhã, com cortina
-    for wx in (84, 140):
-        fill_rect(image, wx, 64, 16, 14, BEAM_D)
-        fill_rect(image, wx + 2, 66, 12, 10, SKY_WIN_L)
-        fill_rect(image, wx + 7, 66, 2, 10, BEAM)
-        fill_rect(image, wx + 2, 70, 12, 2, BEAM)
-        fill_rect(image, wx + 2, 72, 5, 4, CURTAIN)
-        fill_rect(image, wx + 9, 72, 5, 4, CURTAIN)
-    # porta
-    fill_rect(image, 108, 70, 24, 32, BEAM_D)
-    fill_rect(image, 110, 72, 20, 30, DOOR)
-    fill_rect(image, 112, 74, 4, 26, DOOR_L)
-    fill_rect(image, 124, 86, 2, 2, FLAME)
-    # bandeirinhas
-    for index, fx in enumerate(range(96, 150, 8)):
-        color = RIBBON if index % 2 == 0 else SKIRT
-        pix(image, fx, 56, INK)
-        pix(image, fx + 1, 56, INK)
-        pix(image, fx, 57, color)
-        pix(image, fx + 1, 57, color)
-        pix(image, fx, 58, color)
-    for fx in range(96, 146):
-        if fx % 2 == 0:
-            pix(image, fx, 55, INK)
-
-    blob(image, 214, 116, 16, 10, LEAF_D)
-    blob(image, 208, 114, 9, 6, LEAF)
-    blob(image, 220, 120, 7, 5, LEAF_L)
+            fill_rect(image, x, y, w, h, FACADE)
+            fill_rect(image, x, y, w, 4, (176, 92, 84, 255))
+    wall_window(image, 28, 24, 18, 12)
+    wall_window(image, 58, 24, 18, 12)
+    wall_window(image, 268, 24, 22, 12)
+    wall_window(image, 300, 24, 22, 12)
+    fill_rect(image, 42, 44, 2, 8, DOOR_D)
+    fill_rect(image, 78, 44, 2, 8, DOOR)
+    fill_rect(image, 294, 44, 2, 8, DOOR_D)
+    fill_rect(image, 326, 44, 2, 8, DOOR_D)
+    fill_rect(image, 360, 28, 8, 18, (64, 68, 74, 255))
+    fill_rect(image, 363, 22, 2, 8, (64, 68, 74, 255))
+    pix(image, 364, 20, (255, 236, 170, 255))
+    write_cidade_walls()
     return image
 
 
@@ -1270,6 +1332,9 @@ def main() -> None:
     bench = draw_bench()
     casa = draw_casa()
     rua = draw_rua()
+    academia = draw_academia()
+    creta = draw_creta()
+    heart = draw_heart()
 
     player.save(ASSETS / "sprites" / "player.png")
     plant.save(ASSETS / "sprites" / "plant.png")
@@ -1279,6 +1344,9 @@ def main() -> None:
     draw_shadow().save(ASSETS / "sprites" / "shadow.png")
     casa.save(ASSETS / "maps" / "casa.png")
     rua.save(ASSETS / "maps" / "rua.png")
+    academia.save(ASSETS / "maps" / "academia.png")
+    creta.save(ASSETS / "sprites" / "creta.png")
+    heart.save(ASSETS / "sprites" / "heart.png")
     draw_dialogue_frame().save(ASSETS / "ui" / "dialogue_frame.png")
     draw_key_chip().save(ASSETS / "ui" / "key_e.png")
     draw_arrow().save(ASSETS / "ui" / "arrow.png")
@@ -1296,16 +1364,15 @@ def main() -> None:
     down = player.crop((0, 0, 16, 24))
     side = player.crop((0, 24, 16, 48))
     casa_preview = casa.copy()
-    paste_feet(casa_preview, down, 64, 92)
-    paste_feet(casa_preview, plant, 146, 250)
+    paste_feet(casa_preview, down, 70, 158)
+    paste_feet(casa_preview, plant, 100, 270)
     scale(casa_preview, 2).save(preview / "casa.png")
 
     rua_preview = rua.copy()
-    paste_feet(rua_preview, side, 120, 124)
-    paste_feet(rua_preview, flowers, 76, 120)
-    paste_feet(rua_preview, cat.crop((0, 0, 16, 16)), 46, 134)
-    paste_feet(rua_preview, bench, 186, 136)
-    scale(rua_preview, 3).save(preview / "rua.png")
+    paste_feet(rua_preview, side, 62, 86)
+    paste_feet(rua_preview, creta, 190, 108)
+    scale(rua_preview, 2).save(preview / "rua.png")
+    scale(academia, 2).save(preview / "academia.png")
     print("arte gerada em", ASSETS)
 
 

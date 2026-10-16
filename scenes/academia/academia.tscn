@@ -1,0 +1,82 @@
+[gd_scene load_steps=9 format=3 uid="uid://cacademia01"]
+
+[ext_resource type="Script" path="res://scripts/map.gd" id="1_map"]
+[ext_resource type="Texture2D" path="res://assets/maps/academia.png" id="2_mapa"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="Script" path="res://scripts/exercise.gd" id="4_serie"]
+[ext_resource type="Script" path="res://scripts/heart_piece.gd" id="5_coracao"]
+[ext_resource type="Texture2D" path="res://assets/sprites/heart.png" id="6_coracao"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="7_porta"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_serie"]
+size = Vector2(40, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_coracao"]
+size = Vector2(20, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_porta"]
+size = Vector2(28, 16)
+
+[node name="Academia" type="Node2D"]
+script = ExtResource("1_map")
+map_id = "academia"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(120, 80)
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 0
+texture = ExtResource("2_mapa")
+centered = false
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="Props" instance=ExtResource("3_player")]
+position = Vector2(124, 120)
+
+[node name="Bike" type="Area2D" parent="."]
+position = Vector2(42, 78)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("4_serie")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bike"]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_serie")
+
+[node name="Heart" type="Area2D" parent="."]
+visible = false
+position = Vector2(180, 96)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+script = ExtResource("5_coracao")
+
+[node name="Sprite" type="Sprite2D" parent="Heart"]
+texture_filter = 0
+texture = ExtResource("6_coracao")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Heart"]
+shape = SubResource("RectangleShape2D_coracao")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(124, 146)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_porta")
+target_scene = "res://scenes/rua/rua.tscn"
+target_spawn = "from_academia"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+shape = SubResource("RectangleShape2D_porta")
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="default" type="Marker2D" parent="Spawns"]
+position = Vector2(124, 120)

@@ -41,6 +41,30 @@ const DIALOGUES := {
 		"Um gato listrado pisca devagar, como quem guarda um segredo.",
 		"Ele olha para o banco e mia baixinho.",
 	],
+	"celular": [
+		"O celular acende.",
+		"ALEX: Meu bem vc nao vem treinar?",
+	],
+	"creta": [
+		"Você entra no Creta preto. A academia é logo ali.",
+	],
+	"academia_tempo": [
+		"A academia é do lado da casa. O Alex nem acredita.",
+	],
+	"academia_atraso": [
+		"Chegou. O cronômetro já tinha virado piada.",
+	],
+	"alex_alongou": [
+		"ALEX: amor, eu já alonguei.",
+	],
+	"exercicio_fim": [
+		"Acabou o exercício.",
+		"Um pedaço do coração apareceu na academia.",
+	],
+	"coracao": [
+		"Um quarto do coração.",
+		"É o primeiro pedaço. O resto ainda está na cidade.",
+	],
 	"presente": [
 		"Uma caixinha amarrada com fita está em cima do banco.",
 		"Você abre o cartão.",

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://crua_aniv001"]
+[gd_scene load_steps=20 format=3 uid="uid://crua_aniv001"]
 
 [ext_resource type="Script" path="res://scripts/map.gd" id="1_map"]
 [ext_resource type="Texture2D" path="res://assets/maps/rua.png" id="2_mapa"]
@@ -6,10 +6,13 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/flowers.png" id="4_flores"]
 [ext_resource type="Texture2D" path="res://assets/sprites/cat.png" id="5_gato"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bench.png" id="6_banco"]
-[ext_resource type="Script" path="res://scripts/feet_sprite.gd" id="7_pes"]
-[ext_resource type="Script" path="res://scripts/loop_sprite.gd" id="8_loop"]
-[ext_resource type="Script" path="res://scripts/interactable.gd" id="9_falar"]
-[ext_resource type="Script" path="res://scripts/door.gd" id="10_porta"]
+[ext_resource type="Texture2D" path="res://assets/sprites/creta.png" id="7_creta"]
+[ext_resource type="Script" path="res://scripts/feet_sprite.gd" id="8_pes"]
+[ext_resource type="Script" path="res://scripts/loop_sprite.gd" id="9_loop"]
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="10_falar"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="11_porta"]
+[ext_resource type="Script" path="res://scripts/creta.gd" id="12_creta"]
+[ext_resource type="Script" path="res://scripts/creta_talk.gd" id="13_falar_carro"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flores_solido"]
 size = Vector2(12, 6)
@@ -29,8 +32,14 @@ size = Vector2(30, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_banco"]
 size = Vector2(34, 18)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_carro"]
+size = Vector2(36, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_carro_fala"]
+size = Vector2(48, 36)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_porta"]
-size = Vector2(24, 16)
+size = Vector2(28, 18)
 
 [node name="Rua" type="Node2D"]
 script = ExtResource("1_map")
@@ -51,15 +60,15 @@ collision_mask = 0
 y_sort_enabled = true
 
 [node name="Player" parent="Props" instance=ExtResource("3_player")]
-position = Vector2(120, 126)
+position = Vector2(62, 86)
 
 [node name="Flowers" type="Node2D" parent="Props"]
-position = Vector2(76, 120)
+position = Vector2(28, 78)
 
 [node name="Sprite" type="Sprite2D" parent="Props/Flowers"]
 texture_filter = 0
 texture = ExtResource("4_flores")
-script = ExtResource("7_pes")
+script = ExtResource("8_pes")
 
 [node name="Solid" type="StaticBody2D" parent="Props/Flowers"]
 collision_mask = 0
@@ -73,19 +82,19 @@ position = Vector2(0, -4)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
-script = ExtResource("9_falar")
+script = ExtResource("10_falar")
 dialogue_id = "flores"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Flowers/Talk"]
 shape = SubResource("RectangleShape2D_flores")
 
 [node name="Cat" type="Node2D" parent="Props"]
-position = Vector2(46, 134)
+position = Vector2(120, 162)
 
 [node name="Sprite" type="Sprite2D" parent="Props/Cat"]
 texture_filter = 0
 texture = ExtResource("5_gato")
-script = ExtResource("8_loop")
+script = ExtResource("9_loop")
 frame_count = 2
 fps = 1.4
 
@@ -100,19 +109,19 @@ shape = SubResource("RectangleShape2D_gato_solido")
 collision_layer = 4
 collision_mask = 0
 monitoring = false
-script = ExtResource("9_falar")
+script = ExtResource("10_falar")
 dialogue_id = "gato"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Cat/Talk"]
 shape = SubResource("RectangleShape2D_gato")
 
 [node name="Bench" type="Node2D" parent="Props"]
-position = Vector2(176, 136)
+position = Vector2(230, 164)
 
 [node name="Sprite" type="Sprite2D" parent="Props/Bench"]
 texture_filter = 0
 texture = ExtResource("6_banco")
-script = ExtResource("7_pes")
+script = ExtResource("8_pes")
 
 [node name="Solid" type="StaticBody2D" parent="Props/Bench"]
 collision_mask = 0
@@ -126,28 +135,63 @@ position = Vector2(0, 2)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
-script = ExtResource("9_falar")
+script = ExtResource("10_falar")
 dialogue_id = "presente"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Bench/Talk"]
 shape = SubResource("RectangleShape2D_banco")
 
+[node name="Creta" type="CharacterBody2D" parent="Props"]
+position = Vector2(188, 100)
+script = ExtResource("12_creta")
+
+[node name="Sprite" type="Sprite2D" parent="Props/Creta"]
+texture_filter = 0
+texture = ExtResource("7_creta")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Creta"]
+shape = SubResource("RectangleShape2D_carro")
+
+[node name="Talk" type="Area2D" parent="Props/Creta"]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("13_falar_carro")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Creta/Talk"]
+shape = SubResource("RectangleShape2D_carro_fala")
+
 [node name="Door" type="Area2D" parent="."]
-position = Vector2(120, 104)
+position = Vector2(62, 58)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
-script = ExtResource("10_porta")
+script = ExtResource("11_porta")
 target_scene = "res://scenes/casa/casa.tscn"
 target_spawn = "from_rua"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
 shape = SubResource("RectangleShape2D_porta")
 
+[node name="GymDoor" type="Area2D" parent="."]
+position = Vector2(312, 58)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_porta")
+target_scene = "res://scenes/academia/academia.tscn"
+target_spawn = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GymDoor"]
+shape = SubResource("RectangleShape2D_porta")
+
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="default" type="Marker2D" parent="Spawns"]
-position = Vector2(120, 126)
+position = Vector2(62, 86)
 
 [node name="from_casa" type="Marker2D" parent="Spawns"]
-position = Vector2(120, 126)
+position = Vector2(62, 86)
+
+[node name="from_academia" type="Marker2D" parent="Spawns"]
+position = Vector2(312, 86)

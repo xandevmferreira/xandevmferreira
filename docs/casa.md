@@ -33,4 +33,6 @@ A rua é um condomínio fechado, não uma fazenda. O Creta preto fica na rua, pe
 
 Ao sair da academia, a missão é voltar para casa e se arrumar para a UFPA. O guarda-roupa faz o PUF e troca a roupa. O Henrique espera na rua, entra no Creta e os dois seguem até a universidade. Lá estão o professor Ernani, dentro do prédio, o professor Breno, do lado de fora, a placa da Pedagogia e outro quarto do coração.
 
-A saída da UFPA leva ao consultório. A Amanda passa um café, atende o paciente no divã e a Eli, de cabelo branco e roupa preta, entrega um biscoito e o terceiro pedaço do coração.
+A saída da UFPA leva ao consultório. Fora da sala fechada, a Eli espera perto do sofá. Dentro, a Amanda toma um café e o paciente deita no divã. A Eli entrega um biscoito e o terceiro pedaço do coração. Depois a Amanda volta para casa e manda mensagem para o Alexandre, namorado dela.
+
+Os textos que indicam o caminho continuam: academia, UFPA, consultório e a volta para casa. Piano, santos, plantas, máquina, flores e o gato não descrevem o cenário.

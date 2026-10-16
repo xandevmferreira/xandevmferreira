@@ -45,7 +45,11 @@ var henrique_joined := false
 var ufpa_arrived := false
 var coffee_ready := false
 var session_done := false
+var clinic_seen := false
+var alexandre_pending := false
+var alexandre_sent := false
 var _hearts := {}
+var _said_gate := false
 var _spawn_used := ""
 var _car: Node2D
 var _after_close := ""
@@ -114,8 +118,15 @@ func on_map_ready(player: Node2D, spawns: Node2D) -> void:
 			arrive_gym()
 		elif scene.name == "Rua" and _spawn_used == "from_academia" and not mission_ufpa:
 			mission_ufpa = true
+			start_dialogue(Story.lines_for("missao_ufpa"))
 		elif scene.name == "Universidade" and not ufpa_arrived:
 			ufpa_arrived = true
+			start_dialogue(Story.lines_for("ufpa_chegada"))
+		elif scene.name == "Consultorio" and not clinic_seen:
+			clinic_seen = true
+			start_dialogue(Story.lines_for("clinica_chegada"))
+		elif scene.name == "Casa" and alexandre_pending and not alexandre_sent:
+			phone_ringing = true
 	)
 
 func set_prompt(anchor: Vector2, show: bool) -> void:
@@ -215,6 +226,10 @@ func read_phone() -> void:
 	if not phone_ringing or dialogue_open or transitioning:
 		return
 	phone_ringing = false
+	if alexandre_pending and not alexandre_sent:
+		alexandre_sent = true
+		start_dialogue(Story.lines_for("alexandre"))
+		return
 	phone_read = true
 	_after_close = "timer"
 	start_dialogue(Story.lines_for("celular"))
@@ -223,7 +238,9 @@ func queue_drive(car: Node2D) -> void:
 	if driving or dialogue_open or transitioning:
 		return
 	_car = car
-	_start_drive()
+	_after_close = "enter_car"
+	var fala := "creta_ufpa" if henrique_joined else "creta"
+	start_dialogue(Story.lines_for(fala))
 
 func end_drive() -> void:
 	if not driving or _car == null:
@@ -246,7 +263,12 @@ func arrive_gym() -> void:
 	if gym_arrived:
 		return
 	gym_arrived = true
+	var made_it := gym_left > 0.0
 	gym_left = 0.0
+	if made_it:
+		start_dialogue(Story.lines_for("academia_tempo"))
+	elif gym_late or phone_read:
+		start_dialogue(Story.lines_for("academia_atraso"))
 
 func has_heart(piece_id: String) -> bool:
 	return _hearts.has(piece_id)
@@ -263,9 +285,13 @@ func transform_outfit() -> void:
 	if player and player.has_method("apply_outfit"):
 		player.apply_outfit("elegante")
 	_show_puf()
+	start_dialogue(Story.lines_for("puf"))
 
 func remind_gate() -> void:
-	pass
+	if _said_gate or henrique_joined or blocks_player():
+		return
+	_said_gate = true
+	start_dialogue(Story.lines_for("ufpa_cedo"))
 
 func go_university() -> void:
 	if transitioning or not henrique_joined:
@@ -298,6 +324,9 @@ func _refresh_status() -> void:
 	if gym_left > 0.0:
 		var total := int(ceil(gym_left))
 		_status.text = "Treino %d:%02d" % [total / 60, total % 60]
+		_status.visible = true
+	elif alexandre_pending and not alexandre_sent:
+		_status.text = "Alexandre"
 		_status.visible = true
 	elif heart_pieces > 0:
 		_status.text = "Coração %d/4" % heart_pieces

@@ -2,6 +2,7 @@ extends Interactable
 
 @export var piece_id := "academia"
 @export var needs_exercise := true
+@export var line_id := "coracao"
 
 func _ready() -> void:
 	super()
@@ -15,3 +16,4 @@ func interact() -> void:
 	Game.collect_heart(piece_id)
 	visible = false
 	collision_layer = 0
+	Game.start_dialogue(Story.lines_for(line_id))

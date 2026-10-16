@@ -1472,6 +1472,7 @@ GLYPHS = {
     "C": ["011", "100", "100", "100", "011"],
     "D": ["110", "101", "101", "101", "110"],
     "E": ["111", "100", "110", "100", "111"],
+    "F": ["111", "100", "110", "100", "100"],
     "G": ["011", "100", "101", "101", "011"],
     "H": ["101", "101", "111", "101", "101"],
     "I": ["111", "010", "010", "010", "111"],
@@ -1576,18 +1577,20 @@ def draw_universidade() -> Image.Image:
     return image
 
 
-CLINIC_W = 320
-CLINIC_H = 180
+CLINIC_W = 400
+CLINIC_H = 240
 CLINIC_WALLS: list[tuple[int, int, int, int]] = [
-    (0, 0, 320, 8),
-    (0, 8, 8, 164),
-    (312, 8, 8, 164),
-    (0, 172, 136, 8),
-    (184, 172, 136, 8),
-    (44, 54, 96, 34),
-    (214, 22, 90, 46),
-    (18, 22, 22, 24),
-    (156, 68, 28, 26),
+    (0, 0, 176, 8),
+    (216, 0, 184, 8),
+    (0, 8, 8, 224),
+    (392, 8, 8, 224),
+    (0, 232, 400, 8),
+    (8, 104, 168, 8),
+    (216, 104, 176, 8),
+    (32, 36, 92, 28),
+    (16, 124, 108, 44),
+    (228, 136, 132, 36),
+    (312, 188, 36, 24),
 ]
 
 
@@ -1598,7 +1601,7 @@ def write_consultorio_walls() -> None:
         "",
         "## Paredes do consultório. Sai de tools/generate_art.py.",
         "",
-        "const SIZE := Vector2i(320, 180)",
+        "const SIZE := Vector2i(400, 240)",
         "",
         "const RECTS: Array[Rect2] = [",
     ]
@@ -1612,62 +1615,77 @@ def write_consultorio_walls() -> None:
 def draw_consultorio() -> Image.Image:
     image = Image.new("RGBA", (CLINIC_W, CLINIC_H), (36, 34, 40, 255))
     pixels = image.load()
-    stone = (236, 230, 222, 255)
-    stone_b = (224, 216, 206, 255)
+    carpet = (198, 176, 154, 255)
+    carpet_b = (184, 162, 140, 255)
+    for y in range(8, 104):
+        for x in range(8, 392):
+            pixels[x, y] = carpet if (x // 16 + y // 16) % 2 == 0 else carpet_b
+    stone = (242, 236, 228, 255)
+    stone_b = (228, 220, 210, 255)
     grout = (196, 186, 174, 255)
-    for y in range(36, 172):
-        for x in range(8, 312):
-            if x % 18 == 0 or y % 18 == 0:
+    for y in range(112, 232):
+        for x in range(8, 392):
+            if x % 20 == 0 or y % 20 == 0:
                 pixels[x, y] = grout
             else:
-                pixels[x, y] = stone if ((x // 18) + (y // 18)) % 2 == 0 else stone_b
-    fill_rect(image, 8, 34, 304, 2, GOLD)
-    fill_rect(image, 8, 170, 304, 2, (58, 52, 48, 255))
-    fill_rect(image, 78, 10, 132, 22, (214, 176, 78, 255))
-    fill_rect(image, 80, 12, 128, 18, (186, 206, 214, 255))
-    fill_rect(image, 92, 16, 14, 14, (62, 64, 78, 255))
-    fill_rect(image, 112, 18, 22, 12, (48, 50, 62, 255))
-    fill_rect(image, 150, 14, 18, 16, (72, 74, 88, 255))
-    fill_rect(image, 176, 18, 20, 12, (52, 54, 68, 255))
-    fill_rect(image, 40, 70, 104, 36, (52, 48, 46, 255))
-    fill_rect(image, 42, 72, 100, 32, (214, 176, 78, 255))
-    fill_rect(image, 44, 74, 96, 28, (48, 46, 52, 255))
-    fill_rect(image, 44, 58, 96, 28, (28, 26, 30, 255))
-    fill_rect(image, 46, 56, 92, 8, (22, 20, 24, 255))
-    fill_rect(image, 48, 60, 88, 16, (244, 236, 226, 255))
-    fill_rect(image, 48, 74, 88, 6, (232, 220, 206, 255))
-    fill_rect(image, 44, 54, 18, 24, (250, 244, 236, 255))
-    fill_rect(image, 46, 56, 14, 4, GOLD)
-    fill_rect(image, 48, 80, 88, 2, GOLD)
-    fill_rect(image, 156, 72, 28, 16, (24, 22, 26, 255))
-    fill_rect(image, 158, 68, 24, 8, (32, 30, 34, 255))
-    fill_rect(image, 160, 70, 20, 4, (244, 236, 226, 255))
-    fill_rect(image, 158, 86, 3, 6, GOLD)
-    fill_rect(image, 179, 86, 3, 6, GOLD)
-    fill_rect(image, 214, 22, 90, 46, (22, 20, 24, 255))
-    fill_rect(image, 214, 64, 90, 4, GOLD)
-    fill_rect(image, 222, 28, 18, 22, (48, 46, 50, 255))
-    fill_rect(image, 226, 32, 10, 8, (180, 176, 170, 255))
-    pix(image, 230, 30, GOLD)
-    fill_rect(image, 248, 36, 8, 6, (250, 246, 240, 255))
-    fill_rect(image, 260, 36, 8, 6, (250, 246, 240, 255))
-    fill_rect(image, 272, 34, 22, 16, (236, 228, 216, 255))
-    fill_rect(image, 276, 30, 14, 6, (250, 250, 246, 255))
-    fill_rect(image, 18, 36, 22, 12, (46, 72, 58, 255))
-    fill_rect(image, 14, 30, 12, 10, (36, 64, 50, 255))
-    fill_rect(image, 28, 28, 14, 12, (58, 90, 68, 255))
-    fill_rect(image, 22, 44, 14, 10, (20, 18, 22, 255))
-    fill_rect(image, 24, 46, 10, 6, (32, 30, 34, 255))
-    fill_rect(image, 186, 104, 22, 10, (24, 22, 26, 255))
-    fill_rect(image, 190, 100, 14, 8, (250, 244, 232, 255))
-    pix(image, 194, 102, (196, 132, 72, 255))
-    pix(image, 196, 103, (214, 156, 96, 255))
-    pix(image, 198, 102, (176, 112, 64, 255))
-    fill_rect(image, 140, 152, 40, 20, (28, 24, 22, 255))
-    fill_rect(image, 144, 152, 6, 20, GOLD)
-    fill_rect(image, 168, 160, 3, 3, GOLD)
+                pixels[x, y] = stone if ((x // 20) + (y // 20)) % 2 == 0 else stone_b
+    fill_rect(image, 8, 104, 168, 8, (32, 30, 34, 255))
+    fill_rect(image, 216, 104, 176, 8, (32, 30, 34, 255))
+    fill_rect(image, 8, 104, 168, 2, GOLD)
+    fill_rect(image, 216, 104, 176, 2, GOLD)
+    fill_rect(image, 184, 104, 24, 8, (176, 148, 120, 255))
+    fill_rect(image, 176, 104, 8, 8, (92, 64, 48, 255))
+    fill_rect(image, 208, 104, 8, 8, (122, 74, 52, 255))
+    fill_rect(image, 184, 0, 8, 8, (92, 64, 48, 255))
+    fill_rect(image, 208, 0, 8, 8, (122, 74, 52, 255))
+    fill_rect(image, 32, 36, 96, 10, (24, 22, 26, 255))
+    fill_rect(image, 32, 44, 96, 20, (42, 40, 46, 255))
+    fill_rect(image, 36, 48, 88, 12, (214, 196, 176, 255))
+    fill_rect(image, 32, 60, 96, 4, GOLD)
+    fill_rect(image, 36, 62, 6, 4, GOLD)
+    fill_rect(image, 118, 62, 6, 4, GOLD)
+    fill_rect(image, 16, 128, 108, 40, (22, 20, 24, 255))
+    fill_rect(image, 16, 164, 108, 4, GOLD)
+    fill_rect(image, 24, 108, 26, 32, (48, 46, 52, 255))
+    fill_rect(image, 28, 112, 18, 16, (176, 172, 166, 255))
+    fill_rect(image, 32, 128, 10, 6, (28, 26, 30, 255))
+    pix(image, 34, 106, GOLD)
+    fill_rect(image, 58, 136, 16, 12, (250, 248, 244, 255))
+    fill_rect(image, 60, 138, 12, 6, (122, 72, 42, 255))
+    fill_rect(image, 62, 124, 2, 8, (236, 236, 232, 255))
+    fill_rect(image, 68, 120, 2, 10, (250, 250, 246, 255))
+    fill_rect(image, 74, 126, 2, 6, (236, 236, 232, 255))
+    fill_rect(image, 86, 140, 22, 14, (120, 72, 44, 255))
+    fill_rect(image, 88, 136, 18, 6, (92, 54, 32, 255))
+    paint_text(image, 36, 154, "CAFE", (255, 236, 196, 255))
+    fill_rect(image, 220, 132, 148, 48, (52, 48, 46, 255))
+    fill_rect(image, 222, 134, 144, 44, GOLD)
+    fill_rect(image, 224, 136, 140, 40, (36, 34, 40, 255))
+    fill_rect(image, 232, 144, 124, 24, (28, 26, 30, 255))
+    fill_rect(image, 236, 148, 116, 16, (244, 236, 226, 255))
+    fill_rect(image, 232, 140, 28, 26, (250, 244, 236, 255))
+    fill_rect(image, 234, 142, 24, 4, GOLD)
+    fill_rect(image, 236, 164, 116, 2, GOLD)
+    fill_rect(image, 312, 188, 36, 18, (24, 22, 26, 255))
+    fill_rect(image, 316, 184, 28, 8, (244, 236, 226, 255))
+    fill_rect(image, 314, 204, 4, 6, GOLD)
+    fill_rect(image, 342, 204, 4, 6, GOLD)
     write_consultorio_walls()
     return image
+
+
+def draw_lying_patient() -> Image.Image:
+    image = new(48, 16)
+    fill_rect(image, 1, 3, 12, 10, (72, 60, 54, 255))
+    fill_rect(image, 3, 4, 9, 8, SKIN)
+    pix(image, 5, 7, EYE)
+    pix(image, 8, 7, EYE)
+    pix(image, 6, 9, MOUTH)
+    fill_rect(image, 12, 4, 20, 8, (86, 96, 108, 255))
+    fill_rect(image, 14, 5, 4, 3, SKIN)
+    fill_rect(image, 31, 5, 12, 6, (48, 50, 58, 255))
+    fill_rect(image, 42, 6, 5, 4, SHOE)
+    return outline(image)
 
 
 def draw_heart_more() -> Image.Image:
@@ -1708,6 +1726,7 @@ def main() -> None:
     breno = draw_standing(ELDER, ELDER_S, WHITE_HAIR, (120, 84, 58, 255), (48, 52, 60, 255))
     eli = draw_standing(SKIN, SKIN_S, WHITE_HAIR, (22, 20, 24, 255), (16, 14, 18, 255), jewelry=True)
     paciente = draw_standing(SKIN, SKIN_S, (72, 60, 54, 255), (86, 96, 108, 255), (48, 50, 58, 255))
+    deitado = draw_lying_patient()
 
     player.save(ASSETS / "sprites" / "player.png")
     elegante.save(ASSETS / "sprites" / "player_elegante.png")
@@ -1720,6 +1739,7 @@ def main() -> None:
     breno.save(ASSETS / "sprites" / "breno.png")
     eli.save(ASSETS / "sprites" / "eli.png")
     paciente.save(ASSETS / "sprites" / "paciente.png")
+    deitado.save(ASSETS / "sprites" / "paciente_diva.png")
     plant.save(ASSETS / "sprites" / "plant.png")
     flowers.save(ASSETS / "sprites" / "flowers.png")
     cat.save(ASSETS / "sprites" / "cat.png")
@@ -1760,8 +1780,8 @@ def main() -> None:
     paste_feet(rua_preview, creta, 190, 108)
     scale(rua_preview, 2).save(preview / "rua.png")
     scale(academia, 2).save(preview / "academia.png")
-    paste_feet(consultorio, eli, 204, 120)
-    paste_feet(consultorio, paciente, 78, 136)
+    paste_feet(consultorio, eli, 146, 70)
+    paste_feet(consultorio, deitado, 270, 160)
     scale(consultorio, 2).save(preview / "consultorio.png")
     print("arte gerada em", ASSETS)
 

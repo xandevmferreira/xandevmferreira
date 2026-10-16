@@ -1,8 +1,17 @@
 extends Interactable
 
-## Café, paciente e a Eli, nesta ordem.
+## Café da Amanda, paciente no divã e a Eli fora da sala.
+
+const DIVAN_POS := Vector2(270, 156)
 
 @export_enum("cafe", "paciente", "eli") var role := "cafe"
+
+var deitado := false
+
+func _ready() -> void:
+	super()
+	if role == "paciente" and Game.session_done:
+		_deitar()
 
 func interact() -> void:
 	match role:
@@ -19,6 +28,7 @@ func interact() -> void:
 				Game.start_dialogue(Story.lines_for("paciente_fim"))
 			else:
 				Game.session_done = true
+				_deitar()
 				Game.start_dialogue(Story.lines_for("paciente"))
 		"eli":
 			if not Game.session_done:
@@ -27,4 +37,15 @@ func interact() -> void:
 				Game.start_dialogue(Story.lines_for("eli_depois"))
 			else:
 				Game.collect_heart("eli")
+				Game.alexandre_pending = true
 				Game.start_dialogue(Story.lines_for("eli"))
+
+func _deitar() -> void:
+	deitado = true
+	var em_pe := get_node_or_null("Sprite")
+	var no_diva := get_node_or_null("Deitado")
+	if em_pe:
+		em_pe.visible = false
+	if no_diva:
+		no_diva.visible = true
+	global_position = DIVAN_POS

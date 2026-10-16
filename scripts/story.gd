@@ -12,7 +12,24 @@ const DIALOGUES := {
 		"Alguém que dormiu aqui arrumou antes de sair.",
 	],
 	"celular": [
+		"O celular acende.",
 		"Alex: Meu bem vc nao vem treinar?",
+	],
+	"creta": [
+		"A academia é logo ali.",
+	],
+	"academia_tempo": [
+		"A academia é do lado da casa.",
+	],
+	"academia_atraso": [
+		"Chegou. O cronômetro já tinha virado piada.",
+	],
+	"exercicio_fim": [
+		"Acabou o exercício.",
+		"Um pedaço do coração apareceu na academia.",
+	],
+	"coracao": [
+		"Um quarto do coração.",
 	],
 	"alex_alongou": [
 		"Alex: amor, eu já alonguei.",
@@ -40,6 +57,29 @@ const DIALOGUES := {
 	"alex4": [
 		"Alex: Você consegue! Eu acredito!",
 	],
+	"puf": [
+		"PUF. Roupa preta e joias douradas.",
+		"Pronta pra UFPA.",
+	],
+	"armario_pronta": [
+		"Pronta pra UFPA.",
+	],
+	"missao_ufpa": [
+		"Hora de ir pra casa e se arrumar.",
+		"Hoje tem aula na UFPA.",
+	],
+	"creta_ufpa": [
+		"Henrique sobe junto. A UFPA é seguindo a rua.",
+	],
+	"ufpa_cedo": [
+		"A UFPA fica pra lá. O Henrique ainda não veio.",
+	],
+	"ufpa_chegada": [
+		"A UFPA. O rio passa atrás da Pedagogia.",
+	],
+	"coracao2": [
+		"Outro quarto do coração.",
+	],
 	"henrique": [
 		"Henrique: Amiga, tu nem sabe!",
 		"Henrique: Entra no Creta. Eu vou junto.",
@@ -57,14 +97,18 @@ const DIALOGUES := {
 		"Feliz aniversário.",
 		"Eu quis te dar um lugar pequeno para começar este dia.",
 	],
+	"clinica_chegada": [
+		"O consultório. A sala fechada fica pra dentro.",
+		"A Eli espera fora, perto do sofá.",
+	],
 	"cafe": [
-		"Amanda: Café passado.",
+		"Amanda: Um café pra mim.",
 	],
 	"cafe_pronto": [
-		"Amanda: O café já está pronto.",
+		"Amanda: Já tomei o meu café.",
 	],
 	"paciente_espera": [
-		"Paciente: Sem café eu não começo.",
+		"Amanda: Primeiro eu tomo um café.",
 	],
 	"paciente": [
 		"Paciente: A vida está um peso.",
@@ -80,6 +124,12 @@ const DIALOGUES := {
 	"eli": [
 		"Eli: Um biscoito de um passeio comum na Grécia.",
 		"Eli: E o terceiro pedaço do coração.",
+		"Hora de ir pra casa.",
+		"Manda mensagem pro Alexandre.",
+	],
+	"alexandre": [
+		"Amanda: Alexandre, terminei o atendimento.",
+		"Alexandre: Te espero, meu bem.",
 	],
 	"eli_depois": [
 		"Eli: O biscoito ainda está quentinho.",

@@ -190,8 +190,16 @@ func _drive_to_gym() -> void:
 	for _i in 4:
 		await physics_frame
 	_press_interact()
-	for _frame in 6:
+	for _frame in 4:
 		await process_frame
+	if not _game.dialogue_open:
+		_fail("o Creta não abriu")
+		return
+	var guard := 0
+	while _game.dialogue_open and guard < 6:
+		_press_interact()
+		await process_frame
+		guard += 1
 	if not _game.is_driving():
 		_fail("não entrou no Creta")
 		return
@@ -295,6 +303,7 @@ func _drive_to_gym() -> void:
 	if not _game.mission_ufpa:
 		_fail("a missão da UFPA não abriu")
 		return
+	await _close_talk()
 	_game.request_scene("res://scenes/casa/casa.tscn", "default")
 	if not await _await_scene("Casa"):
 		_fail("não voltou para se arrumar")
@@ -361,29 +370,38 @@ func _drive_to_gym() -> void:
 	if _game.heart_pieces != 2:
 		_fail("não achou o segundo coração: %s" % _game.heart_pieces)
 		return
+	await _close_talk()
 	_game.request_scene("res://scenes/consultorio/consultorio.tscn", "default")
 	if not await _await_scene("Consultorio"):
 		_fail("não chegou no consultório")
 		return
 	await create_timer(0.45).timeout
 	await _shot(current_scene, "/tmp/art-preview/godot_consultorio.png")
-	current_scene.get_node("Props/Paciente").interact()
+	await _close_talk()
+	var paciente = current_scene.get_node("Props/Paciente")
+	paciente.interact()
 	await process_frame
-	if not await _seen("Sem café"):
-		_fail("o paciente entrou sem café")
+	if not await _seen("tomo um café"):
+		_fail("o café não ficou com a Amanda")
 		return
 	await _close_talk()
 	current_scene.get_node("Cafe").interact()
 	await process_frame
-	if not await _seen("Café passado"):
+	if not await _seen("café pra mim"):
 		_fail("o café não saiu")
 		return
 	await _close_talk()
 	if not _game.coffee_ready:
 		_fail("o café não ficou pronto")
 		return
-	current_scene.get_node("Props/Paciente").interact()
+	var na_sala := current_scene.get_node("Props/Player") as CharacterBody2D
+	na_sala.global_position = Vector2(196, 200)
+	await physics_frame
+	paciente.interact()
 	await process_frame
+	if not paciente.deitado:
+		_fail("o paciente não deitou no divã")
+		return
 	if not await _seen("desejo do Outro"):
 		_fail("a frase do Lacan não apareceu")
 		return
@@ -392,6 +410,8 @@ func _drive_to_gym() -> void:
 	if not _game.session_done:
 		_fail("a sessão não terminou")
 		return
+	na_sala.global_position = Vector2(180, 70)
+	await physics_frame
 	current_scene.get_node("Props/Eli").interact()
 	await process_frame
 	if not await _seen("passeio comum"):
@@ -401,10 +421,32 @@ func _drive_to_gym() -> void:
 	await _close_talk()
 	if _game.heart_pieces != 3:
 		_fail("não recebeu o 3/4 do coração: %s" % _game.heart_pieces)
+		return
+	if not _game.alexandre_pending:
+		_fail("a volta pra casa não abriu")
+		return
+	_game.request_scene("res://scenes/casa/casa.tscn", "from_clinica")
+	if not await _await_scene("Casa"):
+		_fail("não voltou pra casa depois do consultório")
+		return
+	await create_timer(0.55).timeout
+	if not _game.phone_ringing:
+		_fail("a mensagem pro Alexandre não apareceu")
+		return
+	_press_interact()
+	for _frame in 4:
+		await process_frame
+	if not await _seen("Alexandre"):
+		_fail("a mensagem pro Alexandre não abriu")
+		return
+	await _shot(current_scene, "/tmp/art-preview/godot_alexandre.png")
+	await _close_talk()
+	if not _game.alexandre_sent:
+		_fail("a mensagem pro Alexandre não foi enviada")
 
 func _seen(snippet: String) -> bool:
 	var guard := 0
-	while guard < 6:
+	while guard < 12:
 		if _label_has(snippet):
 			return true
 		if not _game.dialogue_open:
@@ -416,7 +458,7 @@ func _seen(snippet: String) -> bool:
 
 func _close_talk() -> void:
 	var guard := 0
-	while _game.dialogue_open and guard < 8:
+	while _game.dialogue_open and guard < 12:
 		_press_interact()
 		await process_frame
 		guard += 1

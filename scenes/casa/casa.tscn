@@ -168,3 +168,6 @@ position = Vector2(70, 158)
 
 [node name="from_rua" type="Marker2D" parent="Spawns"]
 position = Vector2(408, 268)
+
+[node name="from_clinica" type="Marker2D" parent="Spawns"]
+position = Vector2(408, 268)

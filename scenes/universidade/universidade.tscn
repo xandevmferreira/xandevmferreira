@@ -98,6 +98,7 @@ monitoring = false
 script = ExtResource("9_coracao")
 piece_id = "ufpa"
 needs_exercise = false
+line_id = "coracao2"
 
 [node name="Sprite" type="Sprite2D" parent="Heart"]
 texture_filter = 0

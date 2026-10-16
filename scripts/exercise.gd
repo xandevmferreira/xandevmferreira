@@ -4,6 +4,8 @@ var _count := 0
 
 func interact() -> void:
 	if Game.exercised:
+		if not Game.has_heart("academia"):
+			Game.start_dialogue(Story.lines_for("exercicio_fim"))
 		return
 	_count += 1
 	if _count < 3:
@@ -14,3 +16,4 @@ func interact() -> void:
 	if heart:
 		heart.visible = true
 		heart.collision_layer = 4
+	Game.start_dialogue(Story.lines_for("exercicio_fim"))

@@ -3,16 +3,18 @@ extends RefCounted
 
 ## Paredes do consultório. Sai de tools/generate_art.py.
 
-const SIZE := Vector2i(320, 180)
+const SIZE := Vector2i(400, 240)
 
 const RECTS: Array[Rect2] = [
-	Rect2(0, 0, 320, 8),
-	Rect2(0, 8, 8, 164),
-	Rect2(312, 8, 8, 164),
-	Rect2(0, 172, 136, 8),
-	Rect2(184, 172, 136, 8),
-	Rect2(44, 54, 96, 34),
-	Rect2(214, 22, 90, 46),
-	Rect2(18, 22, 22, 24),
-	Rect2(156, 68, 28, 26),
+	Rect2(0, 0, 176, 8),
+	Rect2(216, 0, 184, 8),
+	Rect2(0, 8, 8, 224),
+	Rect2(392, 8, 8, 224),
+	Rect2(0, 232, 400, 8),
+	Rect2(8, 104, 168, 8),
+	Rect2(216, 104, 176, 8),
+	Rect2(32, 36, 92, 28),
+	Rect2(16, 124, 108, 44),
+	Rect2(228, 136, 132, 36),
+	Rect2(312, 188, 36, 24),
 ]

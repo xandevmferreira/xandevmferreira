@@ -93,17 +93,6 @@ collision_mask = 0
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_vaso")
 
-[node name="Talk" type="Area2D" parent="Props/Plant"]
-position = Vector2(0, -6)
-collision_layer = 4
-collision_mask = 0
-monitoring = false
-script = ExtResource("6_falar")
-dialogue_id = "planta"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Plant/Talk"]
-shape = SubResource("RectangleShape2D_planta")
-
 [node name="Talkers" type="Node2D" parent="."]
 
 [node name="Cama" type="Area2D" parent="Talkers"]
@@ -117,28 +106,6 @@ dialogue_id = "cama"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Cama"]
 shape = SubResource("RectangleShape2D_cama")
 
-[node name="Piano" type="Area2D" parent="Talkers"]
-position = Vector2(28, 268)
-collision_layer = 4
-collision_mask = 0
-monitoring = false
-script = ExtResource("6_falar")
-dialogue_id = "piano"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Piano"]
-shape = SubResource("RectangleShape2D_piano")
-
-[node name="Santos" type="Area2D" parent="Talkers"]
-position = Vector2(64, 259)
-collision_layer = 4
-collision_mask = 0
-monitoring = false
-script = ExtResource("6_falar")
-dialogue_id = "santos"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Santos"]
-shape = SubResource("RectangleShape2D_santos")
-
 [node name="Sofa" type="Area2D" parent="Talkers"]
 position = Vector2(212, 254)
 collision_layer = 4
@@ -149,28 +116,6 @@ dialogue_id = "pai"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Sofa"]
 shape = SubResource("RectangleShape2D_sofa")
-
-[node name="Cozinha" type="Area2D" parent="Talkers"]
-position = Vector2(420, 132)
-collision_layer = 4
-collision_mask = 0
-monitoring = false
-script = ExtResource("6_falar")
-dialogue_id = "cozinha"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Cozinha"]
-shape = SubResource("RectangleShape2D_cozinha")
-
-[node name="Maquina" type="Area2D" parent="Talkers"]
-position = Vector2(408, 29)
-collision_layer = 4
-collision_mask = 0
-monitoring = false
-script = ExtResource("6_falar")
-dialogue_id = "maquina"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Maquina"]
-shape = SubResource("RectangleShape2D_maquina")
 
 [node name="Mae" type="Area2D" parent="Talkers"]
 position = Vector2(374, 152)

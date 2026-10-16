@@ -98,7 +98,6 @@ monitoring = false
 script = ExtResource("9_coracao")
 piece_id = "ufpa"
 needs_exercise = false
-line_id = "coracao2"
 
 [node name="Sprite" type="Sprite2D" parent="Heart"]
 texture_filter = 0
@@ -113,8 +112,8 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("11_porta")
-target_scene = "res://scenes/rua/rua.tscn"
-target_spawn = "from_ufpa"
+target_scene = "res://scenes/consultorio/consultorio.tscn"
+target_spawn = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
 shape = SubResource("RectangleShape2D_porta")

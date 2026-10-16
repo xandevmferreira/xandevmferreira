@@ -25,10 +25,12 @@ A cena da casa segue a planta em `references/locations/casa/planta.png`.
 
 A personagem começa no quarto da Amanda. O banheiro dela é suíte, com porta saindo do quarto. A volta da rua a deixa no hall.
 
-O pai fica sentado no sofá. A mãe cozinha. A cachorra preta dorme no chão, perto da cozinha.
+O Pai fica sentado no sofá. A Mãe cozinha. A Pretinha dorme no chão, perto da cozinha. As pessoas falam com o nome, dois pontos e a fala. A cama e a placa da UFPA guardam o texto delas. Piano, santos, plantas, máquina, flores e o gato não abrem descrição.
 
 ## Fora da casa
 
 A rua é um condomínio fechado, não uma fazenda. O Creta preto fica na rua, perto da porta. A academia é do lado. Depois de 1 minuto na casa, o celular recebe uma mensagem do Alex e começa um cronômetro de 3 minutos. Na academia, o Alex anima o treino e a série libera um quarto do coração.
 
-Ao sair da academia, a missão é voltar para casa e se arrumar para a UFPA. O guarda-roupa faz o PUF e troca a roupa. O Henrique espera na rua, entra no Creta e os dois seguem até a universidade. Lá estão o professor Ernani, o professor Breno, a placa da Pedagogia e outro quarto do coração.
+Ao sair da academia, a missão é voltar para casa e se arrumar para a UFPA. O guarda-roupa faz o PUF e troca a roupa. O Henrique espera na rua, entra no Creta e os dois seguem até a universidade. Lá estão o professor Ernani, dentro do prédio, o professor Breno, do lado de fora, a placa da Pedagogia e outro quarto do coração.
+
+A saída da UFPA leva ao consultório. A Amanda passa um café, atende o paciente no divã e a Eli, de cabelo branco e roupa preta, entrega um biscoito e o terceiro pedaço do coração.

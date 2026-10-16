@@ -59,7 +59,7 @@ func _run() -> void:
 		if _game.dialogue_open:
 			_fail("a fala da cama não terminou")
 
-	casa.get_node("Talkers/Cozinha").interact()
+	casa.get_node("Talkers/Mae").interact()
 	await process_frame
 	_press_interact()
 	for _frame in 2:
@@ -190,16 +190,8 @@ func _drive_to_gym() -> void:
 	for _i in 4:
 		await physics_frame
 	_press_interact()
-	for _frame in 4:
+	for _frame in 6:
 		await process_frame
-	if not _game.dialogue_open:
-		_fail("o Creta não abriu")
-		return
-	var guard := 0
-	while _game.dialogue_open and guard < 6:
-		_press_interact()
-		await process_frame
-		guard += 1
 	if not _game.is_driving():
 		_fail("não entrou no Creta")
 		return
@@ -300,10 +292,9 @@ func _drive_to_gym() -> void:
 		_fail("não saiu da academia")
 		return
 	await create_timer(0.55).timeout
-	if not _game.mission_ufpa or not _game.dialogue_open:
+	if not _game.mission_ufpa:
 		_fail("a missão da UFPA não abriu")
 		return
-	await _close_talk()
 	_game.request_scene("res://scenes/casa/casa.tscn", "default")
 	if not await _await_scene("Casa"):
 		_fail("não voltou para se arrumar")
@@ -361,10 +352,55 @@ func _drive_to_gym() -> void:
 		_fail("o professor Breno não falou")
 		return
 	await _close_talk()
+	var porta = current_scene.get_node("Door")
+	if not String(porta.target_scene).contains("consultorio"):
+		_fail("a saída da UFPA não vai ao consultório")
+		return
 	current_scene.get_node("Heart").interact()
 	await process_frame
 	if _game.heart_pieces != 2:
 		_fail("não achou o segundo coração: %s" % _game.heart_pieces)
+		return
+	_game.request_scene("res://scenes/consultorio/consultorio.tscn", "default")
+	if not await _await_scene("Consultorio"):
+		_fail("não chegou no consultório")
+		return
+	await create_timer(0.45).timeout
+	await _shot(current_scene, "/tmp/art-preview/godot_consultorio.png")
+	current_scene.get_node("Props/Paciente").interact()
+	await process_frame
+	if not await _seen("Sem café"):
+		_fail("o paciente entrou sem café")
+		return
+	await _close_talk()
+	current_scene.get_node("Cafe").interact()
+	await process_frame
+	if not await _seen("Café passado"):
+		_fail("o café não saiu")
+		return
+	await _close_talk()
+	if not _game.coffee_ready:
+		_fail("o café não ficou pronto")
+		return
+	current_scene.get_node("Props/Paciente").interact()
+	await process_frame
+	if not await _seen("desejo do Outro"):
+		_fail("a frase do Lacan não apareceu")
+		return
+	await _shot(current_scene, "/tmp/art-preview/godot_paciente.png")
+	await _close_talk()
+	if not _game.session_done:
+		_fail("a sessão não terminou")
+		return
+	current_scene.get_node("Props/Eli").interact()
+	await process_frame
+	if not await _seen("passeio comum"):
+		_fail("a Eli não entregou o biscoito")
+		return
+	await _shot(current_scene, "/tmp/art-preview/godot_eli.png")
+	await _close_talk()
+	if _game.heart_pieces != 3:
+		_fail("não recebeu o 3/4 do coração: %s" % _game.heart_pieces)
 
 func _seen(snippet: String) -> bool:
 	var guard := 0

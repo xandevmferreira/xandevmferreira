@@ -43,8 +43,9 @@ var mission_ufpa := false
 var dressed := false
 var henrique_joined := false
 var ufpa_arrived := false
+var coffee_ready := false
+var session_done := false
 var _hearts := {}
-var _said_gate := false
 var _spawn_used := ""
 var _car: Node2D
 var _after_close := ""
@@ -113,10 +114,8 @@ func on_map_ready(player: Node2D, spawns: Node2D) -> void:
 			arrive_gym()
 		elif scene.name == "Rua" and _spawn_used == "from_academia" and not mission_ufpa:
 			mission_ufpa = true
-			start_dialogue(Story.lines_for("missao_ufpa"))
 		elif scene.name == "Universidade" and not ufpa_arrived:
 			ufpa_arrived = true
-			start_dialogue(Story.lines_for("ufpa_chegada"))
 	)
 
 func set_prompt(anchor: Vector2, show: bool) -> void:
@@ -224,9 +223,7 @@ func queue_drive(car: Node2D) -> void:
 	if driving or dialogue_open or transitioning:
 		return
 	_car = car
-	_after_close = "enter_car"
-	var fala := "creta_ufpa" if henrique_joined else "creta"
-	start_dialogue(Story.lines_for(fala))
+	_start_drive()
 
 func end_drive() -> void:
 	if not driving or _car == null:
@@ -249,12 +246,7 @@ func arrive_gym() -> void:
 	if gym_arrived:
 		return
 	gym_arrived = true
-	var made_it := gym_left > 0.0
 	gym_left = 0.0
-	if made_it:
-		start_dialogue(Story.lines_for("academia_tempo"))
-	elif gym_late or phone_read:
-		start_dialogue(Story.lines_for("academia_atraso"))
 
 func has_heart(piece_id: String) -> bool:
 	return _hearts.has(piece_id)
@@ -271,13 +263,9 @@ func transform_outfit() -> void:
 	if player and player.has_method("apply_outfit"):
 		player.apply_outfit("elegante")
 	_show_puf()
-	start_dialogue(Story.lines_for("puf"))
 
 func remind_gate() -> void:
-	if _said_gate or henrique_joined or blocks_player():
-		return
-	_said_gate = true
-	start_dialogue(Story.lines_for("ufpa_cedo"))
+	pass
 
 func go_university() -> void:
 	if transitioning or not henrique_joined:

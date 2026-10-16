@@ -14,9 +14,11 @@ const DIALOGUES := {
 	"celular": [
 		"O celular acende.",
 		"Alex: Meu bem vc nao vem treinar?",
+		"Agora vá pra academia.",
 	],
 	"creta": [
-		"A academia é logo ali.",
+		"A academia é a porta ao lado.",
+		"Agora vá pra lá.",
 	],
 	"academia_tempo": [
 		"A academia é do lado da casa.",
@@ -26,7 +28,7 @@ const DIALOGUES := {
 	],
 	"exercicio_fim": [
 		"Acabou o exercício.",
-		"Um pedaço do coração apareceu na academia.",
+		"Agora volte pra casa.",
 	],
 	"coracao": [
 		"Um quarto do coração.",
@@ -62,30 +64,32 @@ const DIALOGUES := {
 	],
 	"puf": [
 		"PUF. Roupa preta e joias douradas.",
-		"Pronta pra UFPA.",
+		"Agora vá pra rua.",
 	],
 	"armario_pronta": [
 		"Pronta pra UFPA.",
+		"O Henrique espera na rua.",
 	],
 	"missao_ufpa": [
-		"Hora de ir pra casa e se arrumar.",
+		"Agora vá pra casa se arrumar.",
 		"Hoje tem aula na UFPA.",
 	],
 	"creta_ufpa": [
-		"Henrique sobe junto. A UFPA é seguindo a rua.",
+		"Siga a placa da UFPA.",
 	],
 	"ufpa_cedo": [
 		"A UFPA fica pra lá. O Henrique ainda não veio.",
 	],
 	"ufpa_chegada": [
-		"A UFPA. O rio passa atrás da Pedagogia.",
+		"Fale com Ernani e o Breno.",
+		"Depois siga a placa CLINICA.",
 	],
 	"coracao2": [
 		"Outro quarto do coração.",
 	],
 	"henrique": [
 		"Henrique: Amiga, tu nem sabe!",
-		"Henrique: Entra no Creta. Eu vou junto.",
+		"Henrique: Entre no Creta. Placa UFPA.",
 	],
 	"placa": [
 		"Só os melhores chegam aqui.",
@@ -101,8 +105,8 @@ const DIALOGUES := {
 		"Eu quis te dar um lugar pequeno para começar este dia.",
 	],
 	"clinica_chegada": [
-		"O consultório. A sala fechada fica pra dentro.",
-		"A Eli espera fora, perto do sofá.",
+		"A sala particular é pra dentro.",
+		"A Eli fica fora, no sofá.",
 	],
 	"cafe": [
 		"Amanda: Um café pra mim.",
@@ -117,25 +121,27 @@ const DIALOGUES := {
 		"Paciente: A vida está um peso.",
 		"Paciente: Nada do que eu faço serve.",
 		"Amanda: O desejo é o desejo do Outro.",
+		"Agora fale com a Eli, lá fora.",
 	],
 	"paciente_fim": [
 		"Paciente: Vou pensar nisso.",
 	],
 	"eli_espera": [
-		"Eli: Atende ele. Eu te espero.",
+		"Eli: Atende na sala particular.",
+		"Eli: Eu espero aqui fora.",
 	],
 	"eli": [
 		"Eli: Um biscoito de um passeio comum na Grécia.",
 		"Eli: E o terceiro pedaço do coração.",
-		"Hora de ir pra casa.",
-		"Manda mensagem pro Alexandre.",
+		"Agora volte pra casa.",
+		"Mande mensagem pro Alexandre.",
 	],
 	"alexandre": [
 		"Amanda: Amor, to muito cansada.",
 		"Amanda: Vamos dormir juntos?",
 	],
 	"final": [
-		"Todos torcemos por ti.",
+		"Amanda, todos torcemos por ti.",
 		"Te amamos incondicionalmente.",
 		"Estaremos sempre aqui por você.",
 		"Feliz aniversário.",

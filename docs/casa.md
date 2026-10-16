@@ -29,11 +29,11 @@ O Pai fica sentado no sofá. A Mãe cozinha. A Pretinha dorme no chão, perto da
 
 ## Fora da casa
 
-A rua é um condomínio fechado, não uma fazenda. O Creta preto fica na rua, perto da porta. A academia é do lado. Depois de 1 minuto na casa, o celular recebe uma mensagem do Alex e começa um cronômetro de 3 minutos. Na academia, o Alex anima o treino e a série libera um quarto do coração.
+A rua é um condomínio fechado, não uma fazenda. Placas na calçada marcam CASA, ACADEMIA e UFPA. O Creta preto fica na frente da casa. Se ele for estacionado em outro ponto, continua lá na volta. A academia é do lado. Depois de 1 minuto na casa, o celular recebe uma mensagem do Alex e começa um cronômetro de 3 minutos. Na academia, o Alex anima o treino e a série libera um quarto do coração.
 
 Ao sair da academia, a missão é voltar para casa e se arrumar para a UFPA. O guarda-roupa faz o PUF e troca a roupa. O Henrique espera na rua, entra no Creta e os dois seguem até a universidade. Lá estão o professor Ernani, dentro do prédio, o professor Breno, do lado de fora, a placa da Pedagogia e outro quarto do coração.
 
-A saída da UFPA leva ao consultório. Placas indicam a UFPA, a clínica e a sala. Fora da sala fechada, a Eli espera perto do sofá. Dentro, a Amanda toma um café e o paciente deita no divã. A Eli entrega um biscoito e o terceiro pedaço do coração. Em casa, a Amanda chama o Alexandre de amor. A família se reúne na sala, o coração cresce na tela e a mensagem de aniversário passa sozinha.
+A saída da UFPA leva ao consultório. A sala particular fica fechada, do lado de dentro. A Amanda toma um café e o paciente deita no divã. Só depois ela fala com a Eli, que espera fora, perto do sofá. A Eli entrega um biscoito e o terceiro pedaço do coração. Em casa, a Amanda chama o Alexandre de amor. A família se reúne na sala, o coração cresce na tela e a mensagem de aniversário passa sozinha.
 
 Um gato preto fica na calçada, na frente da casa. O Pai recita, sem anunciar o livro: o amor que voa e anda, os filhos como flechas e uma frase sobre a vida.
 

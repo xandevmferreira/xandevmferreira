@@ -80,11 +80,20 @@ collision_mask = 0
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_flores_solido")
 
-[node name="GatoPreto" type="Sprite2D" parent="Props"]
+[node name="GatoPreto" type="Node2D" parent="Props"]
+position = Vector2(70, 82)
+
+[node name="Sprite" type="Sprite2D" parent="Props/GatoPreto"]
 texture_filter = 0
-position = Vector2(108, 82)
 texture = ExtResource("16_gato_preto")
 script = ExtResource("8_pes")
+
+[node name="Solid" type="StaticBody2D" parent="Props/GatoPreto"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/GatoPreto/Solid"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_gato_solido")
 
 [node name="Cat" type="Node2D" parent="Props"]
 position = Vector2(120, 162)
@@ -130,7 +139,7 @@ dialogue_id = "presente"
 shape = SubResource("RectangleShape2D_banco")
 
 [node name="Creta" type="CharacterBody2D" parent="Props"]
-position = Vector2(188, 100)
+position = Vector2(100, 120)
 script = ExtResource("12_creta")
 
 [node name="Sprite" type="Sprite2D" parent="Props/Creta"]

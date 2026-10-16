@@ -185,8 +185,8 @@ func _drive_to_gym() -> void:
 	await create_timer(0.45).timeout
 	var rua := current_scene
 	var walker := rua.get_node("Props/Player") as CharacterBody2D
-	walker.global_position = Vector2(188, 128)
-	walker.facing = Vector2.UP
+	walker.global_position = Vector2(100, 96)
+	walker.facing = Vector2.DOWN
 	for _i in 4:
 		await physics_frame
 	_press_interact()
@@ -324,6 +324,14 @@ func _drive_to_gym() -> void:
 	var friend := current_scene.get_node("Props/Henrique")
 	if not friend.visible:
 		_fail("o Henrique não apareceu")
+		return
+	var parked := current_scene.get_node("Props/Creta") as Node2D
+	if parked.global_position.x < 250.0:
+		_fail("o Creta não ficou onde foi deixado: %s" % parked.global_position)
+		return
+	var gato := current_scene.get_node_or_null("Props/GatoPreto") as Node2D
+	if gato == null or gato.global_position.x > 110.0 or gato.global_position.y > 96.0:
+		_fail("o gato preto não está na frente da casa")
 		return
 	friend.interact()
 	await process_frame
@@ -503,6 +511,9 @@ func _check_lines() -> void:
 			var size := font.get_multiline_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, 206.0, 13)
 			if size.y > 30.0:
 				_fail("fala longa (%s, %s px): %s" % [id, size.y, line])
+			var baixa := line.to_lower()
+			if baixa.contains("quixote") or baixa.contains("como diz"):
+				_fail("fala ainda anuncia o livro: %s" % line)
 
 func _shot(node: Node, path: String) -> void:
 	if node == null or DisplayServer.get_name() == "headless":

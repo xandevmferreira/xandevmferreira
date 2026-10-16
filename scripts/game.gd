@@ -58,6 +58,9 @@ var _hearts := {}
 var _said_gate := false
 var _spawn_used := ""
 var _car: Node2D
+var car_saved := false
+var car_pos := Vector2.ZERO
+var car_flip := false
 var _after_close := ""
 var _status: Label
 var _phone_chip: Control
@@ -86,6 +89,7 @@ func start_dialogue(lines: PackedStringArray) -> void:
 func request_scene(path: String, spawn_name: String) -> void:
 	if transitioning or path.is_empty():
 		return
+	_remember_car()
 	transitioning = true
 	pending_spawn = spawn_name
 	_prompt_wanted = false
@@ -104,6 +108,9 @@ func on_map_ready(player: Node2D, spawns: Node2D) -> void:
 	if marker:
 		player.global_position = marker.global_position
 	pending_spawn = "default"
+	var arrived := spawns.get_parent()
+	if arrived != null and arrived.name == "Rua":
+		_restore_car(arrived)
 	var body := player as CharacterBody2D
 	if body:
 		body.visible = true
@@ -311,6 +318,33 @@ func transform_outfit() -> void:
 		player.apply_outfit("elegante")
 	_show_puf()
 	start_dialogue(Story.lines_for("puf"))
+
+func _remember_car() -> void:
+	var scene := get_tree().current_scene
+	if scene == null or scene.name != "Rua":
+		return
+	var car := scene.get_node_or_null("Props/Creta") as Node2D
+	if car == null:
+		return
+	car_saved = true
+	car_pos = car.global_position
+	var sprite := car.get_node_or_null("Sprite") as Sprite2D
+	if sprite:
+		car_flip = sprite.flip_h
+
+func _restore_car(scene: Node) -> void:
+	if not car_saved:
+		return
+	var car := scene.get_node_or_null("Props/Creta") as Node2D
+	if car == null:
+		return
+	var pos := car_pos
+	pos.x = clampf(pos.x, 48.0, 350.0)
+	pos.y = clampf(pos.y, 104.0, 140.0)
+	car.global_position = pos
+	var sprite := car.get_node_or_null("Sprite") as Sprite2D
+	if sprite:
+		sprite.flip_h = car_flip
 
 func remind_gate() -> void:
 	if _said_gate or henrique_joined or blocks_player():

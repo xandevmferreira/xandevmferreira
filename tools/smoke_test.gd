@@ -430,19 +430,29 @@ func _drive_to_gym() -> void:
 		_fail("não voltou pra casa depois do consultório")
 		return
 	await create_timer(0.55).timeout
-	if not _game.phone_ringing:
+	if not _game.dialogue_open:
 		_fail("a mensagem pro Alexandre não apareceu")
 		return
-	_press_interact()
-	for _frame in 4:
-		await process_frame
-	if not await _seen("Alexandre"):
+	if not await _seen("cansada"):
 		_fail("a mensagem pro Alexandre não abriu")
 		return
 	await _shot(current_scene, "/tmp/art-preview/godot_alexandre.png")
 	await _close_talk()
 	if not _game.alexandre_sent:
 		_fail("a mensagem pro Alexandre não foi enviada")
+		return
+	var espera := 0
+	while espera < 400 and String(_game.finale_caption).is_empty():
+		await process_frame
+		espera += 1
+	if _game.heart_pieces != 4:
+		_fail("o coração não fechou: %s" % _game.heart_pieces)
+		return
+	if String(_game.finale_caption).is_empty():
+		_fail("a mensagem da família não apareceu")
+		return
+	await create_timer(0.4).timeout
+	await _shot(current_scene, "/tmp/art-preview/godot_final.png")
 
 func _seen(snippet: String) -> bool:
 	var guard := 0

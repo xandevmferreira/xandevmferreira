@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 ## Personagem em visão de cima. Anda em quatro direções e fala com o que está à frente.
 
-const SPEED := 48.0
+const SPEED := 64.0
 const FRAME := Vector2i(16, 24)
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D

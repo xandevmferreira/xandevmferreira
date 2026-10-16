@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://crua_aniv001"]
+[gd_scene load_steps=21 format=3 uid="uid://crua_aniv001"]
 
 [ext_resource type="Script" path="res://scripts/map.gd" id="1_map"]
 [ext_resource type="Texture2D" path="res://assets/maps/rua.png" id="2_mapa"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://scripts/creta_talk.gd" id="13_falar_carro"]
 [ext_resource type="Script" path="res://scripts/npc.gd" id="14_npc"]
 [ext_resource type="Texture2D" path="res://assets/sprites/henrique.png" id="15_henrique"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gato_preto.png" id="16_gato_preto"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flores_solido"]
 size = Vector2(12, 6)
@@ -78,6 +79,12 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Flowers/Solid"]
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_flores_solido")
+
+[node name="GatoPreto" type="Sprite2D" parent="Props"]
+texture_filter = 0
+position = Vector2(108, 82)
+texture = ExtResource("16_gato_preto")
+script = ExtResource("8_pes")
 
 [node name="Cat" type="Node2D" parent="Props"]
 position = Vector2(120, 162)

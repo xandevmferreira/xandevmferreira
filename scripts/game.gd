@@ -48,6 +48,12 @@ var session_done := false
 var clinic_seen := false
 var alexandre_pending := false
 var alexandre_sent := false
+var finale_played := false
+var _family_staged := false
+var _cine := false
+var _cine_hold := 0.0
+var _cine_heart: Node2D
+var finale_caption := ""
 var _hearts := {}
 var _said_gate := false
 var _spawn_used := ""
@@ -60,7 +66,7 @@ func _ready() -> void:
 	_build_ui()
 
 func blocks_player() -> bool:
-	return dialogue_open or transitioning
+	return dialogue_open or transitioning or _cine
 
 func is_driving() -> bool:
 	return driving
@@ -126,7 +132,12 @@ func on_map_ready(player: Node2D, spawns: Node2D) -> void:
 			clinic_seen = true
 			start_dialogue(Story.lines_for("clinica_chegada"))
 		elif scene.name == "Casa" and alexandre_pending and not alexandre_sent:
-			phone_ringing = true
+			alexandre_sent = true
+			phone_ringing = false
+			_after_close = "finale"
+			start_dialogue(Story.lines_for("alexandre"))
+		elif scene.name == "Casa" and finale_played and not _family_staged:
+			_stage_family()
 	)
 
 func set_prompt(anchor: Vector2, show: bool) -> void:
@@ -152,6 +163,11 @@ func _process(delta: float) -> void:
 				_arrow.visible = true
 	elif dialogue_open:
 		_arrow.visible = int(Time.get_ticks_msec() / 360.0) % 2 == 0
+		if _cine:
+			_cine_hold += delta
+			if _cine_hold >= 1.7:
+				_cine_hold = 0.0
+				_advance()
 
 	var scene := get_tree().current_scene
 	if scene != null and scene.name == "Casa" and not phone_read and not phone_ringing and not dialogue_open:
@@ -191,6 +207,8 @@ func _screen_point(world: Vector2) -> Vector2:
 
 func _show_current_line() -> void:
 	_full = _lines[_index]
+	if _cine:
+		finale_caption = _full
 	_shown = 0
 	_char_clock = 0.0
 	_typing = true
@@ -217,10 +235,16 @@ func _close_dialogue() -> void:
 	_arrow.visible = false
 	var follow := _after_close
 	_after_close = ""
+	var cine := _cine
+	if cine:
+		_cine = false
+		_release_player()
 	if follow == "timer":
 		gym_left = 180.0
 	elif follow == "enter_car":
 		_start_drive()
+	elif follow == "finale":
+		_begin_finale()
 
 func read_phone() -> void:
 	if not phone_ringing or dialogue_open or transitioning:
@@ -228,6 +252,7 @@ func read_phone() -> void:
 	phone_ringing = false
 	if alexandre_pending and not alexandre_sent:
 		alexandre_sent = true
+		_after_close = "finale"
 		start_dialogue(Story.lines_for("alexandre"))
 		return
 	phone_read = true
@@ -298,6 +323,79 @@ func go_university() -> void:
 		return
 	driving = false
 	request_scene("res://scenes/universidade/universidade.tscn", "default")
+
+func _begin_finale() -> void:
+	if finale_played:
+		return
+	finale_played = true
+	_cine = true
+	var scene := get_tree().current_scene
+	if scene == null or scene.name != "Casa":
+		request_scene("res://scenes/casa/casa.tscn", "from_clinica")
+		return
+	_stage_family()
+
+func _stage_family() -> void:
+	if _family_staged:
+		return
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	var props := scene.get_node_or_null("Props")
+	var player := scene.get_node_or_null("Props/Player") as CharacterBody2D
+	if props == null or player == null:
+		return
+	_family_staged = true
+	player.global_position = Vector2(220, 284)
+	player.facing = Vector2.UP
+	player.velocity = Vector2.ZERO
+	player.collision_layer = 0
+	player.set_physics_process(false)
+	if player.has_method("apply_outfit") and dressed:
+		player.apply_outfit("elegante")
+	var sprite := player.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite:
+		sprite.play(&"idle_up")
+	_move_feet(scene.get_node_or_null("Props/Pai"), Vector2(186, 284))
+	_move_feet(scene.get_node_or_null("Props/Mae"), Vector2(252, 284))
+	_move_feet(scene.get_node_or_null("Props/Cachorra"), Vector2(150, 286))
+	if scene.get_node_or_null("Props/Alexandre") == null:
+		var amor := Sprite2D.new()
+		amor.name = "Alexandre"
+		amor.texture = load("res://assets/sprites/alex.png")
+		amor.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		amor.centered = true
+		if amor.texture:
+			amor.offset = Vector2(0, -amor.texture.get_height() * 0.5 + 1.0)
+		props.add_child(amor)
+		amor.position = Vector2(286, 284)
+	var tela := Sprite2D.new()
+	tela.name = "TelaFinal"
+	tela.texture = load("res://assets/sprites/heart_full.png")
+	tela.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	tela.centered = true
+	tela.position = Vector2(216, 232)
+	tela.scale = Vector2(1, 1)
+	props.add_child(tela)
+	_cine_heart = tela
+	collect_heart("final")
+	var tween := create_tween()
+	tween.tween_property(tela, "scale", Vector2(3, 3), 1.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_callback(func() -> void:
+		if not dialogue_open:
+			start_dialogue(Story.lines_for("final"))
+	)
+
+func _move_feet(node: Node2D, feet: Vector2) -> void:
+	if node:
+		node.position = feet
+
+func _release_player() -> void:
+	var player := get_tree().get_first_node_in_group("player") as CharacterBody2D
+	if player == null:
+		return
+	player.collision_layer = 2
+	player.set_physics_process(true)
 
 func _start_drive() -> void:
 	if _car == null:

@@ -1353,6 +1353,10 @@ def draw_rua() -> Image.Image:
     fill_rect(image, 360, 28, 8, 18, (64, 68, 74, 255))
     fill_rect(image, 363, 22, 2, 8, (64, 68, 74, 255))
     pix(image, 364, 20, (255, 236, 170, 255))
+    paint_sign(image, 300, 62, "UFPA")
+    fill_rect(image, 324, 66, 8, 2, (255, 244, 220, 255))
+    fill_rect(image, 330, 64, 2, 2, (255, 244, 220, 255))
+    fill_rect(image, 330, 68, 2, 2, (255, 244, 220, 255))
     write_cidade_walls()
     return image
 
@@ -1478,6 +1482,8 @@ GLYPHS = {
     "I": ["111", "010", "010", "010", "111"],
     "L": ["100", "100", "100", "100", "111"],
     "M": ["101", "111", "101", "101", "101"],
+    "N": ["101", "111", "101", "101", "101"],
+    "T": ["111", "010", "010", "010", "010"],
     "O": ["010", "101", "101", "101", "010"],
     "P": ["110", "101", "110", "100", "100"],
     "Q": ["010", "101", "101", "011", "001"],
@@ -1486,6 +1492,15 @@ GLYPHS = {
     "U": ["101", "101", "101", "101", "010"],
     " ": ["000", "000", "000", "000", "000"],
 }
+
+
+def paint_sign(image: Image.Image, x: int, y: int, text: str) -> None:
+    width = len(text) * 4 + 4
+    fill_rect(image, x, y, width, 9, (36, 32, 30, 255))
+    fill_rect(image, x, y, width, 1, GOLD)
+    fill_rect(image, x, y + 8, width, 1, GOLD)
+    paint_text(image, x + 2, y + 2, text, (255, 244, 220, 255))
+    fill_rect(image, x + width // 2 - 1, y + 9, 2, 10, (92, 64, 48, 255))
 
 
 def paint_text(image: Image.Image, x: int, y: int, text: str, color: tuple) -> None:
@@ -1563,6 +1578,12 @@ def draw_universidade() -> Image.Image:
     wall_window(image, 206, 70, 20, 12)
     wall_window(image, 234, 70, 20, 12)
     paint_text(image, 136, 54, "PEDAGOGIA", (92, 48, 40, 255))
+    for y in range(124, 188):
+        for x in range(176, 208):
+            if image.getpixel((x, y))[3] == 0:
+                continue
+            image.putpixel((x, y), (214, 206, 190, 255) if (x + y) % 8 else (196, 186, 170, 255))
+    paint_sign(image, 214, 150, "CLINICA")
     fill_rect(image, 214, 118, 84, 16, (122, 86, 58, 255))
     fill_rect(image, 214, 118, 84, 2, (92, 62, 40, 255))
     paint_text(image, 218, 120, "SO OS MELHORES", (255, 244, 220, 255))
@@ -1638,6 +1659,11 @@ def draw_consultorio() -> Image.Image:
     fill_rect(image, 208, 104, 8, 8, (122, 74, 52, 255))
     fill_rect(image, 184, 0, 8, 8, (92, 64, 48, 255))
     fill_rect(image, 208, 0, 8, 8, (122, 74, 52, 255))
+    for y in range(12, 104):
+        for x in range(188, 204):
+            image.putpixel((x, y), (176, 148, 120, 255) if y % 6 == 0 else (164, 136, 108, 255))
+    paint_sign(image, 150, 78, "SALA")
+    paint_sign(image, 150, 16, "SAIDA")
     fill_rect(image, 32, 36, 96, 10, (24, 22, 26, 255))
     fill_rect(image, 32, 44, 96, 20, (42, 40, 46, 255))
     fill_rect(image, 36, 48, 88, 12, (214, 196, 176, 255))
@@ -1688,6 +1714,31 @@ def draw_lying_patient() -> Image.Image:
     return outline(image)
 
 
+def draw_heart_full() -> Image.Image:
+    image = new(16, 16)
+    fill_rect(image, 2, 3, 5, 4, (214, 72, 96, 255))
+    fill_rect(image, 9, 3, 5, 4, (214, 72, 96, 255))
+    fill_rect(image, 2, 6, 12, 4, (214, 72, 96, 255))
+    fill_rect(image, 4, 10, 8, 2, (196, 56, 82, 255))
+    fill_rect(image, 6, 12, 4, 2, (196, 56, 82, 255))
+    pix(image, 4, 4, (255, 214, 220, 255))
+    return outline(image)
+
+
+def draw_black_cat() -> Image.Image:
+    image = new(16, 14)
+    fill_rect(image, 2, 1, 3, 3, (16, 14, 18, 255))
+    fill_rect(image, 9, 1, 3, 3, (16, 14, 18, 255))
+    fill_rect(image, 3, 3, 9, 6, (16, 14, 18, 255))
+    pix(image, 5, 5, (214, 176, 78, 255))
+    pix(image, 9, 5, (214, 176, 78, 255))
+    pix(image, 7, 7, (120, 80, 90, 255))
+    fill_rect(image, 12, 5, 3, 2, (16, 14, 18, 255))
+    fill_rect(image, 4, 9, 2, 3, (16, 14, 18, 255))
+    fill_rect(image, 9, 9, 2, 3, (16, 14, 18, 255))
+    return outline(image)
+
+
 def draw_heart_more() -> Image.Image:
     image = new(16, 16)
     fill_rect(image, 3, 3, 4, 3, (214, 72, 96, 255))
@@ -1717,6 +1768,8 @@ def main() -> None:
     creta = draw_creta()
     heart = draw_heart()
     heart_more = draw_heart_more()
+    heart_full = draw_heart_full()
+    gato_preto = draw_black_cat()
     alex = draw_standing(MORENO, MORENO_S, HAIR, (168, 64, 72, 255), (48, 52, 64, 255))
     henrique = draw_standing(MORENO, MORENO_S, HAIR, (64, 104, 156, 255), (48, 52, 64, 255))
     mae = draw_standing(SKIN, SKIN_S, BROWN, (214, 168, 150, 255), (120, 96, 84, 255), glasses=True)
@@ -1754,6 +1807,8 @@ def main() -> None:
     creta.save(ASSETS / "sprites" / "creta.png")
     heart.save(ASSETS / "sprites" / "heart.png")
     heart_more.save(ASSETS / "sprites" / "heart2.png")
+    heart_full.save(ASSETS / "sprites" / "heart_full.png")
+    gato_preto.save(ASSETS / "sprites" / "gato_preto.png")
     draw_dialogue_frame().save(ASSETS / "ui" / "dialogue_frame.png")
     draw_key_chip().save(ASSETS / "ui" / "key_e.png")
     draw_arrow().save(ASSETS / "ui" / "arrow.png")

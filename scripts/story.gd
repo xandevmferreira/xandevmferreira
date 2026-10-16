@@ -35,8 +35,11 @@ const DIALOGUES := {
 		"Alex: amor, eu já alonguei.",
 	],
 	"pai": [
-		"Pai: No Quixote, o amor às vezes voa.",
-		"Pai: Às vezes anda. Ninguém o alcança, nem lhe escapa.",
+		"Pai: O amor às vezes voa.",
+		"Pai: Às vezes anda. Ninguém lhe escapa.",
+		"Pai: Os filhos são como flechas.",
+		"Pai: Lançamos sem saber o destino.",
+		"Pai: A vida passa. O amor fica.",
 	],
 	"mae": [
 		"Mãe: Bom dia filhota!",
@@ -128,8 +131,17 @@ const DIALOGUES := {
 		"Manda mensagem pro Alexandre.",
 	],
 	"alexandre": [
-		"Amanda: Alexandre, terminei o atendimento.",
-		"Alexandre: Te espero, meu bem.",
+		"Amanda: Amor, to muito cansada.",
+		"Amanda: Vamos dormir juntos?",
+	],
+	"final": [
+		"Todos torcemos por ti.",
+		"Te amamos incondicionalmente.",
+		"Estaremos sempre aqui por você.",
+		"Feliz aniversário.",
+		"Deus te abençoe sempre.",
+		"Nunca pare a busca pela felicidade.",
+		"Te amamos!",
 	],
 	"eli_depois": [
 		"Eli: O biscoito ainda está quentinho.",

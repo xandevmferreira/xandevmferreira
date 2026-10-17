@@ -302,7 +302,21 @@ func _drive_to_gym() -> void:
 	if not _game.mission_ufpa:
 		_fail("a missão da UFPA não abriu")
 		return
+	if not _game.phone_ringing:
+		_fail("o celular do irmão não tocou")
+		return
+	_press_interact()
+	await process_frame
+	if not await _seen("meme"):
+		_fail("o irmão não falou do meme")
+		return
+	if not await _seen("amo"):
+		_fail("o irmão não disse que ama")
+		return
 	await _close_talk()
+	if not _game.brother_read:
+		_fail("a mensagem do irmão não foi lida")
+		return
 	_game.request_scene("res://scenes/casa/casa.tscn", "default")
 	if not await _await_scene("Casa"):
 		_fail("não voltou para se arrumar")
@@ -463,6 +477,9 @@ func _drive_to_gym() -> void:
 	if _game.heart_pieces != 4:
 		_fail("o coração não fechou: %s" % _game.heart_pieces)
 		return
+	if current_scene.get_node_or_null("Props/Irmao") == null:
+		_fail("o irmão não entrou na família")
+		return
 	var tela := _game.get_node_or_null("FinalHeart/TelaFinal") as Sprite2D
 	if tela == null or tela.texture == null or tela.scale.x < 2.0:
 		_fail("o coração completo não cresceu")
@@ -476,7 +493,7 @@ func _drive_to_gym() -> void:
 		_fail("a mensagem da família não é o texto inteiro: %s" % _game.finale_caption)
 		return
 	var leitura := Time.get_ticks_msec()
-	while Time.get_ticks_msec() - leitura < 12000 and not _dialogue_line().contains("Te amamos!"):
+	while Time.get_ticks_msec() - leitura < 22000 and not _dialogue_line().contains("Te amamos!"):
 		await process_frame
 	if not _dialogue_line().contains("Te amamos!"):
 		_fail("a mensagem inteira não apareceu no balão")

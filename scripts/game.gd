@@ -9,7 +9,7 @@ const CHAR_DELAY := 0.032
 const TEXT_WIDTH := 206.0
 const BOX_POS := Vector2(6, 108)
 const BOX_SIZE := Vector2(228, 48)
-const FINALE_HOLD := 7.0
+const FINALE_HOLD := 2.6
 
 var pending_spawn := "default"
 var dialogue_open := false
@@ -51,6 +51,8 @@ var ufpa_arrived := false
 var coffee_ready := false
 var session_done := false
 var clinic_seen := false
+var brother_pending := false
+var brother_read := false
 var alexandre_pending := false
 var alexandre_sent := false
 var finale_played := false
@@ -136,7 +138,8 @@ func on_map_ready(player: Node2D, spawns: Node2D) -> void:
 			arrive_gym()
 		elif scene.name == "Rua" and _spawn_used == "from_academia" and not mission_ufpa:
 			mission_ufpa = true
-			start_dialogue(Story.lines_for("missao_ufpa"))
+			brother_pending = true
+			phone_ringing = true
 		elif scene.name == "Universidade" and not ufpa_arrived:
 			ufpa_arrived = true
 			start_dialogue(Story.lines_for("ufpa_chegada"))
@@ -219,9 +222,8 @@ func _screen_point(world: Vector2) -> Vector2:
 
 func _show_current_line() -> void:
 	_full = _lines[_index]
-	if _cine:
-		finale_caption = _full
-		_open_finale_box()
+	if _cine and finale_caption.is_empty():
+		finale_caption = " ".join(_lines)
 	_shown = 0
 	_char_clock = 0.0
 	_typing = true
@@ -272,6 +274,8 @@ func _close_dialogue() -> void:
 		gym_left = 180.0
 	elif follow == "enter_car":
 		_start_drive()
+	elif follow == "missao":
+		start_dialogue(Story.lines_for("missao_ufpa"))
 	elif follow == "finale":
 		_begin_finale()
 
@@ -283,6 +287,11 @@ func read_phone() -> void:
 		alexandre_sent = true
 		_after_close = "finale"
 		start_dialogue(Story.lines_for("alexandre"))
+		return
+	if brother_pending and not brother_read:
+		brother_read = true
+		_after_close = "missao"
+		start_dialogue(Story.lines_for("irmao"))
 		return
 	phone_read = true
 	_after_close = "timer"
@@ -467,20 +476,11 @@ func _stage_family() -> void:
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
 		cam.offset = Vector2(24, 2)
-	_move_feet(scene.get_node_or_null("Props/Pai"), Vector2(164, 284))
-	_move_feet(scene.get_node_or_null("Props/Mae"), Vector2(276, 284))
-	_move_feet(scene.get_node_or_null("Props/Cachorra"), Vector2(138, 286))
-	if scene.get_node_or_null("Props/Alexandre") == null:
-		var amor := Sprite2D.new()
-		amor.name = "Alexandre"
-		amor.texture = load("res://assets/sprites/alexandre.png")
-		amor.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		amor.centered = true
-		amor.z_index = 2
-		if amor.texture:
-			amor.offset = Vector2(0, -amor.texture.get_height() * 0.5 + 1.0)
-		props.add_child(amor)
-		amor.position = Vector2(308, 284)
+	_move_feet(scene.get_node_or_null("Props/Pai"), Vector2(162, 284))
+	_move_feet(scene.get_node_or_null("Props/Mae"), Vector2(272, 284))
+	_move_feet(scene.get_node_or_null("Props/Cachorra"), Vector2(136, 286))
+	_place_portrait(props, "Irmao", "res://assets/sprites/irmao.png", Vector2(294, 284))
+	_place_portrait(props, "Alexandre", "res://assets/sprites/alexandre.png", Vector2(318, 284))
 	var layer := CanvasLayer.new()
 	layer.name = "FinalHeart"
 	layer.layer = 18
@@ -494,7 +494,7 @@ func _stage_family() -> void:
 	if cam:
 		var center := cam.get_screen_center_position()
 		var view := get_viewport().get_visible_rect().size
-		hands = (Vector2(300, 268) - center) + view * 0.5
+		hands = (Vector2(310, 266) - center) + view * 0.5
 	tela.position = hands
 	tela.scale = Vector2(0.5, 0.5)
 	layer.add_child(tela)
@@ -516,6 +516,21 @@ func _stage_family() -> void:
 		if not dialogue_open:
 			start_dialogue(Story.lines_for("final"))
 	)
+
+func _place_portrait(props: Node, portrait_name: String, texture_path: String, feet: Vector2) -> void:
+	if props.get_node_or_null(portrait_name) != null:
+		_move_feet(props.get_node(portrait_name) as Node2D, feet)
+		return
+	var portrait := Sprite2D.new()
+	portrait.name = portrait_name
+	portrait.texture = load(texture_path)
+	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	portrait.centered = true
+	portrait.z_index = 2
+	if portrait.texture:
+		portrait.offset = Vector2(0, -portrait.texture.get_height() * 0.5 + 1.0)
+	props.add_child(portrait)
+	portrait.position = feet
 
 func _move_feet(node: Node2D, feet: Vector2) -> void:
 	if node:
@@ -556,6 +571,9 @@ func _refresh_status() -> void:
 	if gym_left > 0.0:
 		var total := int(ceil(gym_left))
 		_status.text = "Treino %d:%02d" % [total / 60, total % 60]
+		_status.visible = true
+	elif brother_pending and not brother_read:
+		_status.text = "Irmão"
 		_status.visible = true
 	elif alexandre_pending and not alexandre_sent:
 		_status.text = "Alexandre"

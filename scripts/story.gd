@@ -70,6 +70,10 @@ const DIALOGUES := {
 	"missao_ufpa": [
 		"Hoje a aula é na UFPA.",
 	],
+	"irmao": [
+		"Irmão: Olha o Instagram. Tem um meme engraçado.",
+		"Irmão: Te amo muito.",
+	],
 	"creta_ufpa": [
 		"A UFPA é seguindo a placa.",
 	],
@@ -135,7 +139,11 @@ const DIALOGUES := {
 		"Amanda: Vamos dormir juntos?",
 	],
 	"final": [
-		"Amanda, todos torcemos por ti e te amamos incondicionalmente. Estaremos sempre aqui por você. Feliz aniversário, Deus te abençoe sempre e que você nunca pare a busca pela felicidade. Te amamos!",
+		"Amanda, todos torcemos por ti e te amamos incondicionalmente.",
+		"Estaremos sempre aqui por você.",
+		"Feliz aniversário, Deus te abençoe sempre",
+		"e que você nunca pare a busca pela felicidade.",
+		"Te amamos!",
 	],
 	"eli_depois": [
 		"Eli: O biscoito ainda está quentinho.",

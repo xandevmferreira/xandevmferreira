@@ -1774,6 +1774,46 @@ def draw_heart_complete() -> Image.Image:
     return outline(image)
 
 
+def draw_heart_progress(parts: int) -> Image.Image:
+    """Coração em quatro partes. As ganhas ficam vermelhas e o resto cinza."""
+    width, height = 32, 28
+    image = new(width, height)
+    rose = (214, 48, 72, 255)
+    deep = (168, 32, 58, 255)
+    light = (244, 126, 146, 255)
+    gray = (186, 182, 188, 255)
+    gray_deep = (132, 128, 136, 255)
+    points = []
+    for y in range(height):
+        for x in range(width):
+            sx = x * 40.0 / width
+            sy = y * 36.0 / height
+            left = (sx - 12) * (sx - 12) + (sy - 11) * (sy - 11) <= 81
+            right = (sx - 27) * (sx - 27) + (sy - 11) * (sy - 11) <= 81
+            lobe = sy <= 18 and (left or right)
+            point = False
+            if 14 <= sy <= 33:
+                half = 15.5 * (1.0 - (sy - 14) / 19.0)
+                point = abs(sx - 19.5) <= half
+            if lobe or point:
+                points.append((x, y, sy))
+    ranked = sorted(points, key=lambda item: -item[1])
+    red_count = int(round(len(ranked) * parts / 4.0))
+    reds = {(item[0], item[1]) for item in ranked[:red_count]}
+    for x, y, sy in points:
+        if (x, y) in reds:
+            if sy < 16:
+                color = light
+            elif sy < 26:
+                color = rose
+            else:
+                color = deep
+        else:
+            color = gray if sy < 22 else gray_deep
+        image.putpixel((x, y), color)
+    return outline(image)
+
+
 def draw_heart_full() -> Image.Image:
     image = new(16, 16)
     fill_rect(image, 2, 3, 5, 4, (214, 72, 96, 255))
@@ -1830,6 +1870,7 @@ def main() -> None:
     heart_more = draw_heart_more()
     heart_full = draw_heart_full()
     heart_complete = draw_heart_complete()
+    heart_quarters = [draw_heart_progress(part) for part in (1, 2, 3, 4)]
     gato_preto = draw_black_cat()
     alex = draw_standing(MORENO, MORENO_S, HAIR, (168, 64, 72, 255), (48, 52, 64, 255))
     alexandre = draw_alexandre()
@@ -1871,6 +1912,8 @@ def main() -> None:
     heart.save(ASSETS / "sprites" / "heart.png")
     heart_more.save(ASSETS / "sprites" / "heart2.png")
     heart_full.save(ASSETS / "sprites" / "heart_full.png")
+    for index, quarter in enumerate(heart_quarters, start=1):
+        quarter.save(ASSETS / "sprites" / f"heart_q{index}.png")
     heart_complete.save(ASSETS / "sprites" / "heart_complete.png")
     gato_preto.save(ASSETS / "sprites" / "gato_preto.png")
     draw_dialogue_frame().save(ASSETS / "ui" / "dialogue_frame.png")

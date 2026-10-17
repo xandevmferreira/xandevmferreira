@@ -292,9 +292,15 @@ func queue_drive(car: Node2D) -> void:
 	if driving or dialogue_open or transitioning:
 		return
 	_car = car
+	if henrique_joined:
+		_after_close = "enter_car"
+		start_dialogue(Story.lines_for("creta_ufpa"))
+		return
+	if mission_ufpa or exercised:
+		_start_drive()
+		return
 	_after_close = "enter_car"
-	var fala := "creta_ufpa" if henrique_joined else "creta"
-	start_dialogue(Story.lines_for(fala))
+	start_dialogue(Story.lines_for("creta"))
 
 func end_drive() -> void:
 	if not driving or _car == null:
@@ -335,7 +341,7 @@ func grant_heart(piece_id: String, line_id: String = "") -> void:
 	var fresh := not has_heart(piece_id)
 	if fresh:
 		collect_heart(piece_id)
-	if line_id != "":
+	if fresh and line_id != "":
 		start_dialogue(Story.lines_for(line_id))
 	if fresh:
 		_celebrate_heart()
@@ -347,24 +353,32 @@ func _celebrate_heart() -> void:
 	var old := player.get_node_or_null("CoracaoGanho")
 	if old:
 		old.queue_free()
+	var step := clampi(heart_pieces, 1, 4)
 	var heart := Sprite2D.new()
 	heart.name = "CoracaoGanho"
-	heart.texture = load("res://assets/sprites/heart_full.png")
+	heart.texture = load("res://assets/sprites/heart_q%d.png" % step)
 	heart.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	heart.centered = true
 	heart.z_index = 8
-	heart.position = Vector2(0, -44)
-	heart.scale = Vector2(1.6, 1.6)
+	heart.position = Vector2(0, -42)
+	heart.scale = Vector2(1.15, 1.15)
+	heart.modulate = Color(1.7, 1.7, 1.7, 1.0)
 	player.add_child(heart)
 	var feet := player.position.y
-	var tween := create_tween()
-	tween.tween_property(player, "position:y", feet - 8.0, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(heart, "scale", Vector2(2.2, 2.2), 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(heart, "position:y", -32.0, 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(player, "position:y", feet, 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	tween.parallel().tween_property(heart, "scale", Vector2(1.45, 1.45), 0.16).set_trans(Tween.TRANS_SINE)
-	tween.tween_property(heart, "scale", Vector2(1.8, 1.8), 0.1).set_trans(Tween.TRANS_SINE)
-	tween.tween_property(heart, "scale", Vector2(1.45, 1.45), 0.12).set_trans(Tween.TRANS_SINE)
+	var hop := player.create_tween()
+	hop.tween_property(player, "position:y", feet - 8.0, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	hop.tween_property(player, "position:y", feet, 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	var tween := heart.create_tween()
+	tween.tween_property(heart, "scale", Vector2(2.15, 2.15), 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(heart, "position:y", -34.0, 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(heart, "modulate", Color(1, 1, 1, 1), 0.12).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(heart, "scale", Vector2(1.7, 1.7), 0.12).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(heart, "scale", Vector2(2.05, 2.05), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(heart, "scale", Vector2(1.75, 1.75), 0.12).set_trans(Tween.TRANS_SINE)
+	tween.tween_interval(0.28)
+	tween.tween_property(heart, "modulate:a", 0.0, 0.32).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(heart, "position:y", -48.0, 0.32).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_callback(heart.queue_free)
 
 func transform_outfit() -> void:
 	if dressed:

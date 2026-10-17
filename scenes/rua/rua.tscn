@@ -219,7 +219,7 @@ position = Vector2(62, 86)
 position = Vector2(62, 86)
 
 [node name="from_academia" type="Marker2D" parent="Spawns"]
-position = Vector2(312, 86)
+position = Vector2(268, 78)
 
 [node name="from_ufpa" type="Marker2D" parent="Spawns"]
 position = Vector2(340, 86)

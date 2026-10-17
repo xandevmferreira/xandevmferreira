@@ -61,22 +61,14 @@ func _run() -> void:
 
 	casa.get_node("Talkers/Mae").interact()
 	await process_frame
-	_press_interact()
-	for _frame in 2:
-		await process_frame
+	if not await _seen("filhota"):
+		_fail("a Mãe não falou")
+	elif not _dialogue_line().contains("abençoe"):
+		_fail("a Mãe dividiu a fala")
 	await _shot(casa, "/tmp/art-preview/godot_dialogo.png")
-	if not _game.dialogue_open:
-		_fail("o diálogo não abriu")
-	else:
-		var presses := 0
-		while _game.dialogue_open and presses < 8:
-			_press_interact()
-			await process_frame
-			presses += 1
-		if _game.dialogue_open:
-			_fail("o diálogo não fechou depois de %s toques" % presses)
-		elif presses < 3:
-			_fail("o diálogo fechou cedo demais (%s toques)" % presses)
+	await _close_talk()
+	if _game.dialogue_open:
+		_fail("a fala da Mãe não fechou")
 
 	_check_lines()
 
@@ -84,12 +76,16 @@ func _run() -> void:
 	await process_frame
 	if not await _seen("voa"):
 		_fail("o Pai não recitou")
+	elif not _dialogue_line().contains("anda"):
+		_fail("o Pai não disse o ditado do amor por inteiro")
 	elif _dialogue_line().contains("flechas"):
 		_fail("o Pai recitou tudo de uma vez")
 	await _close_talk()
 	casa.get_node("Talkers/Sofa").interact()
 	await process_frame
-	if not await _seen("anda"):
+	if not await _seen("flechas"):
+		_fail("o Pai não disse o outro ditado")
+	elif _dialogue_line().contains("voa"):
 		_fail("o Pai repetiu o primeiro ditado")
 	await _close_talk()
 
@@ -277,10 +273,16 @@ func _drive_to_gym() -> void:
 	if not _game.exercised:
 		_fail("o exercício não terminou")
 		return
-	if trainee.get_node_or_null("CoracaoGanho") == null or _game.heart_pieces != 1:
-		_fail("o coração não ficou na cabeça: %s" % _game.heart_pieces)
+	if _game.heart_pieces != 1 or trainee.get_node_or_null("CoracaoGanho") == null:
+		_fail("o coração não apareceu: %s" % _game.heart_pieces)
 		return
 	await _shot(current_scene, "/tmp/art-preview/godot_coracao.png")
+	var sumiu := Time.get_ticks_msec()
+	while trainee.get_node_or_null("CoracaoGanho") != null and Time.get_ticks_msec() - sumiu < 2500:
+		await process_frame
+	if trainee.get_node_or_null("CoracaoGanho") != null:
+		_fail("o coração ficou fixo na cabeça")
+		return
 	trainee.global_position = Vector2(124, 130)
 	trainee.facing = Vector2.DOWN
 	await physics_frame
@@ -376,8 +378,14 @@ func _drive_to_gym() -> void:
 	if not String(porta.target_scene).contains("consultorio"):
 		_fail("a saída da UFPA não vai ao consultório")
 		return
-	if _game.heart_pieces != 2 or student.get_node_or_null("CoracaoGanho") == null:
+	if _game.heart_pieces != 2:
 		_fail("os professores não deixaram o coração: %s" % _game.heart_pieces)
+		return
+	var sumiu_ufpa := Time.get_ticks_msec()
+	while student.get_node_or_null("CoracaoGanho") != null and Time.get_ticks_msec() - sumiu_ufpa < 2500:
+		await process_frame
+	if student.get_node_or_null("CoracaoGanho") != null:
+		_fail("o coração ficou fixo na UFPA")
 		return
 	_game.request_scene("res://scenes/consultorio/consultorio.tscn", "default")
 	if not await _await_scene("Consultorio"):

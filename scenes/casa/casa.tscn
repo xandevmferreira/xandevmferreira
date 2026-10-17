@@ -112,8 +112,8 @@ collision_layer = 4
 collision_mask = 0
 monitoring = false
 script = ExtResource("6_falar")
-dialogue_id = "pai"
-one_by_one = true
+dialogue_id = "pai_amor"
+sayings = PackedStringArray("pai_amor", "pai_filhos", "pai_vida")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Sofa"]
 shape = SubResource("RectangleShape2D_sofa")

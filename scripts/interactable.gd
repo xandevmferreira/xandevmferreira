@@ -6,6 +6,7 @@ extends Area2D
 
 @export var dialogue_id := ""
 @export var one_by_one := false
+@export var sayings: PackedStringArray = PackedStringArray()
 
 var _step := 0
 
@@ -16,6 +17,11 @@ func _ready() -> void:
 	monitorable = true
 
 func interact() -> void:
+	if not sayings.is_empty():
+		var saying := sayings[_step % sayings.size()]
+		_step += 1
+		Game.start_dialogue(Story.lines_for(saying))
+		return
 	var lines := Story.lines_for(dialogue_id)
 	if lines.is_empty():
 		return

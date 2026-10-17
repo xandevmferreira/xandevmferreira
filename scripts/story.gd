@@ -33,16 +33,17 @@ const DIALOGUES := {
 	"alex_alongou": [
 		"Alex: amor, eu já alonguei.",
 	],
-	"pai": [
-		"Pai: O amor às vezes voa.",
-		"Pai: Às vezes anda. Ninguém lhe escapa.",
-		"Pai: Os filhos são como flechas.",
-		"Pai: Lançamos sem saber o destino.",
+	"pai_amor": [
+		"Pai: O amor às vezes voa e às vezes anda. Ninguém lhe escapa.",
+	],
+	"pai_filhos": [
+		"Pai: Os filhos são como flechas. Lançamos sem saber o destino.",
+	],
+	"pai_vida": [
 		"Pai: A vida passa. O amor fica.",
 	],
 	"mae": [
-		"Mãe: Bom dia filhota!",
-		"Mãe: Deus te abençoe.",
+		"Mãe: Bom dia filhota! Deus te abençoe.",
 	],
 	"cachorra": [
 		"Pretinha: Me leva pra passear humana!",
@@ -68,7 +69,6 @@ const DIALOGUES := {
 	],
 	"missao_ufpa": [
 		"Hoje a aula é na UFPA.",
-		"Passa em casa e se arruma.",
 	],
 	"creta_ufpa": [
 		"A UFPA é seguindo a placa.",

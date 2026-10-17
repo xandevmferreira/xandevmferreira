@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
@@ -43,7 +43,7 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	visibility: hidden;
+	visibility: visible;
 }
 
 #status-splash {
@@ -93,7 +93,22 @@ body {
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="Jogar.icon.png" />
 <link rel="apple-touch-icon" href="Jogar.apple-touch-icon.png"/>
 <style>body{background:#3a242c}</style>
-	</head>
+	<style>
+#espera {
+	color: #fff6ea;
+	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+	font-size: 1.05rem;
+	line-height: 1.45;
+	margin: 1rem 1.4rem 0;
+	max-width: 24rem;
+	text-align: center;
+}
+#status-progress {
+	height: 1rem;
+	accent-color: #fff6ea;
+}
+</style>
+</head>
 	<body>
 		<canvas id="canvas">
 			Your browser does not support the canvas tag.
@@ -107,11 +122,12 @@ body {
 			<img id="status-splash" class="show-image--false fullsize--true use-filter--true" src="Jogar.png" alt="">
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
+			<p id="espera"><b>Aniversário</b><br>A primeira vez demora um pouco.<br>Pode esperar. O jogo é grande.</p>
 		</div>
 
 		<script src="Jogar.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"Jogar","experimentalVK":false,"fileSizes":{"Jogar.pck":391544,"Jogar.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"Jogar","experimentalVK":false,"fileSizes":{"Jogar.pck":395160,"Jogar.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
@@ -135,6 +151,10 @@ const engine = new Engine(GODOT_CONFIG);
 		statusOverlay.style.visibility = 'visible';
 		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
 		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		const espera = document.getElementById('espera');
+		if (espera) {
+			espera.style.display = mode === 'progress' ? 'block' : 'none';
+		}
 		statusMode = mode;
 	}
 
@@ -156,7 +176,7 @@ const engine = new Engine(GODOT_CONFIG);
 		} else if (typeof err === 'string') {
 			setStatusNotice(err);
 		} else {
-			setStatusNotice('An unknown error occurred.');
+			setStatusNotice('Não consegui abrir o jogo. Tenta no Chrome.');
 		}
 		setStatusMode('notice');
 		initializing = false;
@@ -166,7 +186,11 @@ const engine = new Engine(GODOT_CONFIG);
 		threads: GODOT_THREADS_ENABLED,
 	});
 
-	if (missing.length !== 0) {
+	if (/WhatsApp|Instagram|FBAN|FBAV|FB_IAB|Line\//i.test(navigator.userAgent || '')) {
+		setStatusNotice('Para jogar, abre no Chrome.\n\nNo WhatsApp: toca nos três pontinhos e escolhe Abrir no navegador.');
+		setStatusMode('notice');
+		initializing = false;
+	} else if (missing.length !== 0) {
 		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
 			let serviceWorkerRegistrationPromise;
 			try {
@@ -194,7 +218,7 @@ const engine = new Engine(GODOT_CONFIG);
 			});
 		} else {
 			// Display the message as usual
-			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+			const missingMsg = 'Este navegador não abre o jogo.\nAbre no Chrome ou no Edge.\n';
 			displayFailureNotice(missingMsg + missing.join('\n'));
 		}
 	} else {

@@ -10,6 +10,8 @@ func _init() -> void:
 
 func _run() -> void:
 	_game = root.get_node("Game")
+	if _game._touch != null:
+		_fail("os botões de toque apareceram sem tela de toque")
 	change_scene_to_file("res://scenes/casa/casa.tscn")
 	for _i in 8:
 		await process_frame

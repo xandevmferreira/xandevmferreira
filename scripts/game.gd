@@ -71,6 +71,10 @@ var car_flip := false
 var _after_close := ""
 var _status: Label
 var _phone_chip: Control
+var _touch: CanvasLayer
+var _touch_buttons := {}
+var _touch_held := {}
+var _touch_talk_at := 0
 
 func _ready() -> void:
 	_build_ui()
@@ -589,6 +593,7 @@ func _refresh_status() -> void:
 		_status.visible = true
 	else:
 		_status.visible = false
+	_sync_touch()
 
 func _build_ui() -> void:
 	_layer = CanvasLayer.new()
@@ -669,6 +674,7 @@ func _build_ui() -> void:
 	_layer.add_child(_status)
 
 	_layer.move_child(_fade, -1)
+	_build_touch(font)
 
 func _show_puf() -> void:
 	var flash := ColorRect.new()
@@ -699,6 +705,101 @@ func _show_puf() -> void:
 		if is_instance_valid(label):
 			label.queue_free()
 	)
+
+func _wants_touch() -> bool:
+	if DisplayServer.is_touchscreen_available():
+		return true
+	if OS.has_feature("web"):
+		var points: Variant = JavaScriptBridge.eval("Number(navigator.maxTouchPoints)||0", true)
+		return int(points) > 0
+	return false
+
+func _build_touch(font: Font) -> void:
+	if not _wants_touch():
+		return
+	var hint_label := _hint.get_child(0) as Label
+	if hint_label:
+		hint_label.text = "Setas andam  ·  E fala"
+	_touch = CanvasLayer.new()
+	_touch.layer = 19
+	add_child(_touch)
+	_touch_buttons[&"move_up"] = _touch_button(font, "^", Vector2(34, 92), Vector2(34, 22), &"move_up")
+	_touch_buttons[&"move_left"] = _touch_button(font, "<", Vector2(2, 114), Vector2(32, 22), &"move_left")
+	_touch_buttons[&"move_right"] = _touch_button(font, ">", Vector2(68, 114), Vector2(32, 22), &"move_right")
+	_touch_buttons[&"move_down"] = _touch_button(font, "v", Vector2(34, 136), Vector2(34, 22), &"move_down")
+	_touch_buttons[&"interact"] = _touch_button(font, "E", Vector2(192, 108), Vector2(44, 44), &"interact")
+	for action: StringName in _touch_buttons:
+		_touch.add_child(_touch_buttons[action])
+
+func _touch_button(font: Font, text: String, pos: Vector2, button_size: Vector2, action: StringName) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.position = pos
+	button.size = button_size
+	button.focus_mode = Control.FOCUS_NONE
+	button.mouse_filter = Control.MOUSE_FILTER_STOP
+	button.add_theme_font_override(&"font", font)
+	button.add_theme_font_size_override(&"font_size", 13)
+	button.add_theme_color_override(&"font_color", Color("fff6ea"))
+	button.add_theme_color_override(&"font_pressed_color", FADE_COLOR)
+	button.add_theme_color_override(&"font_hover_color", Color("fff6ea"))
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color(FADE_COLOR, 0.62)
+	normal.set_corner_radius_all(3)
+	normal.set_border_width_all(1)
+	normal.border_color = Color("fff6ea", 0.9)
+	var pressed := normal.duplicate() as StyleBoxFlat
+	pressed.bg_color = Color("fff6ea", 0.92)
+	var empty := StyleBoxEmpty.new()
+	button.add_theme_stylebox_override(&"normal", normal)
+	button.add_theme_stylebox_override(&"hover", normal)
+	button.add_theme_stylebox_override(&"pressed", pressed)
+	button.add_theme_stylebox_override(&"focus", empty)
+	button.button_down.connect(_touch_down.bind(action))
+	button.button_up.connect(_touch_up.bind(action))
+	return button
+
+func _touch_down(action: StringName) -> void:
+	if _touch_held.get(action, false):
+		return
+	if action == &"interact":
+		var now := Time.get_ticks_msec()
+		if now - _touch_talk_at < 280:
+			return
+		_touch_talk_at = now
+	_touch_held[action] = true
+	Input.action_press(action)
+	var event := InputEventAction.new()
+	event.action = action
+	event.pressed = true
+	Input.parse_input_event(event)
+
+func _touch_up(action: StringName) -> void:
+	if not _touch_held.get(action, false):
+		return
+	_touch_held[action] = false
+	Input.action_release(action)
+	var event := InputEventAction.new()
+	event.action = action
+	event.pressed = false
+	Input.parse_input_event(event)
+
+func _sync_touch() -> void:
+	if _touch == null:
+		return
+	var explore := not blocks_player()
+	var talk := dialogue_open and not _cine
+	_touch.visible = explore or talk
+	for action: StringName in [&"move_up", &"move_down", &"move_left", &"move_right"]:
+		var move_button := _touch_buttons[action] as BaseButton
+		move_button.visible = explore
+		if not explore:
+			_touch_up(action)
+	var talk_button := _touch_buttons[&"interact"] as Button
+	talk_button.visible = explore or talk
+	talk_button.position = Vector2(192, 34) if talk else Vector2(192, 108)
+	if not (explore or talk):
+		_touch_up(&"interact")
 
 func _make_chip(font: Font, text: String, pos: Vector2, chip_size: Vector2) -> Control:
 	var chip := ColorRect.new()

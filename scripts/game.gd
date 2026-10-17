@@ -7,6 +7,9 @@ const FADE_COLOR := Color("3a242c")
 const TEXT_COLOR := Color("3a242c")
 const CHAR_DELAY := 0.032
 const TEXT_WIDTH := 206.0
+const BOX_POS := Vector2(6, 108)
+const BOX_SIZE := Vector2(228, 48)
+const FINALE_HOLD := 7.0
 
 var pending_spawn := "default"
 var dialogue_open := false
@@ -169,10 +172,10 @@ func _process(delta: float) -> void:
 				_typing = false
 				_arrow.visible = true
 	elif dialogue_open:
-		_arrow.visible = int(Time.get_ticks_msec() / 360.0) % 2 == 0
+		_arrow.visible = not _cine and int(Time.get_ticks_msec() / 360.0) % 2 == 0
 		if _cine:
 			_cine_hold += delta
-			if _cine_hold >= 1.7:
+			if _cine_hold >= FINALE_HOLD:
 				_cine_hold = 0.0
 				_advance()
 
@@ -216,18 +219,32 @@ func _show_current_line() -> void:
 	_full = _lines[_index]
 	if _cine:
 		finale_caption = _full
+		_open_finale_box()
 	_shown = 0
 	_char_clock = 0.0
 	_typing = true
 	_label.text = ""
 	_arrow.visible = false
 
+func _open_finale_box() -> void:
+	var font := _label.get_theme_font(&"font")
+	var text_size := font.get_multiline_string_size(_full, HORIZONTAL_ALIGNMENT_LEFT, TEXT_WIDTH, 13)
+	var height := text_size.y + 16.0
+	_box.size = Vector2(BOX_SIZE.x, height)
+	_box.position = Vector2(BOX_POS.x, 156.0 - height)
+	_label.size = Vector2(TEXT_WIDTH, text_size.y + 4.0)
+
+func _restore_talk_box() -> void:
+	_box.position = BOX_POS
+	_box.size = BOX_SIZE
+	_label.size = Vector2(TEXT_WIDTH, 36)
+
 func _advance() -> void:
 	if _typing:
 		_shown = _full.length()
 		_label.text = _full
 		_typing = false
-		_arrow.visible = true
+		_arrow.visible = not _cine
 		return
 	_index += 1
 	if _index >= _lines.size():
@@ -240,6 +257,7 @@ func _close_dialogue() -> void:
 	_typing = false
 	_box.visible = false
 	_arrow.visible = false
+	_restore_talk_box()
 	var follow := _after_close
 	_after_close = ""
 	var cine := _cine
@@ -498,8 +516,8 @@ func _build_ui() -> void:
 	_box.patch_margin_top = 6
 	_box.patch_margin_right = 6
 	_box.patch_margin_bottom = 6
-	_box.position = Vector2(6, 108)
-	_box.size = Vector2(228, 48)
+	_box.position = BOX_POS
+	_box.size = BOX_SIZE
 	_box.visible = false
 	_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_layer.add_child(_box)

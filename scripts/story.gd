@@ -141,13 +141,7 @@ const DIALOGUES := {
 		"Amanda: Vamos dormir juntos?",
 	],
 	"final": [
-		"Amanda, todos torcemos por ti.",
-		"Te amamos incondicionalmente.",
-		"Estaremos sempre aqui por você.",
-		"Feliz aniversário.",
-		"Deus te abençoe sempre.",
-		"Nunca pare a busca pela felicidade.",
-		"Te amamos!",
+		"Amanda, todos torcemos por ti e te amamos incondicionalmente. Estaremos sempre aqui por você. Feliz aniversário, Deus te abençoe sempre e que você nunca pare a busca pela felicidade. Te amamos!",
 	],
 	"eli_depois": [
 		"Eli: O biscoito ainda está quentinho.",

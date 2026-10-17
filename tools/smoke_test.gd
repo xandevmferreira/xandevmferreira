@@ -456,10 +456,16 @@ func _drive_to_gym() -> void:
 	if _game.heart_pieces != 4:
 		_fail("o coração não fechou: %s" % _game.heart_pieces)
 		return
-	if String(_game.finale_caption).is_empty():
-		_fail("a mensagem da família não apareceu")
+	var mensagem := "Amanda, todos torcemos por ti e te amamos incondicionalmente. Estaremos sempre aqui por você. Feliz aniversário, Deus te abençoe sempre e que você nunca pare a busca pela felicidade. Te amamos!"
+	if String(_game.finale_caption) != mensagem:
+		_fail("a mensagem da família não é o texto inteiro: %s" % _game.finale_caption)
 		return
-	await create_timer(0.4).timeout
+	var leitura := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - leitura < 12000 and not _dialogue_line().contains("Te amamos!"):
+		await process_frame
+	if not _dialogue_line().contains("Te amamos!"):
+		_fail("a mensagem inteira não apareceu no balão")
+		return
 	await _shot(current_scene, "/tmp/art-preview/godot_final.png")
 
 func _seen(snippet: String) -> bool:
@@ -509,7 +515,7 @@ func _check_lines() -> void:
 	for id: String in Story.DIALOGUES:
 		for line: String in Story.DIALOGUES[id]:
 			var size := font.get_multiline_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, 206.0, 13)
-			if size.y > 30.0:
+			if id != "final" and size.y > 30.0:
 				_fail("fala longa (%s, %s px): %s" % [id, size.y, line])
 			var baixa := line.to_lower()
 			if baixa.contains("quixote") or baixa.contains("como diz"):

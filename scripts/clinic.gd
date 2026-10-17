@@ -36,7 +36,7 @@ func interact() -> void:
 			elif Game.has_heart("eli"):
 				Game.start_dialogue(Story.lines_for("eli_depois"))
 			else:
-				Game.collect_heart("eli")
+				Game.grant_heart("eli")
 				Game.alexandre_pending = true
 				Game.start_dialogue(Story.lines_for("eli"))
 

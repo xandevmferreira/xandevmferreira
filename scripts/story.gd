@@ -14,21 +14,18 @@ const DIALOGUES := {
 	"celular": [
 		"O celular acende.",
 		"Alex: Meu bem vc nao vem treinar?",
-		"Agora vá pra academia.",
 	],
 	"creta": [
-		"A academia é a porta ao lado.",
-		"Agora vá pra lá.",
+		"A academia fica logo ali.",
 	],
 	"academia_tempo": [
-		"A academia é do lado da casa.",
+		"Chegou a tempo.",
 	],
 	"academia_atraso": [
 		"Chegou. O cronômetro já tinha virado piada.",
 	],
 	"exercicio_fim": [
-		"Acabou o exercício.",
-		"Agora volte pra casa.",
+		"Alex: Isso. O coração é seu.",
 	],
 	"coracao": [
 		"Um quarto do coração.",
@@ -63,33 +60,31 @@ const DIALOGUES := {
 		"Alex: Você consegue! Eu acredito!",
 	],
 	"puf": [
-		"PUF. Roupa preta e joias douradas.",
-		"Agora vá pra rua.",
+		"PUF. Preto e ouro.",
+		"O Henrique está lá fora.",
 	],
 	"armario_pronta": [
-		"Pronta pra UFPA.",
-		"O Henrique espera na rua.",
+		"Já estou pronta.",
 	],
 	"missao_ufpa": [
-		"Agora vá pra casa se arrumar.",
-		"Hoje tem aula na UFPA.",
+		"Hoje a aula é na UFPA.",
+		"Passa em casa e se arruma.",
 	],
 	"creta_ufpa": [
-		"Siga a placa da UFPA.",
+		"A UFPA é seguindo a placa.",
 	],
 	"ufpa_cedo": [
-		"A UFPA fica pra lá. O Henrique ainda não veio.",
+		"O Henrique ainda não chegou.",
 	],
 	"ufpa_chegada": [
-		"Fale com Ernani e o Breno.",
-		"Depois siga a placa CLINICA.",
+		"A UFPA. O rio passa atrás da Pedagogia.",
 	],
 	"coracao2": [
 		"Outro quarto do coração.",
 	],
 	"henrique": [
 		"Henrique: Amiga, tu nem sabe!",
-		"Henrique: Entre no Creta. Placa UFPA.",
+		"Henrique: Vem, eu vou com você.",
 	],
 	"placa": [
 		"Só os melhores chegam aqui.",
@@ -105,8 +100,7 @@ const DIALOGUES := {
 		"Eu quis te dar um lugar pequeno para começar este dia.",
 	],
 	"clinica_chegada": [
-		"A sala particular é pra dentro.",
-		"A Eli fica fora, no sofá.",
+		"O consultório está em silêncio.",
 	],
 	"cafe": [
 		"Amanda: Um café pra mim.",
@@ -121,20 +115,20 @@ const DIALOGUES := {
 		"Paciente: A vida está um peso.",
 		"Paciente: Nada do que eu faço serve.",
 		"Amanda: O desejo é o desejo do Outro.",
-		"Agora fale com a Eli, lá fora.",
 	],
 	"paciente_fim": [
 		"Paciente: Vou pensar nisso.",
 	],
 	"eli_espera": [
-		"Eli: Atende na sala particular.",
-		"Eli: Eu espero aqui fora.",
+		"Eli: Eu te espero aqui.",
 	],
 	"eli": [
 		"Eli: Um biscoito de um passeio comum na Grécia.",
-		"Eli: E o terceiro pedaço do coração.",
-		"Agora volte pra casa.",
-		"Mande mensagem pro Alexandre.",
+		"Eli: E este pedaço do coração.",
+		"Eli: O Alexandre te espera em casa.",
+	],
+	"gato": [
+		"Miau.",
 	],
 	"alexandre": [
 		"Amanda: Amor, to muito cansada.",

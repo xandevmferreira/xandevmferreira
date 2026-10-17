@@ -80,6 +80,19 @@ func _run() -> void:
 
 	_check_lines()
 
+	casa.get_node("Talkers/Sofa").interact()
+	await process_frame
+	if not await _seen("voa"):
+		_fail("o Pai não recitou")
+	elif _dialogue_line().contains("flechas"):
+		_fail("o Pai recitou tudo de uma vez")
+	await _close_talk()
+	casa.get_node("Talkers/Sofa").interact()
+	await process_frame
+	if not await _seen("anda"):
+		_fail("o Pai repetiu o primeiro ditado")
+	await _close_talk()
+
 	await create_timer(0.55).timeout
 	player.global_position = Vector2(430, 148)
 	player.facing = Vector2.UP
@@ -264,26 +277,10 @@ func _drive_to_gym() -> void:
 	if not _game.exercised:
 		_fail("o exercício não terminou")
 		return
-	var heart := current_scene.get_node_or_null("Heart")
-	if heart == null or not heart.visible:
-		_fail("o pedaço do coração não apareceu")
+	if trainee.get_node_or_null("CoracaoGanho") == null or _game.heart_pieces != 1:
+		_fail("o coração não ficou na cabeça: %s" % _game.heart_pieces)
 		return
 	await _shot(current_scene, "/tmp/art-preview/godot_coracao.png")
-	trainee.global_position = Vector2(180, 114)
-	trainee.facing = Vector2.UP
-	for _i in 4:
-		await physics_frame
-	_press_interact()
-	for _frame in 4:
-		await process_frame
-	var heart_guard := 0
-	while _game.dialogue_open and heart_guard < 8:
-		_press_interact()
-		await process_frame
-		heart_guard += 1
-	if _game.heart_pieces != 1:
-		_fail("não pegou o 1/4 do coração")
-		return
 	trainee.global_position = Vector2(124, 130)
 	trainee.facing = Vector2.DOWN
 	await physics_frame
@@ -333,6 +330,12 @@ func _drive_to_gym() -> void:
 	if gato == null or gato.global_position.x > 110.0 or gato.global_position.y > 96.0:
 		_fail("o gato preto não está na frente da casa")
 		return
+	gato.get_node("Talk").interact()
+	await process_frame
+	if not await _seen("Miau"):
+		_fail("o gato preto não miou")
+		return
+	await _close_talk()
 	friend.interact()
 	await process_frame
 	if not _game.henrique_joined or not await _seen("tu nem sabe"):
@@ -373,12 +376,9 @@ func _drive_to_gym() -> void:
 	if not String(porta.target_scene).contains("consultorio"):
 		_fail("a saída da UFPA não vai ao consultório")
 		return
-	current_scene.get_node("Heart").interact()
-	await process_frame
-	if _game.heart_pieces != 2:
-		_fail("não achou o segundo coração: %s" % _game.heart_pieces)
+	if _game.heart_pieces != 2 or student.get_node_or_null("CoracaoGanho") == null:
+		_fail("os professores não deixaram o coração: %s" % _game.heart_pieces)
 		return
-	await _close_talk()
 	_game.request_scene("res://scenes/consultorio/consultorio.tscn", "default")
 	if not await _await_scene("Consultorio"):
 		_fail("não chegou no consultório")

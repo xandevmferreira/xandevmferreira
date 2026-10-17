@@ -1435,6 +1435,33 @@ def draw_standing(
     return outline(image)
 
 
+def draw_alexandre() -> Image.Image:
+    """Careca, barba fechada e ombros largos. Não é o Alex da academia."""
+    image = new(20, 26)
+    fill_rect(image, 6, 2, 8, 3, SKIN)
+    fill_rect(image, 5, 4, 10, 6, SKIN)
+    pix(image, 8, 3, (255, 236, 220, 255))
+    pix(image, 7, 6, EYE)
+    pix(image, 12, 6, EYE)
+    pix(image, 6, 6, (255, 252, 246, 255))
+    pix(image, 13, 6, (255, 252, 246, 255))
+    fill_rect(image, 5, 8, 10, 4, (36, 30, 28, 255))
+    fill_rect(image, 6, 8, 8, 1, (58, 46, 40, 255))
+    pix(image, 9, 9, (120, 72, 72, 255))
+    fill_rect(image, 8, 12, 4, 2, SKIN_S)
+    fill_rect(image, 1, 13, 18, 7, (32, 44, 72, 255))
+    fill_rect(image, 3, 14, 14, 5, (52, 68, 104, 255))
+    fill_rect(image, 8, 14, 4, 5, (28, 38, 64, 255))
+    fill_rect(image, 0, 14, 3, 6, SKIN)
+    fill_rect(image, 17, 14, 3, 6, SKIN)
+    fill_rect(image, 0, 19, 3, 2, SKIN_S)
+    fill_rect(image, 17, 19, 3, 2, SKIN_S)
+    fill_rect(image, 5, 20, 10, 3, (28, 30, 36, 255))
+    fill_rect(image, 5, 23, 4, 2, SHOE)
+    fill_rect(image, 11, 23, 4, 2, SHOE)
+    return outline(image)
+
+
 def draw_father() -> Image.Image:
     image = new(20, 16)
     fill_rect(image, 6, 0, 8, 3, (168, 164, 158, 255))
@@ -1774,6 +1801,7 @@ def main() -> None:
     heart_full = draw_heart_full()
     gato_preto = draw_black_cat()
     alex = draw_standing(MORENO, MORENO_S, HAIR, (168, 64, 72, 255), (48, 52, 64, 255))
+    alexandre = draw_alexandre()
     henrique = draw_standing(MORENO, MORENO_S, HAIR, (64, 104, 156, 255), (48, 52, 64, 255))
     mae = draw_standing(SKIN, SKIN_S, BROWN, (214, 168, 150, 255), (120, 96, 84, 255), glasses=True)
     pai = draw_father()
@@ -1787,6 +1815,7 @@ def main() -> None:
     player.save(ASSETS / "sprites" / "player.png")
     elegante.save(ASSETS / "sprites" / "player_elegante.png")
     alex.save(ASSETS / "sprites" / "alex.png")
+    alexandre.save(ASSETS / "sprites" / "alexandre.png")
     henrique.save(ASSETS / "sprites" / "henrique.png")
     mae.save(ASSETS / "sprites" / "mae.png")
     pai.save(ASSETS / "sprites" / "pai.png")

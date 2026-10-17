@@ -95,6 +95,16 @@ collision_mask = 0
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_gato_solido")
 
+[node name="Talk" type="Area2D" parent="Props/GatoPreto"]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("10_falar")
+dialogue_id = "gato"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/GatoPreto/Talk"]
+shape = SubResource("RectangleShape2D_gato")
+
 [node name="Cat" type="Node2D" parent="Props"]
 position = Vector2(120, 162)
 

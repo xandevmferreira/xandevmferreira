@@ -45,6 +45,8 @@ var driving := false
 var mission_ufpa := false
 var dressed := false
 var henrique_joined := false
+var saw_ernani := false
+var saw_breno := false
 var ufpa_arrived := false
 var coffee_ready := false
 var session_done := false
@@ -327,6 +329,41 @@ func collect_heart(piece_id: String = "academia") -> void:
 	_hearts[piece_id] = true
 	heart_pieces = _hearts.size()
 
+func grant_heart(piece_id: String, line_id: String = "") -> void:
+	var fresh := not has_heart(piece_id)
+	if fresh:
+		collect_heart(piece_id)
+	if line_id != "":
+		start_dialogue(Story.lines_for(line_id))
+	if fresh:
+		_celebrate_heart()
+
+func _celebrate_heart() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	if player == null:
+		return
+	var old := player.get_node_or_null("CoracaoGanho")
+	if old:
+		old.queue_free()
+	var heart := Sprite2D.new()
+	heart.name = "CoracaoGanho"
+	heart.texture = load("res://assets/sprites/heart_full.png")
+	heart.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	heart.centered = true
+	heart.z_index = 8
+	heart.position = Vector2(0, -44)
+	heart.scale = Vector2(1.6, 1.6)
+	player.add_child(heart)
+	var feet := player.position.y
+	var tween := create_tween()
+	tween.tween_property(player, "position:y", feet - 8.0, 0.12).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(heart, "scale", Vector2(2.2, 2.2), 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(heart, "position:y", -32.0, 0.18).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(player, "position:y", feet, 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(heart, "scale", Vector2(1.45, 1.45), 0.16).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(heart, "scale", Vector2(1.8, 1.8), 0.1).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(heart, "scale", Vector2(1.45, 1.45), 0.12).set_trans(Tween.TRANS_SINE)
+
 func transform_outfit() -> void:
 	if dressed:
 		return
@@ -408,13 +445,16 @@ func _stage_family() -> void:
 	var sprite := player.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if sprite:
 		sprite.play(&"idle_up")
+	var cam := player.get_node_or_null("Camera2D") as Camera2D
+	if cam:
+		cam.offset = Vector2(0, 42)
 	_move_feet(scene.get_node_or_null("Props/Pai"), Vector2(186, 284))
 	_move_feet(scene.get_node_or_null("Props/Mae"), Vector2(252, 284))
 	_move_feet(scene.get_node_or_null("Props/Cachorra"), Vector2(150, 286))
 	if scene.get_node_or_null("Props/Alexandre") == null:
 		var amor := Sprite2D.new()
 		amor.name = "Alexandre"
-		amor.texture = load("res://assets/sprites/alex.png")
+		amor.texture = load("res://assets/sprites/alexandre.png")
 		amor.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		amor.centered = true
 		if amor.texture:

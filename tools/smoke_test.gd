@@ -449,12 +449,19 @@ func _drive_to_gym() -> void:
 	if not _game.alexandre_sent:
 		_fail("a mensagem pro Alexandre não foi enviada")
 		return
-	var espera := 0
-	while espera < 400 and String(_game.finale_caption).is_empty():
+	var espera := Time.get_ticks_msec()
+	while Time.get_ticks_msec() - espera < 8000 and String(_game.finale_caption).is_empty():
 		await process_frame
-		espera += 1
 	if _game.heart_pieces != 4:
 		_fail("o coração não fechou: %s" % _game.heart_pieces)
+		return
+	var tela := _game.get_node_or_null("FinalHeart/TelaFinal") as Sprite2D
+	if tela == null or tela.texture == null or tela.scale.x < 2.0:
+		_fail("o coração completo não cresceu")
+		return
+	var metade := tela.texture.get_height() * tela.scale.y * 0.5
+	if tela.position.y - metade < 0.0 or tela.position.y + metade > 84.0:
+		_fail("o coração completo ficou cortado")
 		return
 	var mensagem := "Amanda, todos torcemos por ti e te amamos incondicionalmente. Estaremos sempre aqui por você. Feliz aniversário, Deus te abençoe sempre e que você nunca pare a busca pela felicidade. Te amamos!"
 	if String(_game.finale_caption) != mensagem:

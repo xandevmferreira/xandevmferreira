@@ -33,7 +33,7 @@ A rua é um condomínio fechado, não uma fazenda. Placas na calçada marcam CAS
 
 Ao sair da academia, a aula é na UFPA. O guarda-roupa faz o PUF e troca a roupa. O Henrique espera na rua, entra no Creta e os dois seguem até a universidade. Lá estão o professor Ernani, dentro do prédio, e o professor Breno, do lado de fora. Depois dos dois, o coração aparece na cabeça da Amanda.
 
-A saída da UFPA leva ao consultório. A sala particular fica fechada, do lado de dentro. A Amanda toma um café e o paciente deita no divã. Só depois ela fala com a Eli, que espera fora, perto do sofá. A Eli entrega um biscoito e o coração aparece de novo na cabeça da Amanda. Em casa, a Amanda chama o Alexandre de amor. Ele é careca, barbudo e forte. A família se reúne na sala, o coração cresce na tela e a mensagem de aniversário passa inteira.
+A saída da UFPA leva ao consultório. A sala particular fica fechada, do lado de dentro. A Amanda toma um café e o paciente deita no divã. Só depois ela fala com a Eli, que espera fora, perto do sofá. A Eli entrega um biscoito e o coração aparece de novo na cabeça da Amanda. Em casa, a Amanda chama o Alexandre de amor. Ele é careca, barbudo e forte. A família se reúne na sala. O Alexandre entrega o último pedaço: o coração completo aparece grande e, só depois, a mensagem de aniversário passa inteira.
 
 Um gato preto fica na calçada, na frente da casa, e mia quando falam com ele. O Pai diz um ditado por vez, sem anunciar o livro.
 

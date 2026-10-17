@@ -1744,6 +1744,36 @@ def draw_lying_patient() -> Image.Image:
     return outline(image)
 
 
+def draw_heart_complete() -> Image.Image:
+    """Coração inteiro, maior, para o Alexandre entregar no final."""
+    image = new(40, 36)
+    rose = (214, 64, 96, 255)
+    deep = (168, 40, 70, 255)
+    light = (244, 126, 150, 255)
+    shine = (255, 228, 234, 255)
+    for y in range(36):
+        for x in range(40):
+            left = (x - 12) * (x - 12) + (y - 11) * (y - 11) <= 81
+            right = (x - 27) * (x - 27) + (y - 11) * (y - 11) <= 81
+            lobe = y <= 18 and (left or right)
+            point = False
+            if 14 <= y <= 33:
+                half = 15.5 * (1.0 - (y - 14) / 19.0)
+                point = abs(x - 19.5) <= half
+            if not lobe and not point:
+                continue
+            if 6 <= x <= 10 and 7 <= y <= 10:
+                color = shine
+            elif y < 14:
+                color = light
+            elif y < 24:
+                color = rose
+            else:
+                color = deep
+            image.putpixel((x, y), color)
+    return outline(image)
+
+
 def draw_heart_full() -> Image.Image:
     image = new(16, 16)
     fill_rect(image, 2, 3, 5, 4, (214, 72, 96, 255))
@@ -1799,6 +1829,7 @@ def main() -> None:
     heart = draw_heart()
     heart_more = draw_heart_more()
     heart_full = draw_heart_full()
+    heart_complete = draw_heart_complete()
     gato_preto = draw_black_cat()
     alex = draw_standing(MORENO, MORENO_S, HAIR, (168, 64, 72, 255), (48, 52, 64, 255))
     alexandre = draw_alexandre()
@@ -1840,6 +1871,7 @@ def main() -> None:
     heart.save(ASSETS / "sprites" / "heart.png")
     heart_more.save(ASSETS / "sprites" / "heart2.png")
     heart_full.save(ASSETS / "sprites" / "heart_full.png")
+    heart_complete.save(ASSETS / "sprites" / "heart_complete.png")
     gato_preto.save(ASSETS / "sprites" / "gato_preto.png")
     draw_dialogue_frame().save(ASSETS / "ui" / "dialogue_frame.png")
     draw_key_chip().save(ASSETS / "ui" / "key_e.png")

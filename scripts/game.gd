@@ -230,13 +230,15 @@ func _show_current_line() -> void:
 
 func _open_finale_box() -> void:
 	var font := _label.get_theme_font(&"font")
-	var text_size := font.get_multiline_string_size(_full, HORIZONTAL_ALIGNMENT_LEFT, TEXT_WIDTH, 13)
+	_label.add_theme_font_size_override(&"font_size", 10)
+	var text_size := font.get_multiline_string_size(_full, HORIZONTAL_ALIGNMENT_LEFT, TEXT_WIDTH, 10)
 	var height := text_size.y + 16.0
 	_box.size = Vector2(BOX_SIZE.x, height)
 	_box.position = Vector2(BOX_POS.x, 156.0 - height)
 	_label.size = Vector2(TEXT_WIDTH, text_size.y + 4.0)
 
 func _restore_talk_box() -> void:
+	_label.add_theme_font_size_override(&"font_size", 13)
 	_box.position = BOX_POS
 	_box.size = BOX_SIZE
 	_label.size = Vector2(TEXT_WIDTH, 36)
@@ -435,8 +437,8 @@ func _stage_family() -> void:
 	if props == null or player == null:
 		return
 	_family_staged = true
-	player.global_position = Vector2(220, 284)
-	player.facing = Vector2.UP
+	player.global_position = Vector2(200, 284)
+	player.facing = Vector2.DOWN
 	player.velocity = Vector2.ZERO
 	player.collision_layer = 0
 	player.set_physics_process(false)
@@ -444,35 +446,58 @@ func _stage_family() -> void:
 		player.apply_outfit("elegante")
 	var sprite := player.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 	if sprite:
-		sprite.play(&"idle_up")
+		sprite.play(&"idle_down")
+	var cabeca := player.get_node_or_null("CoracaoGanho")
+	if cabeca:
+		cabeca.visible = false
 	var cam := player.get_node_or_null("Camera2D") as Camera2D
 	if cam:
-		cam.offset = Vector2(0, 42)
-	_move_feet(scene.get_node_or_null("Props/Pai"), Vector2(186, 284))
-	_move_feet(scene.get_node_or_null("Props/Mae"), Vector2(252, 284))
-	_move_feet(scene.get_node_or_null("Props/Cachorra"), Vector2(150, 286))
+		cam.offset = Vector2(24, 2)
+	_move_feet(scene.get_node_or_null("Props/Pai"), Vector2(164, 284))
+	_move_feet(scene.get_node_or_null("Props/Mae"), Vector2(276, 284))
+	_move_feet(scene.get_node_or_null("Props/Cachorra"), Vector2(138, 286))
 	if scene.get_node_or_null("Props/Alexandre") == null:
 		var amor := Sprite2D.new()
 		amor.name = "Alexandre"
 		amor.texture = load("res://assets/sprites/alexandre.png")
 		amor.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		amor.centered = true
+		amor.z_index = 2
 		if amor.texture:
 			amor.offset = Vector2(0, -amor.texture.get_height() * 0.5 + 1.0)
 		props.add_child(amor)
-		amor.position = Vector2(286, 284)
+		amor.position = Vector2(308, 284)
+	var layer := CanvasLayer.new()
+	layer.name = "FinalHeart"
+	layer.layer = 18
+	add_child(layer)
 	var tela := Sprite2D.new()
 	tela.name = "TelaFinal"
-	tela.texture = load("res://assets/sprites/heart_full.png")
+	tela.texture = load("res://assets/sprites/heart_complete.png")
 	tela.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	tela.centered = true
-	tela.position = Vector2(216, 232)
-	tela.scale = Vector2(1, 1)
-	props.add_child(tela)
+	var hands := Vector2(196, 62)
+	if cam:
+		var center := cam.get_screen_center_position()
+		var view := get_viewport().get_visible_rect().size
+		hands = (Vector2(300, 268) - center) + view * 0.5
+	tela.position = hands
+	tela.scale = Vector2(0.5, 0.5)
+	layer.add_child(tela)
 	_cine_heart = tela
 	collect_heart("final")
+	var grande := Vector2(120, 64)
+	var no_lugar := Vector2(120, 39)
 	var tween := create_tween()
-	tween.tween_property(tela, "scale", Vector2(3, 3), 1.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_interval(0.35)
+	tween.tween_property(tela, "position", grande, 0.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(tela, "scale", Vector2(3.15, 3.15), 0.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(tela, "scale", Vector2(3.4, 3.4), 0.14).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(tela, "scale", Vector2(3.15, 3.15), 0.16).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.tween_interval(0.75)
+	tween.tween_property(tela, "position", no_lugar, 0.42).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.parallel().tween_property(tela, "scale", Vector2(2.15, 2.15), 0.42).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_interval(0.28)
 	tween.tween_callback(func() -> void:
 		if not dialogue_open:
 			start_dialogue(Story.lines_for("final"))
@@ -510,6 +535,9 @@ func _refresh_status() -> void:
 	if _phone_chip:
 		_phone_chip.visible = phone_ringing and not blocks_player()
 	if _status == null:
+		return
+	if _cine:
+		_status.visible = false
 		return
 	if gym_left > 0.0:
 		var total := int(ceil(gym_left))

@@ -1,0 +1,174 @@
+[gd_scene load_steps=17 format=3 uid="uid://ccasa_aniv01"]
+
+[ext_resource type="Script" path="res://scripts/map.gd" id="1_map"]
+[ext_resource type="Texture2D" path="res://assets/maps/casa.png" id="2_mapa"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="Texture2D" path="res://assets/sprites/plant.png" id="4_planta"]
+[ext_resource type="Script" path="res://scripts/feet_sprite.gd" id="5_pes"]
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="6_falar"]
+[ext_resource type="Script" path="res://scripts/door.gd" id="7_porta"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pai.png" id="8_pai"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mae.png" id="9_mae"]
+[ext_resource type="Texture2D" path="res://assets/sprites/cachorra.png" id="10_cao"]
+[ext_resource type="Script" path="res://scripts/wardrobe.gd" id="11_armario"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vaso"]
+size = Vector2(12, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_planta"]
+size = Vector2(20, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cama"]
+size = Vector2(40, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_piano"]
+size = Vector2(40, 44)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_santos"]
+size = Vector2(56, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sofa"]
+size = Vector2(72, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cozinha"]
+size = Vector2(56, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_maquina"]
+size = Vector2(40, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_porta"]
+size = Vector2(32, 16)
+
+[node name="Casa" type="Node2D"]
+script = ExtResource("1_map")
+map_id = "casa"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(120, 80)
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 0
+texture = ExtResource("2_mapa")
+centered = false
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Props" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="Props" instance=ExtResource("3_player")]
+position = Vector2(70, 158)
+
+[node name="Pai" type="Sprite2D" parent="Props"]
+texture_filter = 0
+position = Vector2(212, 258)
+texture = ExtResource("8_pai")
+script = ExtResource("5_pes")
+
+[node name="Mae" type="Sprite2D" parent="Props"]
+texture_filter = 0
+position = Vector2(374, 138)
+texture = ExtResource("9_mae")
+script = ExtResource("5_pes")
+
+[node name="Cachorra" type="Sprite2D" parent="Props"]
+texture_filter = 0
+position = Vector2(404, 186)
+texture = ExtResource("10_cao")
+script = ExtResource("5_pes")
+
+[node name="Plant" type="Node2D" parent="Props"]
+position = Vector2(100, 270)
+
+[node name="Sprite" type="Sprite2D" parent="Props/Plant"]
+texture_filter = 0
+texture = ExtResource("4_planta")
+script = ExtResource("5_pes")
+
+[node name="Solid" type="StaticBody2D" parent="Props/Plant"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/Plant/Solid"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_vaso")
+
+[node name="Talkers" type="Node2D" parent="."]
+
+[node name="Cama" type="Area2D" parent="Talkers"]
+position = Vector2(36, 148)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("6_falar")
+dialogue_id = "cama"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Cama"]
+shape = SubResource("RectangleShape2D_cama")
+
+[node name="Sofa" type="Area2D" parent="Talkers"]
+position = Vector2(212, 254)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("6_falar")
+dialogue_id = "pai_amor"
+sayings = PackedStringArray("pai_amor", "pai_filhos", "pai_vida")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Sofa"]
+shape = SubResource("RectangleShape2D_sofa")
+
+[node name="Mae" type="Area2D" parent="Talkers"]
+position = Vector2(374, 152)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("6_falar")
+dialogue_id = "mae"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Mae"]
+shape = SubResource("RectangleShape2D_cozinha")
+
+[node name="Cachorra" type="Area2D" parent="Talkers"]
+position = Vector2(404, 186)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("6_falar")
+dialogue_id = "cachorra"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Cachorra"]
+shape = SubResource("RectangleShape2D_planta")
+
+[node name="Armario" type="Area2D" parent="Talkers"]
+position = Vector2(108, 150)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("11_armario")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Talkers/Armario"]
+shape = SubResource("RectangleShape2D_cama")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(408, 298)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_porta")
+target_scene = "res://scenes/rua/rua.tscn"
+target_spawn = "from_casa"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+shape = SubResource("RectangleShape2D_porta")
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="default" type="Marker2D" parent="Spawns"]
+position = Vector2(70, 158)
+
+[node name="from_rua" type="Marker2D" parent="Spawns"]
+position = Vector2(408, 268)
+
+[node name="from_clinica" type="Marker2D" parent="Spawns"]
+position = Vector2(408, 268)
